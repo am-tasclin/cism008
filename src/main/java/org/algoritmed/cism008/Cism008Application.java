@@ -17,6 +17,7 @@ import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 @SpringBootApplication
@@ -38,6 +39,7 @@ public class Cism008Application {
 	@Bean
 	public RouterFunction<ServerResponse> route(RestComponent restComponent) {
 		return RouterFunctions
-				.route(GET("rs01").and(accept(MediaType.APPLICATION_JSON)), restComponent::rc01);
+				.route(GET("rs01").and(accept(MediaType.APPLICATION_JSON)), restComponent::rc01)
+				.andRoute(GET("sqlSelect02").and(accept(MediaType.APPLICATION_JSON)), restComponent::sqlSelect02);
 	}
 }

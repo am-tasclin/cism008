@@ -6,3 +6,4 @@ bin/
 gradle*
 *.swp
 **/*.swp
+src/main/resources/application.properties
