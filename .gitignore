@@ -1,0 +1,8 @@
+HELP.md
+.gradle
+.vscode
+build/
+bin/
+gradle*
+*.swp
+**/*.swp
