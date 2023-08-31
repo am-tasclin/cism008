@@ -13,7 +13,6 @@ ws.onopen = event1 => {
         // console.log(event, 123)
         const json = JSON.parse(event.data)
         // console.log(JSON.stringify(json, '', 2))
-        console.log(json.sql)
     })
 }
 
@@ -23,6 +22,7 @@ testJson.sql = 'SELECT doc_id, parent p, reference r, reference2 r2, value vl_st
 LEFT JOIN string ON doc_id=string_id \n\
 LEFT JOIN sort ON doc_id=sort_id \n\
 WHERE  376632 IN (doc_id,parent)';
+console.log(testJson.sql);
 
 (await fetch('./sqlSelect02?sql=' + testJson.sql.replace(/\s+/g, ' '))).json().then(json => {
     console.log(json, 1231)

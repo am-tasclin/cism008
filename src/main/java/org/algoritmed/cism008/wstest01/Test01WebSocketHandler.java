@@ -18,6 +18,7 @@ public class Test01WebSocketHandler extends SimpleWebSocketHandler implements We
     public Mono<Void> handle(WebSocketSession session) {
         Function<? super String, ? extends WebSocketMessage> mapper = jsonString -> {
             Map mapIn = mapFromString(jsonString);
+            mapIn.remove("sql");
             mapIn.put("value", 3);
             logger.info("-24-" + mapIn);
             return session.textMessage(toJsonString(mapIn));
