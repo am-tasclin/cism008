@@ -26,6 +26,4 @@ public class Test01WebSocketHandler extends SimpleWebSocketHandler implements We
 
         return session.send(makeOutput(session, mapper));
     }
-
-
 }

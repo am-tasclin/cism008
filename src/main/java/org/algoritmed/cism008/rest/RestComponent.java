@@ -32,7 +32,7 @@ public class RestComponent {
         m.putAll(request.queryParams());
         try {
             mcrdbSqlClient.executeQuery(m);
-        } catch ( InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         return builderResponse.body(BodyInserters.fromValue(m));
@@ -42,6 +42,7 @@ public class RestComponent {
         Map m = new HashMap();
         m.put("name0", "m1");
         m.putAll(request.queryParams());
+        logger.info("-45-" + m);
         return builderResponse.body(BodyInserters.fromValue(m));
     }
 

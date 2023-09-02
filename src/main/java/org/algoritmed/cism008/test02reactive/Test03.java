@@ -15,21 +15,26 @@ public class Test03 {
 
         return fruits.zipWith(veggies,
                 (first, second) -> first + "-" + second)
-        // .log()
-        ;
+                // .log()
+                ;
     }
 
-    public Flux<String> fruitsFlux(int number) {
+    public Flux<String> fruitsFlux(int numer) {
 
-        Function<Flux<String>, Flux<String>> filterData = data -> data.filter(s -> s.length() > number).log();
+        Function<Flux<String>, Flux<String>> filterData = data -> data.filter(s -> s.length() > numer).log();
 
         return Flux.fromIterable(List.of("Mango", "Orange", "Banana"))
                 .transform(filterData)
-                // .filter(s -> s.length() > number)
+                // .filter(s -> s.length() > numer)
                 .map(String::toUpperCase);// .log();
     }
 
     public static void main(String[] args) {
+        System.out.println(123);
+        System.out.println(1 % 3);
+        System.out.println(2 % 3);
+        System.out.println(3 % 3);
+        System.out.println(4 % 3);
 
         Test03 fluxAndMonoServices = new Test03();
 

@@ -1,29 +1,38 @@
 'use strict'
 const uri_test01 = "ws://" + window.location.host + "/test01"
 console.log(uri_test01)
-const ws = new WebSocket(uri_test01)
 
 const testJson = { x: 1, y: 3 }
-
-ws.onopen = event1 => {
-    ws.send(JSON.stringify(testJson))
-    // ws.send({ x: 1, y: 2 })
-    return new Promise((thenFn) => ws.onmessage = event => thenFn(event)
-    ).then(event => {
-        // console.log(event, 123)
-        const json = JSON.parse(event.data)
-        // console.log(JSON.stringify(json, '', 2))
-    })
-}
-
-// (await fetch('./rs01?a=b')).json().then(json =>     console.log(json, 123));
 
 testJson.sql = 'SELECT doc_id, parent p, reference r, reference2 r2, value vl_str, sort FROM doc \n\
 LEFT JOIN string ON doc_id=string_id \n\
 LEFT JOIN sort ON doc_id=sort_id \n\
 WHERE  376632 IN (doc_id,parent)';
-console.log(testJson.sql);
+console.log(testJson.sql.length);
+console.log(101, new Date().toISOString());
 
+const ws = new WebSocket(uri_test01)
+ws.onopen = event1 =>
+    sendReadMessage(testJson).then(json => {
+        // console.log(JSON.stringify(json, '', 2))
+        console.log(102, new Date().toISOString());
+        const sqlApi = { parent: 376632, cmd: 'insertAdn', }
+        sendReadMessage(sqlApi).then(json => {
+            console.log(json,)
+            console.log(102, new Date().toISOString());
+        })
+    })
+
+const sendReadMessage = sendJson => {
+    ws.send(JSON.stringify(sendJson))
+    return new Promise((thenFn, errorFn) => ws.onmessage = event => thenFn(JSON.parse(event.data)))
+}
+
+console.log(101, new Date().toISOString());
 (await fetch('./sqlSelect02?sql=' + testJson.sql.replace(/\s+/g, ' '))).json().then(json => {
     console.log(json, 1231)
+    console.log(103, new Date().toISOString());
 })
+
+// (await fetch('./rs01?a=b')).json().then(json =>     console.log(json, 123));
+
