@@ -26,12 +26,15 @@ public class Test01WebSocketHandler extends SimpleWebSocketHandler implements We
     public Mono<Void> handle(WebSocketSession session) {
         Function<? super String, ? extends WebSocketMessage> mapper = jsonString -> {
             Map mapIn = mapFromString(jsonString);
-            logger.info("-24-" + mapIn);
+//            logger.info("-24-" + mapIn);
             if (mapIn.get("cmd") != null)
                 try {
                     switch (mapIn.get("cmd").toString()) {
                         case "insertAdn":
                             insertAdn(mapIn);
+                            break;
+                        case "deleteAdn1":
+                            deleteAdn1(mapIn);
                             break;
                         case "executeQuery":
                             executeQuery(mapIn);
@@ -47,11 +50,18 @@ public class Test01WebSocketHandler extends SimpleWebSocketHandler implements We
         return session.send(map);
     }
 
+    private void deleteAdn1(Map mapIn) throws ExecutionException, InterruptedException {
+        Mono<Doc> x = sqlTemplate.delete(new Doc(Long.parseLong(mapIn.get("adnId").toString())));
+        mapIn.put("deleted", x.toFuture().get());
+        logger.info("sql01 -125-" + mapIn);
+    }
+
     private void executeQuery(Map mapIn) throws ExecutionException, InterruptedException {
         String sql = mapIn.get("sql").toString();
         // logger.info("sql -171- \n" + sql);
         List<Map<String, Object>> list = getListOfRowObject(sql).get();
         mapIn.remove("sql");
+        logger.info("sql01 -64-" + mapIn);
         mapIn.put("list", list);
     }
 
@@ -62,16 +72,15 @@ public class Test01WebSocketHandler extends SimpleWebSocketHandler implements We
     }
 
     private void insertAdn(Map mapIn) throws ExecutionException, InterruptedException {
-        logger.info("-41-" + sqlTemplate);
         Doc newDoc = null;
         newDoc = new Doc(nextDbId(), mapIn);
         Mono<Doc> insert = sqlTemplate.insert(newDoc);
         insert.toFuture().get();
-        logger.info("-157-\n" + newDoc);
         mapIn.put("d", newDoc);
+        logger.info("-157-\n" + mapIn);
     }
 
-    public Long nextDbId() throws InterruptedException, ExecutionException {
+    private Long nextDbId() throws InterruptedException, ExecutionException {
         return sqlTemplate.select(Nextdbid.class).first().toFuture().get().getNextval();
     }
 

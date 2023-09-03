@@ -18,8 +18,10 @@ ws.onopen = event1 =>
         console.log(102001, new Date().toISOString(), json);
         const sqlApi = { parent: 376632, cmd: 'insertAdn', }
         sendReadMessage(sqlApi).then(json => {
-            console.log(json,)
-            console.log(102, new Date().toISOString());
+            console.log(102, new Date().toISOString(), json, json.d.doc_id);
+            sendReadMessage({adnId:json.d.doc_id,cmd:"deleteAdn1"}).then(json=>{
+                console.log(102, new Date().toISOString(), json);
+            })
         })
     })
 
@@ -29,7 +31,7 @@ const sendReadMessage = sendJson => {
 }
 
 console.log(101, new Date().toISOString());
-(await fetch('./sqlSelect02?sql=' + testJson.sql.replace(/\s+/g, ' '))).json().then(json => {
+false && (await fetch('./sqlSelect02?sql=' + testJson.sql.replace(/\s+/g, ' '))).json().then(json => {
     console.log(json, 1231)
     console.log(103, new Date().toISOString());
 })
