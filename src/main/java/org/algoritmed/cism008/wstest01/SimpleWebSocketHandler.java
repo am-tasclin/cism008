@@ -2,26 +2,21 @@ package org.algoritmed.cism008.wstest01;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
-
-import org.springframework.web.reactive.socket.WebSocketMessage;
-import org.springframework.web.reactive.socket.WebSocketSession;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.web.reactive.socket.WebSocketMessage;
+import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 
 public class SimpleWebSocketHandler {
+    protected R2dbcEntityTemplate sqlTemplate;
 
-    protected Flux<WebSocketMessage> makeOutput(WebSocketSession session,
-            Function<? super String, ? extends WebSocketMessage> mapper) {
-        Flux<WebSocketMessage> output = session.receive()
-                .map(WebSocketMessage::getPayloadAsText)
-                .map(mapper);
-        return output;
+    protected static Flux<String> getStringFlux(WebSocketSession session) {
+        return session.receive().map(WebSocketMessage::getPayloadAsText);
     }
 
     protected Map mapFromString(String value) {
