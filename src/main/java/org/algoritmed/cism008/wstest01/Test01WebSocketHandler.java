@@ -1,8 +1,11 @@
 package org.algoritmed.cism008.wstest01;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
+import org.algoritmed.cism008.mcrdb.Doc;
+import org.algoritmed.cism008.mcrdb.Nextdbid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,22 @@ public class Test01WebSocketHandler extends SimpleWebSocketHandler implements We
 
     private void insertAdn(Map mapIn) {
         logger.info("-41-" + sqlTemplate);
+        Doc newDoc = null;
+        try {
+            newDoc = new Doc(nextDbId(), mapIn);
+            Mono<Doc> insert = sqlTemplate.insert(newDoc);
+            insert.toFuture().get();
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        logger.info("-157-\n" + newDoc);
+        mapIn.put("d", newDoc);
     }
+
+    public Long nextDbId() throws InterruptedException, ExecutionException {
+        return sqlTemplate.select(Nextdbid.class).first().toFuture().get().getNextval();
+    }
+
     public Test01WebSocketHandler(R2dbcEntityTemplate sqlTemplate) {
         super();
         this.sqlTemplate = sqlTemplate;
