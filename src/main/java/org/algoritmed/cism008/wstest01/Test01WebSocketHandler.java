@@ -1,6 +1,8 @@
 package org.algoritmed.cism008.wstest01;
 
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
@@ -25,28 +27,46 @@ public class Test01WebSocketHandler extends SimpleWebSocketHandler implements We
         Function<? super String, ? extends WebSocketMessage> mapper = jsonString -> {
             Map mapIn = mapFromString(jsonString);
             logger.info("-24-" + mapIn);
-            if (mapIn.get("cmd") != null) switch (mapIn.get("cmd").toString()) {
-                case "insertAdn":
-                    insertAdn(mapIn);
-                    break;
-            }
-            mapIn.remove("sql");
+            if (mapIn.get("cmd") != null)
+                try {
+                    switch (mapIn.get("cmd").toString()) {
+                        case "insertAdn":
+                            insertAdn(mapIn);
+                            break;
+                        case "executeQuery":
+                            executeQuery(mapIn);
+                            break;
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+//            mapIn.remove("sql");
             return session.textMessage(toJsonString(mapIn));
         };
         Flux<WebSocketMessage> map = getStringFlux(session).map(mapper);
         return session.send(map);
     }
 
-    private void insertAdn(Map mapIn) {
+    private void executeQuery(Map mapIn) throws ExecutionException, InterruptedException {
+        String sql = mapIn.get("sql").toString();
+        // logger.info("sql -171- \n" + sql);
+        List<Map<String, Object>> list = getListOfRowObject(sql).get();
+        mapIn.remove("sql");
+        mapIn.put("list", list);
+    }
+
+    private CompletableFuture<List<Map<String, Object>>> getListOfRowObject(String sql) {
+        Mono<List<Map<String, Object>>> collectList = sqlClient.sql(sql).fetch().all().collectList();
+        CompletableFuture<List<Map<String, Object>>> future = collectList.toFuture();
+        return future;
+    }
+
+    private void insertAdn(Map mapIn) throws ExecutionException, InterruptedException {
         logger.info("-41-" + sqlTemplate);
         Doc newDoc = null;
-        try {
-            newDoc = new Doc(nextDbId(), mapIn);
-            Mono<Doc> insert = sqlTemplate.insert(newDoc);
-            insert.toFuture().get();
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        newDoc = new Doc(nextDbId(), mapIn);
+        Mono<Doc> insert = sqlTemplate.insert(newDoc);
+        insert.toFuture().get();
         logger.info("-157-\n" + newDoc);
         mapIn.put("d", newDoc);
     }
@@ -58,6 +78,7 @@ public class Test01WebSocketHandler extends SimpleWebSocketHandler implements We
     public Test01WebSocketHandler(R2dbcEntityTemplate sqlTemplate) {
         super();
         this.sqlTemplate = sqlTemplate;
+        this.sqlClient = sqlTemplate.getDatabaseClient();
     }
 
 }

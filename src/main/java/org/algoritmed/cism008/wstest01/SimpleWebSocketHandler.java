@@ -8,12 +8,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Flux;
 
 public class SimpleWebSocketHandler {
     protected R2dbcEntityTemplate sqlTemplate;
+    protected DatabaseClient sqlClient;
 
     protected static Flux<String> getStringFlux(WebSocketSession session) {
         return session.receive().map(WebSocketMessage::getPayloadAsText);

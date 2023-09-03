@@ -31,6 +31,7 @@ public class Cism008Application {
 
     @Autowired
     R2dbcEntityTemplate sqlTemplate;
+
     @Bean
     public HandlerMapping handlerMapping() {
         Map<String, WebSocketHandler> map = new HashMap<>();

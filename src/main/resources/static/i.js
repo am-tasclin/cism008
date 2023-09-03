@@ -2,7 +2,7 @@
 const uri_test01 = "ws://" + window.location.host + "/test01"
 console.log(uri_test01)
 
-const testJson = { x: 1, y: 3 }
+const testJson = { x: 1, y: 3 ,cmd:"executeQuery"}
 
 testJson.sql = 'SELECT doc_id, parent p, reference r, reference2 r2, value vl_str, sort FROM doc \n\
 LEFT JOIN string ON doc_id=string_id \n\
@@ -14,8 +14,8 @@ console.log(101, new Date().toISOString());
 const ws = new WebSocket(uri_test01)
 ws.onopen = event1 =>
     sendReadMessage(testJson).then(json => {
-        // console.log(JSON.stringify(json, '', 2))
-        console.log(102, new Date().toISOString());
+//        console.log(JSON.stringify(json, '', 2))
+        console.log(102001, new Date().toISOString(), json);
         const sqlApi = { parent: 376632, cmd: 'insertAdn', }
         sendReadMessage(sqlApi).then(json => {
             console.log(json,)
