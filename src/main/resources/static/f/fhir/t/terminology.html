@@ -1,0 +1,20 @@
+<div class="w3-quarter" data-ng-repeat="itemName in ['CodeSystemTitle','ValueSetTitle','UseValueSet']"
+    data-ng-class="{'w3-half':'UseValueSet'==itemName, 'w3-quarter':'UseValueSet'!=itemName}">
+    <div class="w3-border-bottom">
+        <div class="w3-small am-b">
+            <span class="am-n w3-medium"> {{cr.pl.session[itemName].length}}::type </span>
+            {{cr.pl.getSqlApp(itemName).name}}
+        </div>
+    </div>
+    <div class="w3-hover-shadow" data-ng-repeat="item in cr.pl.session[itemName] ">
+        <span class="w3-tiny">{{item.doc_id}}</span>
+        <span data-ng-if="'UseValueSet'!=itemName">
+            <span class="w3-small"> {{item.title}} </span>
+        </span>
+        <span data-ng-if="'UseValueSet'==itemName">
+            {{item.c}}{{item.c_id==item.parent?'.':'..'}}{{item.sr?item.sr:item.srr}}
+            <span class="w3-tiny">{{item.vs_id}}:{{cr.pl.session.eMap[item.vs_id].title}} </span>
+            <span class="w3-small"></span>
+        </span>
+    </div>
+</div>

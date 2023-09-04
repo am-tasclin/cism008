@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uk-UA" data-ng-controller="InitPageController as cr">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="/f/img/algoritmed.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/f/css/w3.css">
+    <link rel="stylesheet" href="/f/css/am.css">
+
+    <script src="/webjars/angular/1.8.3/angular.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-i18n/1.8.2/angular-locale_uk-ua.js" type="application/javascript"></script>
+    <script src="/webjars/angular-route/1.8.2/angular-route.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-resource/1.8.2/angular-resource.min.js" type="application/javascript"></script>
+    <script src="/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js" type="application/javascript"></script>
+    <script src="/f/fhir/algoritmed.AngularJS.lib01.js"></script>
+    <script src="i.js" type="application/javascript"></script>
+</head>
+
+<body class="w3-container">
+    <div class="w3-border-bottom am-max-width-1">
+        <a href="/" class="w3-btn w3-border1 w3-padding-small w3-small">
+            <img style="display: flex;" src="/f/css/homeIcon.svg">
+        </a>
+        <img src="/f/img/algoritmed-logo.webp" width="75px;" />
+        FHIR Terminology viewer
+    </div>
+    <div class="w3-border-bottom">
+        〉 type:key:value →
+        <span class="w3-small">
+            <span data-ng-repeat="itemName in ['CodeSystemTitle']">
+                {{cr.pl.session[itemName].length}}</span>:<span
+                data-ng-repeat="itemName in ['ValueSetTitle']">{{cr.pl.session[itemName].length}}</span>:<span
+                data-ng-repeat="itemName in ['UseValueSet']">{{cr.pl.session[itemName].length}}</span>
+        </span>
+    </div>
+    <div class="w3-row" data-ng-include="'terminology.html'"></div>
+    <p>&nbsp;</p>
+</body>
+
+</html>
