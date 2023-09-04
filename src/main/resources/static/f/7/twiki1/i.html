@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+ * Algoritmed ©, Licence EUPL-1.2 or later.
+-->
+<html>
+<meta charset="utf-8" />
+<title id="headTitle">7DOM:tWiki</title>
+<link rel="stylesheet" href="/f/css/w3am.css">
+<script src="/webjars/vue/3.3.4/dist/vue.global.prod.js" type="application/javascript"></script>
+<script src="/webjars/marked/4.3.0/marked.min.js" type="module"></script>
+<script src="i.js" type="module"></script>
+
+<body class="w3-container">
+    <div class="am-max-width-1">
+        <span class="w3-small">
+            <a href="/" class="w3-btn w3-padding-small">
+                <img style="display: flex;" src="/f/css/homeIcon.svg"> </a>
+            <span id="showDocId">
+                <span class="w3-tiny w3-topbar">
+                    <span class=" am-b ">H&E&W</span>
+                    <sub>tWiki</sub>
+                </span> &nbsp; 📂 7 ➾ ⁙ <b>H</b>TML page <b>E</b>ditor a la <b>W</b>iki
+            </span>
+        </span>
+        <a href="http://algoritmed.com/" class="am-0u w3-right w3-hover-shadow" target="_blank">&nbsp;<img
+                src="/f/img/algoritmed-logo.webp" style="width:75px;" />&nbsp;</a>
+        <div id="actuallyEdit" class="w3-border w3-border-light-blue">
+            &nbsp;
+            <div :review="count">
+                set the HEW parameter
+                <input @keyup.enter="setHewId" v-model="hewId" class="w3-border" />
+            </div>
+            &nbsp;
+        </div>
+        a123
+        <div id="hew" class="w3-border-bottom">
+            <template v-for="hewId in hew_l()">
+                <t-hew :hewid="hewId"></t-hew>
+                <hr />
+            </template>
+        </div>
+
+    </div>
+</body>

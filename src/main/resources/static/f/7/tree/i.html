@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--
+ * Algoritmed ©, Licence EUPL-1.2 or later.
+-->
+<html>
+<meta charset="utf-8" />
+<title id="headTitle">7DOM:Tree</title>
+<link rel="stylesheet" href="/f/css/w3.css">
+<link rel="stylesheet" href="/f/css/am.css">
+<script src="/webjars/vue/3.3.4/dist/vue.global.prod.js" type="application/javascript"></script>
+<script src="/webjars/marked/4.3.0/marked.min.js" type="module"></script>
+<script src="i.js" type="module"></script>
+
+<body class="w3-container">
+    <div class="am-max-width-1" style="position: sticky; top: 0; background-color: white;">
+        <span class="">
+            <a href="/" class="w3-btn w3-padding-small">
+                <img style="display: flex;" src="/f/css/homeIcon.svg"> </a>
+            <span id="showDocId">
+                <span class=" w3-topbar w3-dropdown-hover w3-white">
+                    <span class="w3-tiny">
+                        <span class="am-b ">D&amp;O&amp;M</span>
+                        <sub>Tree</sub>
+                    </span>
+                    <div class="w3-dropdown-content w3-card"> 🗄 </div>
+                </span>&nbsp; 📂 7 ➾
+            </span>
+            <span class="w3-small"> ⁙
+                <b>D</b>ata & <b>O</b>ntology <span class="am-u">Tree</span> editor & <b>M</b>eta data <b>M</b>odeler
+            </span>
+        </span>
+        <a href="http://algoritmed.com/" class="am-0u w3-right w3-hover-shadow" target="_blank">&nbsp;<img
+                src="/f/img/algoritmed-logo.webp" style="width:75px;" />&nbsp;</a>
+        <!-- <span id="edCopyCut" class="w3-right"> <t-ed-copy-cut /> </span> -->
+        <span id="dbMessagePool" class="w3-right"></span>
+        <div class="w3-border w3-border-light-blue">
+            <div id="actuallyEdit" class="w3-container" style="min-height: 7em;">
+                <t-adn-edit-panel></t-adn-edit-panel>
+                <template v-if="'tree'!=actuallyCompomentName()">
+                    <span class="w3-right w3-tiny w3-opacity">&nbsp; {{actuallyCompomentName()}} </span>
+                    &nbsp;
+                    <div>
+                        addTree:
+                        <input @keyup.enter="addTreeFn" v-model="addTreeId" class="w3-border" />
+                        {{addTreeId}}
+                    </div> &nbsp;
+                    <div>
+                        devTest:
+                        <button class="w3-topbar w3-btn w3-ripple" @click="click">&nbsp; 🗄 &nbsp;</button>
+                    </div>
+                </template>
+                <span class="w3-hide">{{count}}</span>
+            </div>&nbsp;
+        </div>
+    </div>
+    <div id="treeDom" class="am-max-width-1 w3-border-right"></div>&nbsp;
+
+    <div class="w3-border-top">
+        <a class="w3-tiny" href="https://www.compart.com/en/unicode/block/U+1F300">Symbols and Pictographs</a>
+        <div id="devTest">
+            <div @click="click" class="w3-hover-shadow">
+                <span class="w3-tiny">🗁,🗀,🗄,🗋,🗎</span>,
+                <span class="w3-small">🗁,🗀,🗄,🗋,🗎</span>,
+                🗁,🗀,🗄,🗋,🗎, 🛢 ⛃ ⛁ 🡔
+            </div>
+            <div>
+                🚧
+                <button @click="showConf" class="w3-btn">show conf</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

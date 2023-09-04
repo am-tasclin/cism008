@@ -1,0 +1,72 @@
+/**
+ * @license am.css v0.1
+ * (c) 2021-2022 Algoritmed Ltd. http://algoritmed.com
+ * License: Apache-2.0 license 
+ */
+.am-n {font-weight: normal;}
+.am-b {font-weight: bold;}
+.am-i {font-style: italic; }
+.am-u {text-decoration: underline; }
+a.am-0u {text-decoration: none; }
+a.am-el {
+	background-image: url(/f/css/external_link.svg);
+	background-position: center right;
+	background-repeat: no-repeat;
+	background-size: 0.857em;
+	padding-right: 1em;
+}
+.am-uppercase{text-transform: uppercase;}
+.am-width-100pr{width: 100%;}
+.am-max-width-1{max-width: 70em;}
+
+ul.am-rw-arrow li::marker {content: '→ ';}
+
+span.am-rx {position: relative; margin: 0 3px;}
+span.am-rx span {position: absolute; left: 8px; bottom: 1px;}
+
+table.am-hf-sticky01 thead tr th {
+    position: sticky;
+    top: 0;
+}
+table.am-hf-sticky01 thead,
+table.am-hf-sticky01 tfoot {
+  position: sticky;
+}
+table.am-hf-sticky01 thead {
+  inset-block-start: 0; /* "top" */
+}
+table.am-hf-sticky01 tfoot {
+  inset-block-start: 0; /* "top" */
+  inset-block-end: 0; /* "bottom" */
+}
+
+ool {
+	counter-reset: section; /*Создает новый счетчик для каждого 
+                                      тега <ol>*/
+	list-style-type: none;
+}
+
+lli::before {
+	counter-increment: section; /*Инкрементировуется только счетчик 
+                                     текущего уровня вложенности*/
+	content: counters(section, ".") " "; /*Добавляем значения всех уровней 
+                                    вложенности, используя разделитель '.'*/
+	/*Если необходима поддержка < IE8, 
+                                      необходимо убедиться, что после 
+                                      разделителя ('.') не стоит пробел*/
+}
+
+@media print {
+	@page {
+		size: A4; 
+		/* DIN A4 standard, Europe 
+		margin: 0;
+		*/
+		margin-right: 0;
+		margin-left: 2em;
+	}
+	.am-no-print, .am-no-print * {
+		display: none !important;
+	}
+	.am-inner-scroll * {margin-right: 0;}
+}
