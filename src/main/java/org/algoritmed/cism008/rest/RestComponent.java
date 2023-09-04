@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.algoritmed.cism008.mcrdb.McrDbClient;
-import org.algoritmed.cism008.wstest01.Test01WebSocketHandler;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -17,7 +16,6 @@ import org.springframework.web.reactive.function.server.ServerResponse.BodyBuild
 import org.springframework.beans.factory.annotation.Autowired;
 
 import reactor.core.publisher.Mono;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Component
 public class RestComponent {

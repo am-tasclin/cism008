@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.algoritmed.cism008.rest.RestComponent;
-import org.algoritmed.cism008.wstest01.Test01WebSocketHandler;
+import org.algoritmed.cism008.wsdbrw.DbRwWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,7 +19,6 @@ import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 @SpringBootApplication
@@ -35,7 +34,7 @@ public class Cism008Application {
     @Bean
     public HandlerMapping handlerMapping() {
         Map<String, WebSocketHandler> map = new HashMap<>();
-        map.put("/test01", new Test01WebSocketHandler(sqlTemplate));
+        map.put("/dbRw", new DbRwWebSocketHandler(sqlTemplate));
 
         int order = -1; // before annotated controllers
         return new SimpleUrlHandlerMapping(map, order);

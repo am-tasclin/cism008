@@ -1,4 +1,4 @@
-package org.algoritmed.cism008.wstest01;
+package org.algoritmed.cism008.wsdbrw;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
