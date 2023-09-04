@@ -36,6 +36,14 @@ dependencies {
 	implementation 'org.webjars.npm:vue:3.3.4'
 	implementation 'org.webjars.npm:moment:2.29.4'
 	implementation 'org.webjars.npm:marked:4.3.0'
+	runtimeOnly 'org.webjars.npm:angular:1.8.2'
+	runtimeOnly 'org.webjars.npm:angular-animate:1.8.2'
+	runtimeOnly 'org.webjars.npm:angular-resource:1.8.2'
+	runtimeOnly 'org.webjars.npm:angular-route:1.8.2'
+	runtimeOnly 'org.webjars.npm:angular-sanitize:1.8.2'
+	runtimeOnly 'org.webjars.npm:angular-aria:1.8.2'
+	runtimeOnly 'org.webjars.npm:angular-i18n:1.8.2'
+	runtimeOnly 'org.webjars.npm:angular-messages:1.8.2'
 
 }
 

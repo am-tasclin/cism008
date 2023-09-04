@@ -86,7 +86,7 @@ public class DbRwWebSocketHandler extends SimpleWebSocketHandler implements WebS
     public DbRwWebSocketHandler(R2dbcEntityTemplate sqlTemplate) {
         super();
         this.sqlTemplate = sqlTemplate;
-        this.sqlClient = sqlTemplate.getDatabaseClient();
+        sqlClient = sqlTemplate.getDatabaseClient();
     }
 
 }
