@@ -6,7 +6,9 @@
 import {
     mcData, reViewAdn, setActuallyTreeObj, actuallyTreeObj
     , initActuallyTreeOpenedId, treeOpenedChildOnOff
-    , domConfHrefHash, reViewActivePanel, 
+    , domConfHrefHash, reViewActivePanel, getDomComponent,
+    setActualeCompomentName, setActuallyTreeObjFromPath,
+    setActiveEditObjName,
 } from '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
 
@@ -29,6 +31,26 @@ export default {
             return x.join(',').includes(this.adnId)
             // return x.includes(this.adnId)
         }, click() {
+            const oldSelectedId = actuallyTreeObj().selectedId;
+            (oldSelectedId == this.adnId || !oldSelectedId) &&
+                treeOpenedChildOnOff(this.treeRootId, this.adnId)
+            !mcData.parentChilds[this.adnId]
+                && readAdnByParentIds([this.adnId])
+                    .then(() => this.count++) || this.count++
+            console.log(oldSelectedId, this.count, this.path)
+
+            setActualeCompomentName('tree')
+            setActiveEditObjName('Tree')
+            setActuallyTreeObjFromPath(this.path)
+            actuallyTreeObj().selectedId = this.adnId
+            actuallyTreeObj().selectedRootId = this.treeRootId
+            oldSelectedId && reViewAdn(oldSelectedId)
+
+            getDomComponent('actuallyEdit').count++
+            getDomComponent('TreeEp') && getDomComponent('TreeEp').count++
+            domConfHrefHash()
+
+        }, click1() {
             const oldSelectedId = actuallyTreeObj().selectedId;
             (oldSelectedId == this.adnId || !oldSelectedId) &&
                 treeOpenedChildOnOff(this.treeRootId, this.adnId)

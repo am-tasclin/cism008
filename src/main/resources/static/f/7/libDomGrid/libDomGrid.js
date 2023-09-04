@@ -17,13 +17,14 @@ const domContainer = {
 console.log(domContainer)
 export const consoleLogDomCOntainer = () => console.log(domContainer)
 
+export const setActiveEditObjName = activeEditObjName => domConf().activeEditObjName = activeEditObjName
 export const setActualeCompomentName = ctName => domContainer.actuallyComponentName = ctName
+export const getActualeCompomentName = () => domContainer.actuallyComponentName
+
 export const setDomComponent = (ctName, ct) =>
     setActualeCompomentName(ctName) && (domContainer.components[ctName] = ct)
-
 export const getDomComponent = (ctName) => domContainer.components[ctName]
 export const getDomComponentAll = () => domContainer.components
-export const getActualeCompomentName = () => domContainer.actuallyComponentName
 /**
  * 
  */
@@ -33,7 +34,7 @@ export const mcData = domContainer.mcData
  */
 const domConf = () => domContainer.conf
 
-const domConfStrignifyList = ['mcElement', 'actuallyTreeObj', 'actuallyEdit', 'hewComponent']
+const domConfStrignifyList = ['mcElement', 'actuallyTreeObj', 'actuallyEdit', 'hewComponent', 'adnEditPanelSubMenu']
 const domConfStrignifyFn = (k, v) => !domConfStrignifyList.includes(k) && v || undefined
 export const domConfLocationHash = () => {
     // console.log(domConf())
@@ -53,6 +54,9 @@ export const domConfStrignify = () => {
  * @returns 
  */
 export const actuallyTreeObj = () => domConf().actuallyTreeObj
+export const setActuallyTreeObjFromPath = pathTreeStr =>
+    domConf().actuallyTreeObj = pathTreeStr.split(',')
+        .reduce((o, k) => o[k], domContainer.conf)
 /**
  * 
  * @param {*} pathTreeStr 
@@ -60,7 +64,8 @@ export const actuallyTreeObj = () => domConf().actuallyTreeObj
  */
 export const setActuallyTreeObj = pathTreeStr => {
     setActualeCompomentName('tree')
-    domConf().actuallyTreeObj = pathTreeStr.split(',').reduce((o, k) => o[k], domContainer.conf)
+    setActuallyTreeObjFromPath(pathTreeStr)
+    // domConf().actuallyTreeObj = pathTreeStr.split(',').reduce((o, k) => o[k], domContainer.conf)
     getDomComponent('actuallyEdit').count++
     getDomComponent('actuallyTreeObj') &&
         getDomComponent('actuallyTreeObj').count++
@@ -96,7 +101,8 @@ export const treeOpenedChildOnOff = (treeRootId, adnId) => {
  * @param {*} activeEditObjName 
  */
 export const reViewActivePanel = (adnId, activeEditObjName) => {
-    domConf().activeEditObjName = activeEditObjName
+    // domConf().activeEditObjName = activeEditObjName
+    setActiveEditObjName(activeEditObjName)
     domConf().activeEditId = adnId
     // console.log(domConf())
     getDomComponent('actuallyEdit').count++

@@ -15,8 +15,8 @@ const treeSelectedId = () => actuallyTreeObj() && actuallyTreeObj().selectedId
     , adn = () => mcData.eMap[treeSelectedId()]
     , reViewEditPanel = () => {
         getDomComponent('TreeEp').count++
-        getDomComponent('actuallyEdit').count++
     }
+
 const isAdnEditPanelSubMenu = type => actuallyTreeObj() && actuallyTreeObj().adnEditPanelSubMenu
     && actuallyTreeObj().adnEditPanelSubMenu[treeSelectedId()]
     && actuallyTreeObj().adnEditPanelSubMenu.activeId == treeSelectedId()
@@ -43,6 +43,7 @@ export default {
         r2() { return adn() && adn().r2 },
         actuallyCompomentName() { return getActualeCompomentName() },
         insertAdnChild() { dbSendInsertAdn({ parent: adn().doc_id }) },
+        insertAdnSibling() { dbSendInsertAdn({ parent: adn().p }) },
         deleteAdn() { dbSendDeleteAdn1({ adnId: this.adn().doc_id, p: this.adn().p }) },
         copyId() { return actuallyTreeObj().copyId },
         copyAdnId() {
@@ -54,6 +55,7 @@ export default {
         isEditStrMenu() { return isAdnEditPanelSubMenu('editStr') },
         isSortMenu() { return isAdnEditPanelSubMenu('sort') },
         setEdVlStr(vl) { initAdnEditPanelSubMenu().edVlStr = vl },
+        adnEditPanelSubMenu() { return actuallyTreeObj().adnEditPanelSubMenu[treeSelectedId()] },
         editStrMenu() {
             console.log(actuallyTreeObj())
             console.log(actuallyTreeObj().adnEditPanelSubMenu)
