@@ -36,8 +36,6 @@ export default {
             !mcData.parentChilds[this.adnId]
                 && readAdnByParentIds([this.adnId])
                     .then(() => this.count++) || this.count++
-            console.log(oldSelectedId, this.count, this.path)
-
             //setActualeCompomentName('tree')
             setActiveEditObjName('Tree')
             setActuallyTreeObjFromPath(this.path)

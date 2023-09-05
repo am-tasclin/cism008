@@ -3,7 +3,7 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { mcData, domConfHew, reViewActivePanel, getDomComponent, setActiveEditObjName } from
+import { mcData, domConfHew, domConfHrefHash, getDomComponent, setActiveEditObjName } from
     '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
 
@@ -42,14 +42,14 @@ export default {
                     domConfHew().selectedId = this.adnId
                     domConfHew().selectedRootId = this.hewdocid
                     getDomComponent('actuallyEdit').count++
-                    getDomComponent('rootHew').count++
+                    // getDomComponent('rootHew').count++
 
                     domConfHew().hewTagComponent[this.adnId] &&
                         domConfHew().hewTagComponent[this.adnId].count++
 
                     domConfHew().hewTagComponent[oldSelectedId] &&
                         domConfHew().hewTagComponent[oldSelectedId].count++
-                    // domConfHew().hewComponent[oldSelectedId].count++
+                    domConfHrefHash()
                 },
                 isSelected() { return domConfHew() && domConfHew().selectedId == this.adnId },
                 vlStr() { return mcData.eMap[this.adnId].vl_str },
