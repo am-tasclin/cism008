@@ -37,7 +37,7 @@ const pageConf = createApp({
         domConfStringify() { return JSON.stringify(domConf, '', 2) },
     },template:`
 <template v-for="hewId in domConf().hew.l">
-    <t-hew :hewid="hewId"></t-hew>
+    <t-hew :hewid="hewId" :hewdocid="hewId"></t-hew>
     <hr />
 </template>
     `,
@@ -62,10 +62,8 @@ app_treeDom.mount('#treeDom')
 import HewEp from '/f/7/libDomGrid/editPanel/HewEp.js'
 import TreeEp from '/f/7/libDomGrid/editPanel/TreeEp.js'
 createApp({
-    data() { return { count: 0, } },
-    mounted() { setDomComponent('actuallyEdit', this) },
-    components: { HewEp, TreeEp },
-    methods: {
+    data() { return { count: 0, } }, components: { HewEp, TreeEp },
+    mounted() { setDomComponent('actuallyEdit', this) }, methods: {
         domConf() { return domConf },
         tagName() {
             console.log(domConf.activeEditObjName)

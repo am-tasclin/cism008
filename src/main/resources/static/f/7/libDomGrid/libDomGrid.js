@@ -15,11 +15,11 @@ const domContainer = {
     components: {}
 }
 console.log(domContainer)
-export const consoleLogDomCOntainer = () => console.log(domContainer)
+export const consoleLogDomContainer = () => console.log(domContainer)
 
 export const setActiveEditObjName = activeEditObjName => domConf().activeEditObjName = activeEditObjName
 export const setActualeCompomentName = ctName => domContainer.actuallyComponentName = ctName
-export const getActualeCompomentName = () => domContainer.actuallyComponentName
+export const getActualeCompomentName = () => domContainer.actuallyComponentName //TO REMOVE
 
 export const setDomComponent = (ctName, ct) =>
     setActualeCompomentName(ctName) && (domContainer.components[ctName] = ct)

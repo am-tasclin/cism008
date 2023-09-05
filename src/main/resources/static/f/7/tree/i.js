@@ -49,9 +49,7 @@ app_treeDom.mount('#treeDom')
 import AdnEditPanel from '/f/7/libDomGrid/AdnEditPanel.js'
 createApp({
     data() { return { count: 0, addTreeId: 0, } },
-    mounted() {
-        setDomComponent('actuallyEdit', this)
-    }, methods: {
+    mounted() { setDomComponent('actuallyEdit', this) }, methods: {
         treeSelectedId() { return actuallyTreeObj() && actuallyTreeObj().selectedId },
         actuallyCompomentName() { return getActualeCompomentName() },
         addTreeFn() {
@@ -64,9 +62,15 @@ createApp({
 }).component('t-adn-edit-panel', AdnEditPanel).mount('#actuallyEdit')
 
 createApp({
-    mounted() {
-        setDomComponent('devTest', this)
-    }, methods: {
+    methods: {
+        clickStartMenu() {
+            console.log(123)
+        },
+    }
+}).mount('#showDocId')
+
+createApp({
+    mounted() { setDomComponent('devTest', this) }, methods: {
         showConf() {
             domConfStrignify()
         }, click() {

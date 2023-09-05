@@ -6,9 +6,8 @@
 import {
     mcData, setDomComponent, getActualeCompomentName, actuallyTreeObj,
     getDomComponent,
-    setUpOneLevel, setTakeToRoot,
 } from '/f/7/libDomGrid/libDomGrid.js'
-import { dbSendVlStrData, dbSendInsertAdn, dbSendDeleteAdn1 } from
+import { dbSendInsertAdn, dbSendDeleteAdn1 } from
     '/f/7/libDbRw/libMcRDb.js'
 
 const treeSelectedId = () => actuallyTreeObj() && actuallyTreeObj().selectedId
@@ -34,9 +33,7 @@ const isAdnEditPanelSubMenu = type => actuallyTreeObj() && actuallyTreeObj().adn
 
 export default {
     data() { return { count: 0, } },
-    mounted() {
-        setDomComponent('TreeEp', this)
-    }, methods: {
+    mounted() { setDomComponent('TreeEp', this) }, methods: {
         adn() { return adn() },
         p() { return adn() && adn().p },
         r1() { return adn() && adn().r },
@@ -65,7 +62,7 @@ export default {
 
         },
     }, template: `
-<div class="w3-row" v-if="'tree'==actuallyCompomentName()">
+<div class="w3-row" v-if="true||'tree'==actuallyCompomentName()">
     <span class="w3-right w3-tiny w3-opacity">
         <span v-if="copyId()">copyId:{{copyId()}} ‧ </span>
         <span class="w3-text-blue am-b"> {{treeSelectedId()}}</span> ‧ tree</span>

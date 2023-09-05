@@ -3,8 +3,19 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-export default{
-    template:`
-a1:Hew
+import {
+    getActualeCompomentName, consoleLogDomContainer,
+} from '/f/7/libDomGrid/libDomGrid.js'
+export default {
+    methods: {
+        actuallyCompomentName() {
+            consoleLogDomContainer()
+            return getActualeCompomentName()
+        },
+    }, template: `
+<div>
+    a1:Hew
+    {{actuallyCompomentName()}}
+</div>
 `,
 }
