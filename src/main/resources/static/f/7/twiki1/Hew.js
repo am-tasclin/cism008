@@ -3,7 +3,7 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { mcData, confHew } from '/f/7/libDomGrid/libDomGrid.js'
+import { mcData, domConfHew } from '/f/7/libDomGrid/libDomGrid.js'
 const idsTag = { 376600: 'h1', 371359: 'p' }
 
 export default {
@@ -30,7 +30,7 @@ export default {
 </component>`,
         },
     }, mounted() {
-        confHew().hewComponent[this.hewid] = this
+        domConfHew().hewComponent[this.hewid] = this
     }, methods: {
         isTag(adnId) { return idsTag[mcData.eMap[adnId] && mcData.eMap[adnId].r] },
         is(v) { return is(v, this.hew()) },

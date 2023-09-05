@@ -10,37 +10,41 @@ const domConf = initDomConfLogic(window.location.hash.substring(1))
 // console.log(uniqueIdsForDbRead1)
 
 console.log(domConf)
-const uniqueIdsForDbRead = domConf.hew.l.concat(domConf.actuallyTreeObj.rootList)
+const uniqueIdsForDbRead = domConf.actuallyTreeObj
+    && domConf.hew.l.concat(domConf.actuallyTreeObj.rootList)
+    || domConf.hew.l
+
 console.log(uniqueIdsForDbRead)
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
 import { readAdnByIds, readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
-import { confHew } from '/f/7/libDomGrid/libDomGrid.js'
+import { domConfHew } from '/f/7/libDomGrid/libDomGrid.js'
 
 ws.onopen = event =>
     uniqueIdsForDbRead.length && readAdnByIds(uniqueIdsForDbRead
     ).then(() => readAdnByParentIds(uniqueIdsForDbRead
     ).then(() => {
-        // console.log(domConf.actuallyTreeObj.rootList, 123, domConf, confHew())
-        domConf.actuallyTreeObj.rootList.forEach(treeId => reViewAdn(treeId))
-    }).then(() => uniqueIdsForDbRead.forEach(hewId => confHew().hewComponent[hewId].count++)))
+        // console.log(domConf.actuallyTreeObj.rootList, 123, domConf, domConfHew())
+        domConf.actuallyTreeObj && 
+            domConf.actuallyTreeObj.rootList.forEach(treeId => reViewAdn(treeId))
+    }).then(() => uniqueIdsForDbRead.forEach(hewId => domConfHew().hewComponent[hewId].count++)))
 
 import { reViewActivePanel } from '/f/7/libDomGrid/libDomGrid.js'
 import Hew from '/f/7/libHew/Hew.js'
 import McElement from '/f/7/libDomGrid/McElement.js'
 const { createApp } = Vue
 const pageConf = createApp({
-    methods: {
+    data() { return { count: 0, } },
+    mounted() { setDomComponent('rootHew', this) }, methods: {
         clickTree(treeId) { reViewActivePanel(treeId, 'Tree') },
         clickHew(hewId) { reViewActivePanel(hewId, 'Hew') },
         domConf() { return domConf },
         domConfStringify() { return JSON.stringify(domConf, '', 2) },
-    },template:`
+    }, template: `
 <template v-for="hewId in domConf().hew.l">
-    <t-hew :hewid="hewId" :hewdocid="hewId"></t-hew>
+    <t-hew :hewid="1*hewId" :hewdocid="1*hewId"></t-hew>
     <hr />
-</template>
-    `,
+</template> <span class="w3-hide">{{count}}</span>`,
 })
 pageConf.component('t-hew', Hew).mount('#hew')
 pageConf.mount('#pageConf')

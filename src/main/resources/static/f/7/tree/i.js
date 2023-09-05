@@ -33,9 +33,7 @@ const { createApp } = Vue
 import McElement from '/f/7/libDomGrid/McElement.js'
 const app_treeDom = createApp({
     data() { return { count: 0, } },
-    mounted() {
-        setDomComponent('treeDom', this)
-    }, methods: {
+    mounted() { setDomComponent('treeDom', this) }, methods: {
         confTreeRootList() { return confTree()[0] && confTree()[0].rootList || [] },
     }, template: `
 <div v-for="adnId in confTreeRootList()">

@@ -4,11 +4,10 @@
  * 
  */
 import {
-    mcData, reViewAdn, setActuallyTreeObj, actuallyTreeObj
-    , initActuallyTreeOpenedId, treeOpenedChildOnOff
-    , domConfHrefHash, reViewActivePanel, getDomComponent,
-    setActualeCompomentName, setActuallyTreeObjFromPath,
-    setActiveEditObjName,
+    mcData, reViewAdn, setActuallyTreeObj, actuallyTreeObj,
+    initActuallyTreeOpenedId, treeOpenedChildOnOff,
+    domConfHrefHash, reViewActivePanel, getDomComponent,
+    setActuallyTreeObjFromPath, setActiveEditObjName,
 } from '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
 
@@ -30,7 +29,7 @@ export default {
             const x = initActuallyTreeOpenedId(this.treeRootId)
             return x.join(',').includes(this.adnId)
             // return x.includes(this.adnId)
-        }, click() {
+        }, clickAdn() {
             const oldSelectedId = actuallyTreeObj().selectedId;
             (oldSelectedId == this.adnId || !oldSelectedId) &&
                 treeOpenedChildOnOff(this.treeRootId, this.adnId)
@@ -39,12 +38,12 @@ export default {
                     .then(() => this.count++) || this.count++
             console.log(oldSelectedId, this.count, this.path)
 
-            setActualeCompomentName('tree')
+            //setActualeCompomentName('tree')
             setActiveEditObjName('Tree')
             setActuallyTreeObjFromPath(this.path)
             actuallyTreeObj().selectedId = this.adnId
             actuallyTreeObj().selectedRootId = this.treeRootId
-            oldSelectedId && reViewAdn(oldSelectedId)
+            oldSelectedId!=this.adnId && reViewAdn(oldSelectedId)
 
             getDomComponent('actuallyEdit').count++
             getDomComponent('TreeEp') && getDomComponent('TreeEp').count++
@@ -65,7 +64,7 @@ export default {
             domConfHrefHash()
         }
     }, template: `
-<div @click="click" class="w3-hover-shadow" :review="count"
+<div @click="clickAdn" class="w3-hover-shadow" :review="count"
         :class="{'w3-light-grey':isSelected(),'w3-white':!isSelected()}">
     <span class="w3-small" :class="{'w3-text-blue':isSelected()}" > 
         <span v-if="adnId==treeRootId">🗄</span>
