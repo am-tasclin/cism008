@@ -69,7 +69,7 @@ import { addNewMc, } from '/f/7/libDomGrid/libDomGrid.js'
  */
 export const readAdnByParentIds = parentId_list => {
     const sql = selectDocVlStrByParentIds.replace(':idList', parentId_list.join(','))
-    console.log(parentId_list)
+    // console.log(parentId_list)
     return executeSelectQuery(sql).then(json => {
         !json.list.length && parentId_list.forEach(andId =>
             mcData.parentChilds[andId] = [])

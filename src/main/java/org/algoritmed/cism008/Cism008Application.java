@@ -32,7 +32,7 @@ public class Cism008Application {
     R2dbcEntityTemplate sqlTemplate;
 
     @Bean
-    public HandlerMapping handlerMapping() {
+    public HandlerMapping wsHandlerMapping() {
         Map<String, WebSocketHandler> map = new HashMap<>();
         map.put("/dbRw", new DbRwWebSocketHandler(sqlTemplate));
 

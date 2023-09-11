@@ -264,10 +264,18 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
         console.log(rawUriDomConf1)
         const uriDomConf_l = rawUriDomConf1.split(',')
         // console.log(uriDomConf_l, ppId, 'hew' == uriDomConf_l[0]);
-        'hew' == uriDomConf_l[0] && initHewUriDomConf(uriDomConf_l)
-            || initTreeUriDomConf(uriDomConf_l, ppId)
+        'hew' == uriDomConf_l[0] && initHewUriDomConf(uriDomConf_l
+        ) || 'wf' == uriDomConf_l[0] && initWfUriDomConf(uriDomConf_l
+        ) || initTreeUriDomConf(uriDomConf_l, ppId)
     })
     return domContainer.conf
+}
+
+const initWfUriDomConf = uriDomConf_l => {
+    console.log(uriDomConf_l)
+    const wf = domContainer.conf.wf || (domContainer.conf.wf 
+        = { l: [], wfComponent: {}, })
+    uriDomConf_l.slice(1).forEach(im => !wf.l.includes(im) && wf.l.push(im))
 }
 /**
  * 
@@ -286,21 +294,15 @@ const initTreeUriDomConf = (uriDomConf_l, ppId) => {
         })();
     // console.log(JSON.stringify(domContainer.conf, '', 2))
 }
-const initDomConfHew = () => domContainer.conf.hew || (domContainer.conf.hew = {
-    l: [],
-    hewComponent: {},
-    hewTagComponent: {},
-})
-
 /**
  * 
  * @param {*} uriDomConf_l 
  * @returns 
  */
 const initHewUriDomConf = (uriDomConf_l) => {
-    const hew = initDomConfHew()
-    uriDomConf_l.slice(1).forEach(im =>
-        !hew.l.includes(im) && hew.l.push(im))
+    const hew = domContainer.conf.hew
+        || (domContainer.conf.hew = { l: [], hewComponent: {}, hewTagComponent: {}, })
+    uriDomConf_l.slice(1).forEach(im => !hew.l.includes(im) && hew.l.push(im))
     return true
 }
 /**

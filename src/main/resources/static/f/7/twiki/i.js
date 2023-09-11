@@ -3,7 +3,7 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { initDomConfLogic, setDomComponent, reViewAdn, uniqueIdPageRead } from
+import { initDomConfLogic, setDomComponent, reViewAdn } from
     '/f/7/libDomGrid/libDomGrid.js'
 const domConf = initDomConfLogic(window.location.hash.substring(1))
 // const uniqueIdsForDbRead1 = uniqueIdPageRead()
@@ -25,7 +25,7 @@ ws.onopen = event =>
     ).then(() => readAdnByParentIds(uniqueIdsForDbRead
     ).then(() => {
         // console.log(domConf.actuallyTreeObj.rootList, 123, domConf, domConfHew())
-        domConf.actuallyTreeObj && 
+        domConf.actuallyTreeObj &&
             domConf.actuallyTreeObj.rootList.forEach(treeId => reViewAdn(treeId))
     }).then(() => uniqueIdsForDbRead.forEach(hewId => domConfHew().hewComponent[hewId].count++)))
 
