@@ -56,6 +56,7 @@ export const domConfStrignify = () => {
  */
 export const actuallyTreeObj = () => domConf().actuallyTreeObj
 export const domConfHew = () => domConf().hew
+export const domConfWf = () => domConf().wf
 // export const confHew = () => domContainer.conf.hew // TO REMOVE
 export const setActuallyTreeObjFromPath = pathTreeStr =>
     domConf().actuallyTreeObj = pathTreeStr.split(',')

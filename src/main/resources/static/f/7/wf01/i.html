@@ -27,9 +27,11 @@
         <a href="http://algoritmed.com/" class="am-0u w3-right w3-hover-shadow" target="_blank">&nbsp;<img
                 src="/f/img/algoritmed-logo.webp" style="width:75px;" />&nbsp;</a>
     </div>
+    <div id="wf01"></div>
+
     <div id="workFlow" class="am-max-width-1">
+        <span class="w3-right"> {{count}} </span>
         <h2 :review="count"> {{adn(rootId).vl_str}} </h2>
-        {{count}}
         <div v-for="adnId in parentChilds(rootId)">
             <div v-if="parentChilds(adnId)" class="w3-container w3-border-left">
                 <span class="w3-tiny w3-opacity w3-right"> {{adnId}} {{parentChilds(adnId)}} </span>

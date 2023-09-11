@@ -31,7 +31,6 @@ ws.onopen = event =>
 
 import { reViewActivePanel } from '/f/7/libDomGrid/libDomGrid.js'
 import Hew from '/f/7/libHew/Hew.js'
-import McElement from '/f/7/libDomGrid/McElement.js'
 const { createApp } = Vue
 const pageConf = createApp({
     data() { return { count: 0, } },
@@ -46,9 +45,10 @@ const pageConf = createApp({
     <hr />
 </template> <span class="w3-hide">{{count}}</span>`,
 })
-pageConf.component('t-hew', Hew).mount('#hew')
+pageConf.component('t-hew', Hew)//.mount('#hew')
 pageConf.mount('#pageConf')
 
+import McElement from '/f/7/libDomGrid/McElement.js'
 const app_treeDom = createApp({
     methods: {
         domConf() { return domConf },
