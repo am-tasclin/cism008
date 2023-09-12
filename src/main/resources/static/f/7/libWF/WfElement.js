@@ -15,7 +15,8 @@ export default {
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
     <template v-for="adnId2 in parentChilds(adnid)">
         <div class="w3-hover-shadow">
-            <span class="w3-tiny">{{adnId2}}&nbsp;{{wfSymbolR(adnId2)}}{{wfSymbolR2(adnId2)}}
+            <span class="w3-tiny">
+                {{adnId2}}&nbsp;{{wfSymbolR(adnId2)}}{{wfSymbolR2(adnId2)}}
             </span> {{adn(adnId2).vl_str}}
             <span class="w3-right w3-tiny w3-opacity">
             {{adn(adnId2).r}}|{{adn(adnId2).r2}}
