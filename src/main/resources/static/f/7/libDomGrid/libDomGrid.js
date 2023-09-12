@@ -12,10 +12,12 @@ const eMap = {}, parentChilds = {}
  */
 const domContainer = {
     conf: {}, mcData: { eMap: eMap, parentChilds: parentChilds },
-    components: {}
+    components: {},
+    constants: {}, // MCrDB constants
 }
 console.log(domContainer)
 export const consoleLogDomContainer = () => console.log(domContainer)
+export const domConstants = domContainer.constants
 
 export const setActiveEditObjName = activeEditObjName => domConf().activeEditObjName = activeEditObjName
 export const setActualeCompomentName = ctName => domContainer.actuallyComponentName = ctName // TO REMOVE
@@ -274,8 +276,8 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
 
 const initWfUriDomConf = uriDomConf_l => {
     console.log(uriDomConf_l)
-    const wf = domContainer.conf.wf || (domContainer.conf.wf 
-        = { l: [], wfComponent: {}, })
+    const wf = domContainer.conf.wf || (domContainer.conf.wf
+        = { l: [], wfComponent: {}, taskComponent: {},})
     uriDomConf_l.slice(1).forEach(im => !wf.l.includes(im) && wf.l.push(im))
 }
 /**

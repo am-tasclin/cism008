@@ -3,9 +3,11 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { mcData, domConfWf } from '/f/7/libDomGrid/libDomGrid.js'
+import { mcData, domConfWf, domConstants } from '/f/7/libDomGrid/libDomGrid.js'
+import Task from '/f/7/libWF/Task.js'
 export default {
     props: { adnid: Number }, data() { return { count: 0, } },
+    components: { Task, },
     mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: {
         adn(adnId) { return mcData.eMap[adnId] || {} },
         parentChilds(adnId) { return mcData.parentChilds[adnId] || [] },
@@ -13,7 +15,7 @@ export default {
         wfSymbolR2(adnId) { return wfType[this.adn(adnId).r2] },
         wfSymbolPR(adnId) { return wfType.p[this.adn(this.adn(adnId).p).r] },
         hasTask(adnId2) {
-            return this.parentChilds(adnId2).find(i => taskElementList.includes(this.adn(i).r))
+            return this.parentChilds(adnId2).find(i => domConstants.taskElementList.includes(this.adn(i).r))
         },
     }, template: `
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
@@ -28,8 +30,12 @@ export default {
             <div class="w3-half">
                 <div class="w3-tiny w3-light-grey"> 𝑡→ Task</div> 
                 <div v-for="adnId3 in parentChilds(adnId2)">
-                    <span class="w3-tiny">{{adnId3}}&nbsp;𝑡→</span>
-                    {{adn(adnId3).r2}}
+                    <div class="w3-hover-shadow">
+                        <span class="w3-tiny">
+                        {{adnId3}}.{{adn(adnId3).r2}}
+                        &nbsp;𝑡→</span>&nbsp;
+                        <Task :adnId="adn(adnId3).r2"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -49,7 +55,7 @@ export default {
 /**
  * 
  */
-const taskElementList = [371927]
+domConstants.taskElementList = [371927]
 /**
  * ⛋ -- Process in PlanDefinition
  * 𝑓 -- ActivityDefinition
