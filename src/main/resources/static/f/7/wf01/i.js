@@ -4,8 +4,7 @@
  * 
  */
 import {
-    initDomConfLogic, mcData,
-    setDomComponent, getDomComponent
+    initDomConfLogic, mcData, setDomComponent, getDomComponent
 } from '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByIds, readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
 
@@ -30,8 +29,10 @@ const deepN_readParent = (deepCount, list, prevList, fn) => {
     deepCount > 0 && list.length && readAdnByParentIds(list).then(() => {
         getDomComponent('workFlow').count++
         getDomComponent('wf01').count++
-        list.forEach(i => domConf.wf.wfComponent[i] &&
-            domConf.wf.wfComponent[i].count++)
+        //domConf.wf.wfComponent[i] &&
+        list.forEach(i => domConf.wf.wfComponent[i].count++)
+        list.forEach(i => domConf.wf.wfComponent[mcData.eMap[i].p] &&
+            domConf.wf.wfComponent[mcData.eMap[i].p].count++)
         const newList = Object.keys(mcData.eMap).filter(i => !mcData.parentChilds[i] && !prevList.includes(i))
         // console.log(deepCount, newList, newList.length)
         deepN_readParent(--deepCount, newList, list.concat(newList), fn)
