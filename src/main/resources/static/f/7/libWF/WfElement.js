@@ -11,12 +11,15 @@ export default {
         parentChilds(adnId) { return mcData.parentChilds[adnId] || [] },
         wfSymbolR(adnId) { return wfType[this.adn(adnId).r] },
         wfSymbolR2(adnId) { return wfType[this.adn(adnId).r2] },
+        wfSymbolPR(adnId) { return wfType.p[this.adn(this.adn(adnId).p).r] },
     }, template: `
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
     <template v-for="adnId2 in parentChilds(adnid)">
         <div class="w3-hover-shadow">
             <span class="w3-tiny">
-                {{adnId2}}&nbsp;{{wfSymbolR(adnId2)}}{{wfSymbolR2(adnId2)}}
+                {{adnId2}}&nbsp;
+                {{wfSymbolPR(adnId2)}}{{wfSymbolR(adnId2)}}
+                {{wfSymbolR2(adnId2)}}
             </span> {{adn(adnId2).vl_str}}
             <span class="w3-right w3-tiny w3-opacity">
             {{adn(adnId2).r}}|{{adn(adnId2).r2}}
@@ -32,4 +35,7 @@ export default {
  * 𝑓 -- ActivityDefinition
  * 𝑡 -- Task
  */
-const wfType = { 369782: '⛋', 371575: '⛋', 373500: '𝑓→', 371927: '𝑡→' }
+const wfType = {
+    369782: '[]', 371575: '[]', 373500: '𝑓→', 371927: '𝑡→'
+    , p: { 369782: '⛋', 371575: '⛋' }
+}
