@@ -37,12 +37,16 @@ const afterReadTasks = (x, deepCount) => {
     readAdnByIds(codes).then(() =>
         deepN_readParent(deepNum, codes, [], afterReadCodes))
 }
-const loggedAttributes = [372052]
+const loggedAttributes = [372052, 377121, 377149, 377170]
 const afterReadCodes = (x, deepCount) => {
     console.log(deepCount, mcData)
     readAdnByIds(loggedAttributes).then(() => {
         getDomComponent('cmd').count++
         getDomComponent('ccr').count++
+        console.log(377121, mcData.eMap[377121])
+        console.log(domConf.wf.taskComponent)
+        Object.keys(domConf.wf.taskComponent).forEach(i =>
+            domConf.wf.taskComponent[i].count++)
     })
 }
 
@@ -80,17 +84,10 @@ const wf01 = createApp({
     }, template: `
 <h2 :review="count"> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
-<div class="w3-border-top w3-opacity">
-    Система кодування
-</div>
-
+<div class="w3-border-top w3-opacity"> Система кодування </div>
 <div class="w3-row w3-border-top">
-    <div class="w3-half">
-        <t-ccr :cr="cr()" />
-    </div>
-    <div class="w3-half">
-        <t-cmd :cmd="cmd()" />
-    </div>
+    <div class="w3-half"><t-ccr :cr="cr()" /></div>
+    <div class="w3-half"><t-cmd :cmd="cmd()" /></div>
 </div>
 `,
 })

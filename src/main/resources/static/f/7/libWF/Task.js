@@ -15,6 +15,7 @@ export default {
 <div v-if="parentChilds(adnId).length" class="w3-container w3-border-left">
     <div v-for="adnId2 in parentChilds(adnId)">
         <span class="w3-tiny">{{adnId2}}&nbsp;</span>{{taskSymbolR(adnId2)}}
+        <span class="w3-opacity w3-small">{{adn(adn(adn(adn(adnId2).r2).r2).p).vl_str}}</span>
         {{adn(adnId2).vl_str}}
         <span v-if="parentChilds(adnId2)[0]">
             ⇸
