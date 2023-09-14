@@ -74,11 +74,11 @@ export const CodeMetaData = {
         adn(adnId) { return mcData.eMap[adnId] || {} },
         parentChilds(adnId) { return mcData.parentChilds[adnId] || [] },
     }, template: `
-<div :review="count" v-for="cmdId in cmd">
+<div :review="count" v-for="cmdId in cmd" class="w3-hover-shadow">
     <span class="w3-tiny">{{cmdId}}</span>
     {{adn(cmdId).vl_str}}
     <div v-if="parentChilds(cmdId)" class="w3-container w3-border-left">
-        <div v-for="adnId in parentChilds(cmdId)">
+        <div v-for="adnId in parentChilds(cmdId)" class="w3-hover-shadow">
             <span class="w3-tiny">{{adnId}}</span>
             {{adn(adnId).vl_str}}
             <span v-if="adn(adnId).r">:{{adn(adn(adnId).r).vl_str}}</span>

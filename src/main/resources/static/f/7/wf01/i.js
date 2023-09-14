@@ -33,7 +33,7 @@ const codes = codeMetaData.concat(codeRepresentation)
 const afterReadTasks = (x, deepCount) => {
     // console.log(mcData.eMap[377155], mcData.parentChilds[377155])
     // console.log(mcData.eMap[377156], mcData.parentChilds[377156])
-    console.log(34, codes, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
+    // console.log(34, codes, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
     readAdnByIds(codes).then(() =>
         deepN_readParent(deepNum, codes, [], afterReadCodes))
 }
@@ -43,7 +43,6 @@ const afterReadCodes = (x, deepCount) => {
     readAdnByIds(loggedAttributes).then(() => {
         getDomComponent('cmd').count++
         getDomComponent('ccr').count++
-        loggedAttributes.forEach(i => console.log(mcData.eMap[i]))
     })
 }
 
@@ -81,6 +80,10 @@ const wf01 = createApp({
     }, template: `
 <h2 :review="count"> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
+<div class="w3-border-top w3-opacity">
+    Система кодування
+</div>
+
 <div class="w3-row w3-border-top">
     <div class="w3-half">
         <t-ccr :cr="cr()" />
