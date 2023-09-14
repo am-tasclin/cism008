@@ -5,9 +5,9 @@
  */
 import { initNewMc, reViewAdn } from '/f/7/libDomGrid/libDomGrid.js'
 import {
-    executeSelectQuery, executeAdnInsertQuery, executeDeleteAdn1Query,
-    executeUpdateString
+    executeSelectQuery, executeAdnInsertQuery, executeDeleteAdn1Query, executeUpdateString
 } from './wsDbRw.js'
+import { mcData } from '../libDomGrid/libDomGrid.js'
 /**
  * 
  * @param {*} adnJson 
@@ -45,10 +45,10 @@ export const dbSendDeleteAdn1 = adnJson => executeDeleteAdn1Query(adnJson).then(
  * @returns 
  */
 export const readAdnByIds = id_list => {
-    const sql = selectDocVlStrByIds.replace(':idList', id_list.join(','))
+    const sql = sqlMakerCollection.get({ n: 'selectDocVlStrByIds', l: id_list })
     return executeSelectQuery(sql).then(json => initNewMc(json.list)
     ).then(() => {
-        console.log('read rr2', id_list)
+        console.log('read rr2', id_list,)
     })
 }
 /**
@@ -68,7 +68,7 @@ import { addNewMc, } from '/f/7/libDomGrid/libDomGrid.js'
  * @param {*} parentId_list 
  */
 export const readAdnByParentIds = parentId_list => {
-    const sql = selectDocVlStrByParentIds.replace(':idList', parentId_list.join(','))
+    const sql = sqlMakerCollection.get({ n: 'selectDocVlStrByParentIds', l: parentId_list })
     // console.log(parentId_list)
     return executeSelectQuery(sql).then(json => {
         !json.list.length && parentId_list.forEach(andId =>
@@ -81,23 +81,35 @@ export const readAdnByParentIds = parentId_list => {
 }
 
 import { initSelectMaker } from './libSqlMaker.js'
-import { mcData } from '../libDomGrid/libDomGrid.js'
+/**
+ * 
+ */
 const selectDocVlStrMaker = initSelectMaker('selectDocVlStr', 'doc')
     .initLeftJoin('string', 'doc_id=string_id')
     .initColumns('doc_id, parent p, reference r, reference2 r2, value vl_str')
-
 /**
  * 
  */
-const selectDocVlStrByIds = selectDocVlStrMaker
+const sqlMakerCollection = {}
+/**
+ * 
+ */
+sqlMakerCollection.get = p => sqlMakerCollection[p.n].replace(':idList', p.l.join(','));
+/**
+ * 
+ * @param {*} p 
+ * @returns 
+ */
+export const initNamedSql = p => sqlMakerCollection.get(p)
+/**
+ * 
+ */
+sqlMakerCollection.selectDocVlStrByIds = selectDocVlStrMaker
     .initWhere('doc_id IN (:idList)').get()
-
 /**
  * 
  */
-const selectDocVlStrByParentIds = selectDocVlStrMaker
-    .initWhere('parent IN (:idList)')
-    .addLeftJoin('sort', 'doc_id=sort_id')
-    .initOrder('sort')
-    .get()
+sqlMakerCollection.selectDocVlStrByParentIds = selectDocVlStrMaker
+    .addLeftJoin('sort', 'doc_id=sort_id').initOrder('sort')
+    .initWhere('parent IN (:idList)').get()
 

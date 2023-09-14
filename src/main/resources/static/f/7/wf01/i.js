@@ -7,7 +7,7 @@ import {
     initDomConfLogic, mcData, setDomComponent, getDomComponent,
     domConstants
 } from '/f/7/libDomGrid/libDomGrid.js'
-import { readAdnByIds, readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
+import { readAdnByIds, readAdnByParentIds, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 
 // console.log(window.location.hash.substring(1))
 const domConf = initDomConfLogic(window.location.hash.substring(1))
@@ -23,14 +23,15 @@ const readTasks = (x, deepCount) => {
     // console.log('afterDeepN --> ', x, deepCount, mcData, domConstants)
     const taskList = Object.keys(mcData.eMap).reduce((l, i) => domConstants.taskElementList
         .includes(mcData.eMap[i].r) && l.push(mcData.eMap[i].r2) && l || l, [])
-    console.log(taskList)
+    console.log(deepCount, taskList)
     taskList.length && readAdnByIds(taskList
     ).then(() => deepN_readParent(deepNum, taskList, [], afterReadTasks))
 }
 const afterReadTasks = (x, deepCount) => {
-    console.log(123, x, deepCount, mcData)
+    console.log(deepCount, mcData)
     console.log(mcData.eMap[377155], mcData.parentChilds[377155])
     console.log(mcData.eMap[377156], mcData.parentChilds[377156])
+    console.log(123, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
 }
 
 const deepNum = 6
