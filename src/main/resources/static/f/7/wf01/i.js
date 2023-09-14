@@ -23,15 +23,23 @@ const readTasks = (x, deepCount) => {
     // console.log('afterDeepN --> ', x, deepCount, mcData, domConstants)
     const taskList = Object.keys(mcData.eMap).reduce((l, i) => domConstants.taskElementList
         .includes(mcData.eMap[i].r) && l.push(mcData.eMap[i].r2) && l || l, [])
-    console.log(deepCount, taskList)
+    // console.log(deepCount, taskList)
     taskList.length && readAdnByIds(taskList
     ).then(() => deepN_readParent(deepNum, taskList, [], afterReadTasks))
 }
+const codeMetaData = [368597, 367562,]
+const codeRepresentation = [377146,]
+const codes = codeMetaData.concat(codeRepresentation)
 const afterReadTasks = (x, deepCount) => {
+    // console.log(mcData.eMap[377155], mcData.parentChilds[377155])
+    // console.log(mcData.eMap[377156], mcData.parentChilds[377156])
+    console.log(34, codes, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
+    readAdnByIds(codes).then(() =>
+        deepN_readParent(deepNum, codes, [], afterReadCodes))
+}
+
+const afterReadCodes = (x, deepCount) => {
     console.log(deepCount, mcData)
-    console.log(mcData.eMap[377155], mcData.parentChilds[377155])
-    console.log(mcData.eMap[377156], mcData.parentChilds[377156])
-    console.log(123, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
 }
 
 const deepNum = 6
@@ -42,7 +50,8 @@ const deepN_readParent = (deepCount, list, prevList, fn) => {
     deepCount > 0 && list.length && readAdnByParentIds(list).then(() => {
         getDomComponent('workFlow').count++
         getDomComponent('wf01').count++
-        //domConf.wf.wfComponent[i] &&
+        codes[0] == prevList[0] && getDomComponent('ccr').count++
+
         list.forEach(i => domConf.wf.taskComponent[i] &&
             domConf.wf.taskComponent[i].count++)
         prevList.find(i => domConf.wf.taskComponent[i] && mcData.parentChilds[i] &&
@@ -59,16 +68,27 @@ const deepN_readParent = (deepCount, list, prevList, fn) => {
 
 const { createApp } = Vue
 import WfElement from '/f/7/libWF/WfElement.js'
+import CodeableConceptRepresentation from '/f/7/libWF/ CodeableConceptRepresentation.js'
 const wf01 = createApp({
     data() { return { count: 0, rootId: domConf.wf.l[0] } },
     mounted() { setDomComponent('wf01', this) }, methods: {
         adn(adnId) { return mcData.eMap[adnId] || {} },
+        cr() { return codeRepresentation },
     }, template: `
 <h2 :review="count"> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
+<div class="w3-row w3-border-top">
+    <div class="w3-half">
+        <t-ccr :cr="cr()"/>
+    </div>
+    <div class="w3-half w3-border-left">
+    a1
+    </div>
+</div>
 `,
 })
 wf01.component('t-wf', WfElement)
+wf01.component('t-ccr', CodeableConceptRepresentation)
 wf01.mount('#wf01')
 
 createApp({

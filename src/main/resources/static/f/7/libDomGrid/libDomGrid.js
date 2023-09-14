@@ -293,7 +293,7 @@ const initTreeUriDomConf = (uriDomConf_l, ppId) => {
     ) && (domContainer.conf.actuallyTreeObj = domContainer.conf.tree[ppId])
         || (() => {
             domContainer.conf.tree = {}
-            console.log(domContainer)
+            // console.log(domContainer)
         })();
     // console.log(JSON.stringify(domContainer.conf, '', 2))
 }
