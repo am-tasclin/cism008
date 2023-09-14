@@ -37,9 +37,14 @@ const afterReadTasks = (x, deepCount) => {
     readAdnByIds(codes).then(() =>
         deepN_readParent(deepNum, codes, [], afterReadCodes))
 }
-
+const loggedAttributes = [372052]
 const afterReadCodes = (x, deepCount) => {
     console.log(deepCount, mcData)
+    readAdnByIds(loggedAttributes).then(() => {
+        getDomComponent('cmd').count++
+        getDomComponent('ccr').count++
+        loggedAttributes.forEach(i => console.log(mcData.eMap[i]))
+    })
 }
 
 const deepNum = 6
@@ -51,7 +56,7 @@ const deepN_readParent = (deepCount, list, prevList, fn) => {
         getDomComponent('workFlow').count++
         getDomComponent('wf01').count++
         codes[0] == prevList[0] && getDomComponent('ccr').count++
-
+        codes[0] == prevList[0] && getDomComponent('cmd').count++
         list.forEach(i => domConf.wf.taskComponent[i] &&
             domConf.wf.taskComponent[i].count++)
         prevList.find(i => domConf.wf.taskComponent[i] && mcData.parentChilds[i] &&
@@ -67,28 +72,30 @@ const deepN_readParent = (deepCount, list, prevList, fn) => {
 }
 
 const { createApp } = Vue
-import WfElement from '/f/7/libWF/WfElement.js'
-import CodeableConceptRepresentation from '/f/7/libWF/ CodeableConceptRepresentation.js'
 const wf01 = createApp({
     data() { return { count: 0, rootId: domConf.wf.l[0] } },
     mounted() { setDomComponent('wf01', this) }, methods: {
         adn(adnId) { return mcData.eMap[adnId] || {} },
         cr() { return codeRepresentation },
+        cmd() { return codeMetaData },
     }, template: `
 <h2 :review="count"> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
 <div class="w3-row w3-border-top">
     <div class="w3-half">
-        <t-ccr :cr="cr()"/>
+        <t-ccr :cr="cr()" />
     </div>
-    <div class="w3-half w3-border-left">
-    a1
+    <div class="w3-half">
+        <t-cmd :cmd="cmd()" />
     </div>
 </div>
 `,
 })
+import WfElement from '/f/7/libWF/WfElement.js'
 wf01.component('t-wf', WfElement)
+import { CodeableConceptRepresentation, CodeMetaData } from '/f/7/libWF/WfElement.js'
 wf01.component('t-ccr', CodeableConceptRepresentation)
+wf01.component('t-cmd', CodeMetaData)
 wf01.mount('#wf01')
 
 createApp({

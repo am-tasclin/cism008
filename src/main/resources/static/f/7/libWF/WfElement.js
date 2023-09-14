@@ -3,7 +3,7 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { mcData, domConfWf, domConstants } from '/f/7/libDomGrid/libDomGrid.js'
+import { mcData, domConfWf, domConstants, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
 import Task from '/f/7/libWF/Task.js'
 export default {
     props: { adnid: Number }, data() { return { count: 0, } },
@@ -64,4 +64,48 @@ domConstants.taskElementList = [371927]
 const wfType = {
     369782: '[]', 371575: '[]', 373500: '𝑓→', 371927: '𝑡→'
     , p: { 369782: '⛋', 371575: '⛋' }
+}
+/**
+ * 
+ */
+export const CodeMetaData = {
+    props: { cmd: Array }, data() { return { count: 0, } },
+    mounted() { setDomComponent('cmd', this) }, methods: {
+        adn(adnId) { return mcData.eMap[adnId] || {} },
+        parentChilds(adnId) { return mcData.parentChilds[adnId] || [] },
+    }, template: `
+<div :review="count" v-for="cmdId in cmd">
+    <span class="w3-tiny">{{cmdId}}</span>
+    {{adn(cmdId).vl_str}}
+    <div v-if="parentChilds(cmdId)" class="w3-container w3-border-left">
+        <div v-for="adnId in parentChilds(cmdId)">
+            <span class="w3-tiny">{{adnId}}</span>
+            {{adn(adnId).vl_str}}
+            <span v-if="adn(adnId).r">:{{adn(adn(adnId).r).vl_str}}</span>
+        </div>
+    </div>
+</div>`,
+}
+/**
+ * 
+ */
+export const CodeableConceptRepresentation = {
+    props: { cr: Object }, data() { return { count: 0, } },
+    mounted() { setDomComponent('ccr', this) }, methods: {
+        adn(adnId) { return mcData.eMap[adnId] || {} },
+        parentChilds(adnId) { return mcData.parentChilds[adnId] || [] },
+    }, template: `
+<table :review="count" v-for="crId in cr" class="w3-small am-width-100pr" >
+    <caption class="w3-light-grey">{{crId}} {{adn(crId).vl_str}}</caption>
+    <tr class="w3-tiny w3-opacity">
+        <th class="w3-border-bottom w3-hover-shadow">
+            {{adn(adn(adn(parentChilds(crId)[0]).r).r).vl_str}}</th>
+        <th class="w3-border-bottom w3-border-left w3-hover-shadow">
+            {{adn(adn(parentChilds(parentChilds(crId)[0])).r).vl_str}}</th>
+    </tr>
+    <tr v-for="adnId in parentChilds(crId)" class="w3-hover-shadow">
+        <td>{{adn(adnId).vl_str}}</td>
+        <td>{{adn(parentChilds(adnId)[0]).vl_str}}</td>
+    </tr>
+</table>`,
 }
