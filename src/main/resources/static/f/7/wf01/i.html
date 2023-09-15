@@ -28,41 +28,9 @@
                 src="/f/img/algoritmed-logo.webp" style="width:75px;" />&nbsp;</a>
     </div>    
     <div id="wf01" class="w3-border-bottom"></div>
-    <!-- <div class="w3-border-top"></div> -->
     <div id="workFlow" class="am-max-width-1">
         <span class="w3-right"> {{count}} </span>
-        <h2 :review="count"> {{adn(rootId).vl_str}} </h2>
-        <div v-for="adnId in parentChilds(rootId)">
-            <div v-if="parentChilds(adnId)" class="w3-container w3-border-left">
-                <span class="w3-tiny w3-opacity w3-right"> {{adnId}} {{parentChilds(adnId)}} </span>
-                <div v-for="adnId2 in parentChilds(adnId)" class="w3-hover-shadow">
-                    <span class="w3-tiny"> {{adnId2}} </span>
-                    {{adn(adnId2).vl_str}}
-                    <div v-if="parentChilds(adnId2).length" class="w3-container w3-border-left">
-                        <span class="w3-tiny w3-opacity w3-right"> {{adnId2}} {{parentChilds(adnId2)}} </span>
-                        <div v-for="adnId3 in parentChilds(adnId2)" class="w3-hover-shadow">
-                            <span class="w3-tiny"> {{adnId3}} </span>
-                            {{adn(adnId3).vl_str}}
-                            <div v-if="parentChilds(adnId3).length" class="w3-container w3-border-left">
-                                <span class="w3-tiny w3-opacity w3-right"> {{adnId3}} {{parentChilds(adnId3)}} </span>
-                                <div v-for="adnId4 in parentChilds(adnId3)" class="w3-hover-shadow">
-                                    <span class="w3-tiny"> {{adnId4}} </span>
-                                    {{adn(adnId4).vl_str}}
-                                    <div v-if="parentChilds(adnId4).length" class="w3-container w3-border-left">
-                                        <span class="w3-tiny w3-opacity w3-right"> {{adnId4}} {{parentChilds(adnId4)}}
-                                        </span>
-                                        <div v-for="adnId5 in parentChilds(adnId4)" class="w3-hover-shadow">
-                                            <span class="w3-tiny"> {{adnId5}} </span>
-                                            {{adn(adnId5).vl_str}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h6 :review="count" class="am-i"> {{adn(rootId).vl_str}} </h6>
     </div>
     <div class="w3-border-top">
         ⛋ 𝑓 𝑡 𝑇 𝐴 ⎹⎸⎹ 𝑓𝑇 𝑓𝐴 ⍿ - ⎹⎸
