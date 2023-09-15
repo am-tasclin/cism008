@@ -4,7 +4,7 @@
  * 
  */
 const sqlMakerContainer = {}
-console.log(sqlMakerContainer)
+// console.log(sqlMakerContainer)
 
 /**
  * Block of functions to generate the SQL select with it init data collection

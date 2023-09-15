@@ -264,7 +264,6 @@ export const pathActuallyTreeObj = () =>
 const initUriDomConf = (rawUriDomConf, ppId) => {
     !ppId && (ppId = 0)
     rawUriDomConf.split(';').forEach(rawUriDomConf1 => {
-        console.log(rawUriDomConf1)
         const uriDomConf_l = rawUriDomConf1.split(',')
         // console.log(uriDomConf_l, ppId, 'hew' == uriDomConf_l[0]);
         'hew' == uriDomConf_l[0] && initHewUriDomConf(uriDomConf_l

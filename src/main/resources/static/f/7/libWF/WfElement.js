@@ -84,10 +84,7 @@ export default {
     </template>
 </div><span class="w3-hide">{{count}}</span>`,
 }
-/**
- * 
- */
-domConstants.taskElementList = [371927]
+
 /**
  * ⛋ -- Process in PlanDefinition
  * 𝑓 -- ActivityDefinition

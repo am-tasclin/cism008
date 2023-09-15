@@ -8,3 +8,4 @@ gradle*
 **/*.swp
 src/main/resources/application.properties
 src/main/resources/static/f/7/wf01/i copy.html
+src/main/resources/static/f/7/wf01view/i copy.html
