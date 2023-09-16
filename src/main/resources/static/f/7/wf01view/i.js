@@ -37,7 +37,7 @@ domConfWf().reView.readParent = (list, prevList) => {
 }
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initWorkFlow } from '/f/7/wf01view/libWF.js'
+import { initWorkFlow } from '/f/7/libWF/libWF.js'
 ws.onopen = event => initWorkFlow()
 
 const { createApp } = Vue

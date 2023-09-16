@@ -14,14 +14,12 @@ domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170]
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initWorkFlow } from '/f/7/wf01view/libWF.js'
-ws.onopen = event => initWorkFlow()
+import { initWorkFlow, actionByOpen } from '/f/7/libWF/libWF.js'
 
+ws.onopen = event => initWorkFlow()
 domConfWf().reView.readParent = (list, prevList) => {
     getDomComponent('wf01use').count++
 }
-
-import { actionByOpen } from '/f/7/wf01view/libWF.js'
 
 const { createApp } = Vue
 createApp({
@@ -35,9 +33,9 @@ createApp({
             const selectedActionId = domConfWf().selectedActionId || (domConfWf().selectedActionId = [])
             !selectedActionId.includes(adnId) && selectedActionId.push(adnId)
                 || selectedActionId.splice(selectedActionId.indexOf(), 1)
-                
+
             selectedActionId.includes(adnId) && actionByOpen(adnId)
-            
+
             this.count++
         },
     }

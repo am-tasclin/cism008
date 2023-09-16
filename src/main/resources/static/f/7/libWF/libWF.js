@@ -3,29 +3,30 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { mcData, domConfWf, domConstants, } from '/f/7/libDomGrid/libDomGrid.js'
+import { adnIds, adn, parentChilds, notParentChilds, domConfWf, domConstants, } from
+    '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByIds, readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
-// import {  initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 
 import { wfType } from '/f/7/libWF/WfElement.js'
-const rootActivityDefinition = [373500]
-const rootTask = [371927]
 console.log(wfType, Object.keys(wfType))
+
 export const actionByOpen = adnId => findTaskInPDAction(adnId, inTaskId => {
-    console.log(mcData.eMap[inTaskId])
+    console.log(adn(inTaskId))
 })
-
-
+/**
+ * 
+ */
+domConstants.TaskIdList = [371927]
+domConstants.ActivityDefinitionIdList = [373500]
+export const childTask = parentId => parentChilds(parentId).find(i =>
+    domConstants.TaskIdList.includes(adn(i).r))
 const findTaskInPDAction = (adnId, inTaskFn) => {
-    const activityDefinitionId = mcData.parentChilds[adnId] && mcData.parentChilds[adnId]
-        .find(i => rootActivityDefinition.includes(mcData.eMap[i].r2))
-    activityDefinitionId && (() => {
-        const taskInstanceId = mcData.parentChilds[activityDefinitionId] && mcData.parentChilds[activityDefinitionId]
-            .find(i => rootTask.includes(mcData.eMap[i].r))
-        taskInstanceId && (() => {
-            const taskIdList = mcData.parentChilds[mcData.eMap[taskInstanceId].r2]
-            taskIdList && taskIdList.find(inTaskFn)
-        })()
+    const activityDefinitionId = parentChilds(adnId) && parentChilds(adnId)
+        .find(i => domConstants.ActivityDefinitionIdList.includes(adn(i).r2))
+    activityDefinitionId && parentChilds(activityDefinitionId) && (() => {
+        const taskInstanceId = childTask(activityDefinitionId)
+        taskInstanceId &&
+            parentChilds(adn(taskInstanceId).r2).find(inTaskFn)
     })()
 }
 
@@ -33,24 +34,22 @@ export const initWorkFlow = () => domConfWf().l.length && readAdnByIds(domConfWf
 ).then(() => deepN_readParent(deepNum, domConfWf().l, [], readTasks))
 
 const readTasks = (x, deepCount) => {
-    // console.log('afterDeepN --> ', x, deepCount, mcData, domConstants)
-    const taskList = Object.keys(mcData.eMap).reduce((l, i) => domConstants.taskElementList
-        .includes(mcData.eMap[i].r) && l.push(mcData.eMap[i].r2) && l || l, [])
+    const taskList = adnIds().reduce((l, i) => domConstants.TaskIdList
+        .includes(adn(i).r) && l.push(adn(i).r2) && l || l, [])
     // console.log(deepCount, taskList)
     taskList.length && readAdnByIds(taskList
     ).then(() => deepN_readParent(deepNum, taskList, [], afterReadTasks))
 }
 
+// import {  initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 const afterReadTasks = (x, deepCount) => {
-    // console.log(mcData.eMap[377155], mcData.parentChilds[377155])
-    // console.log(mcData.eMap[377156], mcData.parentChilds[377156])
     // console.log(34, codes, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
     readAdnByIds(domConfWf().codes).then(() =>
         deepN_readParent(deepNum, domConfWf().codes, [], afterReadCodes))
 }
 
 const afterReadCodes = (x, deepCount) => {
-    console.log(deepCount, mcData)
+    console.log(deepCount, adnIds())
     readAdnByIds(domConfWf().loggedAttributes).then(() => {
         domConfWf().reView && domConfWf().reView.afterReadCodes &&
             domConfWf().reView.afterReadCodes()
@@ -65,13 +64,8 @@ export const deepN_readParent = (deepCount, list, prevList, fn) => {
     deepCount > 0 && list.length && readAdnByParentIds(list).then(() => {
         domConfWf().reView && domConfWf().reView.readParent &&
             domConfWf().reView.readParent(list, prevList)
-        const newList = Object.keys(mcData.eMap).filter(i => !mcData.parentChilds[i] && !prevList.includes(i))
+        const newList = adnIds().filter(i => notParentChilds(i) && !prevList.includes(i))
         // console.log(deepCount, newList, newList.length)
         deepN_readParent(--deepCount, newList, list.concat(newList), fn)
     })
 }
-
-/**
- * 
- */
-domConstants.taskElementList = [371927]

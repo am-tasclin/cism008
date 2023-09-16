@@ -36,8 +36,11 @@
                 <span class="w3-tiny">{{adnId}}</span>
                 {{adn(adnId).vl_str}}
             </div>
-            <div v-if="isSelectedActionId(adnId)" class="w3-border">
-                a1
+            <div v-if="isSelectedActionId(adnId)" class="w3-border-left w3-container">
+                <div v-for="adnId2 in parentChilds(adnId)">
+                    <span class="w3-tiny">{{adnId2}}</span>
+                    {{adn(adnId2).vl_str}}
+                </div>
             </div>
         </template>
     </div>

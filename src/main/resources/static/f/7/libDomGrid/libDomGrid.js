@@ -5,15 +5,15 @@
  * 
  */
 
-const eMap = {}, parentChilds = {}
+const eMap = {}, parentChilds0 = {}, constants = {}
 /**
  * Container of data and structures for build and use the DOM Grid
  * Контейнер даних і структур для створення та використання DOM Grid
  */
 const domContainer = {
-    conf: {}, mcData: { eMap: eMap, parentChilds: parentChilds },
+    conf: {}, mcData: { eMap: eMap, parentChilds: parentChilds0 },
     components: {},
-    constants: {}, // MCrDB constants
+    constants: constants, // MCrDB constants
 }
 console.log(domContainer)
 export const consoleLogDomContainer = () => console.log(domContainer)
@@ -22,15 +22,24 @@ export const domConstants = domContainer.constants
 export const setActiveEditObjName = activeEditObjName => domConf().activeEditObjName = activeEditObjName
 export const setActualeCompomentName = ctName => domContainer.actuallyComponentName = ctName // TO REMOVE
 export const getActualeCompomentName = () => domContainer.actuallyComponentName //TO REMOVE
-
+/**
+ * DomComponent API
+ * @param {*} ctName 
+ * @param {*} ct 
+ * @returns 
+ */
 export const setDomComponent = (ctName, ct) =>
     setActualeCompomentName(ctName) && (domContainer.components[ctName] = ct)
 export const getDomComponent = (ctName) => domContainer.components[ctName]
 export const getDomComponentAll = () => domContainer.components
 /**
- * 
+ * mcData API Wrapper
  */
 export const mcData = domContainer.mcData
+export const adnIds = () => Object.keys(mcData.eMap)
+export const adn = adnId => mcData.eMap[adnId] || {}
+export const parentChilds = adnId => mcData.parentChilds[adnId] || []
+export const notParentChilds = adnId => !mcData.parentChilds[adnId]
 /**
  * 
  */
