@@ -40,6 +40,7 @@ export const adnIds = () => Object.keys(mcData.eMap)
 export const adn = adnId => mcData.eMap[adnId] || {}
 export const parentChilds = adnId => mcData.parentChilds[adnId] || []
 export const notParentChilds = adnId => !mcData.parentChilds[adnId]
+export const mcDataMethods = { adn: adnId => adn(adnId), parentChilds: adnId => parentChilds(adnId), }
 /**
  * 
  */

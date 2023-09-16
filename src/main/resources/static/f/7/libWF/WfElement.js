@@ -3,17 +3,15 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { adn, parentChilds, domConfWf, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
+import { mcDataMethods, domConfWf, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
 /**
  * 
  */
 const Task = {
     props: { adnId: Number }, data() { return { count: 0, } },
-    mounted() { domConfWf().taskComponent[this.adnId] = this }, methods: {
-        adn: adnId => adn(adnId),
-        parentChilds: adnId => parentChilds(adnId),
-        taskSymbolR: adnId => taskType[adn(adnId).r],
-    }, template: `
+    mounted() { domConfWf().taskComponent[this.adnId] = this }, methods: Object.assign(mcDataMethods, {
+        taskSymbolR: adnId => taskType[mcDataMethods.adn(adnId).r],
+    }), template: `
 {{adn(adnId).vl_str}}
 <div v-if="parentChilds(adnId).length" class="w3-container w3-border-left">
     <div v-for="adnId2 in parentChilds(adnId)">
@@ -38,16 +36,13 @@ import { childTaskId } from './libWF.js'
  * WfElement
  */
 export const WfElement = {
-    props: { adnid: Number }, data() { return { count: 0, } },
-    components: { Task, },
-    mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: {
-        adn: adnId => adn(adnId),
-        parentChilds: adnId => parentChilds(adnId),
-        wfSymbolR: adnId => wfType[adn(adnId).r],
-        wfSymbolR2: adnId => wfType[adn(adnId).r2],
-        wfSymbolPR: adnId => wfType.p[adn(adn(adnId).p).r],
+    props: { adnid: Number }, data() { return { count: 0, } }, components: { Task, },
+    mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: Object.assign(mcDataMethods, {
+        wfSymbolR: adnId => wfType[mcDataMethods.adn(adnId).r],
+        wfSymbolR2: adnId => wfType[mcDataMethods.adn(adnId).r2],
+        wfSymbolPR: adnId => wfType.p[mcDataMethods.adn(mcDataMethods.adn(adnId).p).r],
         childTaskId: parentId => childTaskId(parentId),
-    }, template: `
+    }), template: `
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
     <template v-for="adnId2 in parentChilds(adnid)">
         <div class="w3-row" v-if="childTaskId(adnId2)">
@@ -96,10 +91,7 @@ export const wfType = {
  */
 export const CodeMetaData = {
     props: { cmd: Array }, data() { return { count: 0, } },
-    mounted() { setDomComponent('cmd', this) }, methods: {
-        adn: adnId => adn(adnId),
-        parentChilds: adnId => parentChilds(adnId),
-    }, template: `
+    mounted() { setDomComponent('cmd', this) }, methods: mcDataMethods, template: `
 <div :review="count" v-for="cmdId in cmd" class="w3-hover-shadow">
     <span class="w3-tiny">{{cmdId}}</span>
     {{adn(cmdId).vl_str}}
@@ -117,10 +109,7 @@ export const CodeMetaData = {
  */
 export const CodeableConceptRepresentation = {
     props: { cr: Object }, data() { return { count: 0, } },
-    mounted() { setDomComponent('ccr', this) }, methods: {
-        adn: adnId => adn(adnId),
-        parentChilds: adnId => parentChilds(adnId),
-    }, template: `
+    mounted() { setDomComponent('ccr', this) }, methods: mcDataMethods, template: `
 <table :review="count" v-for="crId in cr" class="w3-small am-width-100pr" >
     <caption class="w3-light-grey">{{crId}} {{adn(crId).vl_str}}</caption>
     <tr class="w3-tiny w3-opacity">
