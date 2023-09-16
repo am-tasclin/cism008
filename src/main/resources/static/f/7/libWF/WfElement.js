@@ -3,16 +3,16 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { adn, parentChilds, domConfWf, domConstants, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
+import { adn, parentChilds, domConfWf, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
 /**
  * 
  */
 const Task = {
     props: { adnId: Number }, data() { return { count: 0, } },
     mounted() { domConfWf().taskComponent[this.adnId] = this }, methods: {
-        adn(adnId) { return adn(adnId) },
-        parentChilds(adnId) { return parentChilds(adnId) },
-        taskSymbolR(adnId) { return taskType[this.adn(adnId).r] },
+        adn: adnId => adn(adnId),
+        parentChilds: adnId => parentChilds(adnId),
+        taskSymbolR: adnId => taskType[adn(adnId).r],
     }, template: `
 {{adn(adnId).vl_str}}
 <div v-if="parentChilds(adnId).length" class="w3-container w3-border-left">
@@ -33,7 +33,7 @@ const Task = {
  * 
  */
 const taskType = { 371934: '⇥', 371936: '↦', }
-import { childTask } from './libWF.js'
+import { childTaskId } from './libWF.js'
 /**
  * WfElement
  */
@@ -41,16 +41,16 @@ export const WfElement = {
     props: { adnid: Number }, data() { return { count: 0, } },
     components: { Task, },
     mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: {
-        adn(adnId) { return adn(adnId) },
-        parentChilds(adnId) { return parentChilds(adnId) },
-        wfSymbolR(adnId) { return wfType[this.adn(adnId).r] },
-        wfSymbolR2(adnId) { return wfType[this.adn(adnId).r2] },
-        wfSymbolPR(adnId) { return wfType.p[this.adn(this.adn(adnId).p).r] },
-        childTask(parentId) { return childTask(parentId) },
+        adn: adnId => adn(adnId),
+        parentChilds: adnId => parentChilds(adnId),
+        wfSymbolR: adnId => wfType[adn(adnId).r],
+        wfSymbolR2: adnId => wfType[adn(adnId).r2],
+        wfSymbolPR: adnId => wfType.p[adn(adn(adnId).p).r],
+        childTaskId: parentId => childTaskId(parentId),
     }, template: `
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
     <template v-for="adnId2 in parentChilds(adnid)">
-        <div class="w3-row" v-if="childTask(adnId2)">
+        <div class="w3-row" v-if="childTaskId(adnId2)">
             <div class="w3-half">
                 <div class="w3-hover-shadow">
                     <span class="w3-tiny">{{adnId2}}&nbsp;𝑓→</span>
@@ -97,8 +97,8 @@ export const wfType = {
 export const CodeMetaData = {
     props: { cmd: Array }, data() { return { count: 0, } },
     mounted() { setDomComponent('cmd', this) }, methods: {
-        adn(adnId) { return adn(adnId) },
-        parentChilds(adnId) { return parentChilds(adnId) },
+        adn: adnId => adn(adnId),
+        parentChilds: adnId => parentChilds(adnId),
     }, template: `
 <div :review="count" v-for="cmdId in cmd" class="w3-hover-shadow">
     <span class="w3-tiny">{{cmdId}}</span>
@@ -118,8 +118,8 @@ export const CodeMetaData = {
 export const CodeableConceptRepresentation = {
     props: { cr: Object }, data() { return { count: 0, } },
     mounted() { setDomComponent('ccr', this) }, methods: {
-        adn(adnId) { return adn(adnId) },
-        parentChilds(adnId) { return parentChilds(adnId) },
+        adn: adnId => adn(adnId),
+        parentChilds: adnId => parentChilds(adnId),
     }, template: `
 <table :review="count" v-for="crId in cr" class="w3-small am-width-100pr" >
     <caption class="w3-light-grey">{{crId}} {{adn(crId).vl_str}}</caption>

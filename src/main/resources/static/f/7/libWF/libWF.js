@@ -18,20 +18,27 @@ export const actionByOpen = adnId => findTaskInPDAction(adnId, inTaskId => {
  */
 domConstants.TaskIdList = [371927]
 domConstants.ActivityDefinitionIdList = [373500]
-export const childTask = parentId => parentChilds(parentId).find(i =>
-    domConstants.TaskIdList.includes(adn(i).r))
+/**
+ * 
+ * @param {*} parentId 
+ * @returns 
+ */
+export const childTaskId = parentId => parentChilds(parentId)
+    .find(i => domConstants.TaskIdList.includes(adn(i).r))
+/**
+ * 
+ * @param {*} adnId 
+ * @param {*} inTaskFn 
+ */
 const findTaskInPDAction = (adnId, inTaskFn) => {
     const activityDefinitionId = parentChilds(adnId) && parentChilds(adnId)
         .find(i => domConstants.ActivityDefinitionIdList.includes(adn(i).r2))
-    activityDefinitionId && parentChilds(activityDefinitionId) && (() => {
-        const taskInstanceId = childTask(activityDefinitionId)
-        taskInstanceId &&
-            parentChilds(adn(taskInstanceId).r2).find(inTaskFn)
-    })()
+    activityDefinitionId &&
+        parentChilds(adn(childTaskId(activityDefinitionId)).r2).find(inTaskFn)
 }
 
-export const initWorkFlow = () => domConfWf().l.length && readAdnByIds(domConfWf().l
-).then(() => deepN_readParent(deepNum, domConfWf().l, [], readTasks))
+export const initWorkFlow = () => domConfWf().l.length && readAdnByIds(domConfWf().l)
+    .then(() => deepN_readParent(deepNum, domConfWf().l, [], readTasks))
 
 const readTasks = (x, deepCount) => {
     const taskList = adnIds().reduce((l, i) => domConstants.TaskIdList
@@ -42,19 +49,12 @@ const readTasks = (x, deepCount) => {
 }
 
 // import {  initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
-const afterReadTasks = (x, deepCount) => {
-    // console.log(34, codes, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
-    readAdnByIds(domConfWf().codes).then(() =>
-        deepN_readParent(deepNum, domConfWf().codes, [], afterReadCodes))
-}
+// console.log(34, codes, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
+const afterReadTasks = (x, deepCount) => readAdnByIds(domConfWf().codes)
+    .then(() => deepN_readParent(deepNum, domConfWf().codes, [], afterReadCodes))
 
-const afterReadCodes = (x, deepCount) => {
-    console.log(deepCount, adnIds())
-    readAdnByIds(domConfWf().loggedAttributes).then(() => {
-        domConfWf().reView && domConfWf().reView.afterReadCodes &&
-            domConfWf().reView.afterReadCodes()
-    })
-}
+const afterReadCodes = (x, deepCount) => readAdnByIds(domConfWf().loggedAttributes)
+    .then(() => domConfWf().reView.afterReadCodes && domConfWf().reView.afterReadCodes())
 
 export const deepNum = 6
 export const deepN_readParent = (deepCount, list, prevList, fn) => {
