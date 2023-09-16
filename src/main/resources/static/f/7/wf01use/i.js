@@ -3,10 +3,10 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { initDomConfLogic, mcData, getDomComponent, setDomComponent, domConfWf, } from
+import { initDomConfLogic, mcDataMethods, getDomComponent, setDomComponent, domConfWf, } from
     '/f/7/libDomGrid/libDomGrid.js'
 initDomConfLogic(window.location.hash.substring(1))
-console.log(domConfWf(), mcData)
+console.log(domConfWf(),)
 
 //init WF01 model
 const codeMetaData = [368597, 367562,], codeRepresentation = [377146,]
@@ -24,12 +24,9 @@ domConfWf().reView.readParent = (list, prevList) => {
 const { createApp } = Vue
 createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },
-    mounted() { setDomComponent('wf01use', this) }, methods: {
-        adn(adnId) { return mcData.eMap[adnId] || {} },
-        parentChilds(adnId) { return mcData.parentChilds[adnId] || [] }
-        , isSelectedActionId(adnId) {
-            return domConfWf().selectedActionId && domConfWf().selectedActionId.includes(adnId)
-        }, onOffAction(adnId) {
+    mounted() { setDomComponent('wf01use', this) }, methods: Object.assign(mcDataMethods, {
+        isSelectedActionId: adnId => domConfWf().selectedActionId && domConfWf().selectedActionId.includes(adnId),
+        onOffAction(adnId) {
             const selectedActionId = domConfWf().selectedActionId || (domConfWf().selectedActionId = [])
             !selectedActionId.includes(adnId) && selectedActionId.push(adnId)
                 || selectedActionId.splice(selectedActionId.indexOf(), 1)
@@ -38,5 +35,5 @@ createApp({
 
             this.count++
         },
-    }
+    })
 }).mount('#wf01use')
