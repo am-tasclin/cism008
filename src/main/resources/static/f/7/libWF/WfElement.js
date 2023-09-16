@@ -31,7 +31,7 @@ const Task = {
  * 
  */
 const taskType = { 371934: '⇥', 371936: '↦', }
-import { childTaskId } from './libWF.js'
+import { childTaskId, wfType, wfSymbolPR, wfSymbolR2 } from '/f/7/libWF/libWF.js'
 /**
  * WfElement
  */
@@ -39,8 +39,8 @@ export const WfElement = {
     props: { adnid: Number }, data() { return { count: 0, } }, components: { Task, },
     mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: Object.assign(mcDataMethods, {
         wfSymbolR: adnId => wfType[mcDataMethods.adn(adnId).r],
-        wfSymbolR2: adnId => wfType[mcDataMethods.adn(adnId).r2],
-        wfSymbolPR: adnId => wfType.p[mcDataMethods.adn(mcDataMethods.adn(adnId).p).r],
+        wfSymbolR2: adnId => wfSymbolR2(adnId),
+        wfSymbolPR: adnId => wfSymbolPR(adnId),
         childTaskId: parentId => childTaskId(parentId),
     }), template: `
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
@@ -67,8 +67,7 @@ export const WfElement = {
         <template v-else>
             <div class="w3-hover-shadow">
                 <span class="w3-tiny">{{adnId2}}&nbsp;
-                    {{wfSymbolPR(adnId2)}}
-                    {{wfSymbolR(adnId2)}}{{wfSymbolR2(adnId2)}}
+                    {{wfSymbolPR(adnId2)}}{{wfSymbolR(adnId2)}}{{wfSymbolR2(adnId2)}}
                 </span> {{adn(adnId2).vl_str}}
                 <!--span class="w3-right w3-tiny w3-opacity">{{adn(adnId2).r}}|{{adn(adnId2).r2}}</span-->
             </div>
@@ -76,15 +75,6 @@ export const WfElement = {
         </template>
     </template>
 </div><span class="w3-hide">{{count}}</span>`,
-}
-/**
- * ⛋   -- Process in PlanDefinition
- * 𝑓    -- ActivityDefinition
- * 𝑡    -- Task
- */
-export const wfType = {
-    369782: '[]', 371575: '[]', 373500: '𝑓→', 371927: '𝑡→'
-    , p: { 369782: '⛋', 371575: '⛋' }
 }
 /**
  * 

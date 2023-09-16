@@ -14,7 +14,7 @@ domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170]
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initWorkFlow, actionByOpen } from '/f/7/libWF/libWF.js'
+import { initWorkFlow, actionByOpen, wfSymbolPR, wfSymbolR2 } from '/f/7/libWF/libWF.js'
 
 ws.onopen = event => initWorkFlow()
 domConfWf().reView.readParent = (list, prevList) => {
@@ -26,6 +26,8 @@ createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },
     mounted() { setDomComponent('wf01use', this) }, methods: Object.assign(mcDataMethods, {
         isSelectedActionId: adnId => domConfWf().selectedActionId && domConfWf().selectedActionId.includes(adnId),
+        wfSymbolR2: adnId => wfSymbolR2(adnId),
+        wfSymbolPR: adnId => wfSymbolPR(adnId),
         onOffAction(adnId) {
             const selectedActionId = domConfWf().selectedActionId || (domConfWf().selectedActionId = [])
             !selectedActionId.includes(adnId) && selectedActionId.push(adnId)

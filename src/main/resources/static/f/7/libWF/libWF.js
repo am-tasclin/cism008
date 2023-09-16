@@ -7,16 +7,25 @@ import { adnIds, adn, parentChilds, notParentChilds, domConfWf, domConstants, } 
     '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByIds, readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
 
-import { wfType } from '/f/7/libWF/WfElement.js'
-console.log(wfType, Object.keys(wfType))
-
 export const actionByOpen = adnId => findTaskInPDAction(adnId, inTaskId => {
     console.log(adn(inTaskId))
 })
 /**
- * 
+ * ⛋   -- Process in PlanDefinition
+ * 𝑓    -- ActivityDefinition
+ * 𝑡    -- Task
  */
-domConstants.TaskIdList = [371927]
+export const wfType = {
+    369782: '[]', 371575: '[]', 373500: '𝑓→', 371927: '𝑡→'
+    , p: { 369782: '⛋', 371575: '⛋' }
+}
+console.log(wfType, Object.keys(wfType))
+export const wfSymbolPR = adnId => wfType.p[adn(adn(adnId).p).r]
+export const wfSymbolR2 = adnId => wfType[adn(adnId).r2]
+    /**
+     * 
+     */
+    domConstants.TaskIdList = [371927]
 domConstants.ActivityDefinitionIdList = [373500]
 /**
  * 
