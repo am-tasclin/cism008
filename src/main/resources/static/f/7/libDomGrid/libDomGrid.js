@@ -276,7 +276,7 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
 const initWfUriDomConf = uriDomConf_l => {
     console.log(uriDomConf_l)
     const wf = domContainer.conf.wf || (domContainer.conf.wf
-        = { l: [], wfComponent: {}, taskComponent: {},})
+        = { l: [], wfComponent: {}, taskComponent: {}, reView: {}, })
     uriDomConf_l.slice(1).forEach(im => !wf.l.includes(im) && wf.l.push(im))
 }
 /**
@@ -325,5 +325,3 @@ export const addTreeFn = addTreeId => {
 }
 
 const Okeys = Object.keys
-
-

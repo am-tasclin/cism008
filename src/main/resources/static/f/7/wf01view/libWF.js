@@ -7,6 +7,28 @@ import { mcData, domConfWf, domConstants, } from '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByIds, readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
 // import {  initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 
+import { wfType } from '/f/7/libWF/WfElement.js'
+const rootActivityDefinition = [373500]
+const rootTask = [371927]
+console.log(wfType, Object.keys(wfType))
+export const actionByOpen = adnId => findTaskInPDAction(adnId, inTaskId => {
+    console.log(mcData.eMap[inTaskId])
+})
+
+
+const findTaskInPDAction = (adnId, inTaskFn) => {
+    const activityDefinitionId = mcData.parentChilds[adnId] && mcData.parentChilds[adnId]
+        .find(i => rootActivityDefinition.includes(mcData.eMap[i].r2))
+    activityDefinitionId && (() => {
+        const taskInstanceId = mcData.parentChilds[activityDefinitionId] && mcData.parentChilds[activityDefinitionId]
+            .find(i => rootTask.includes(mcData.eMap[i].r))
+        taskInstanceId && (() => {
+            const taskIdList = mcData.parentChilds[mcData.eMap[taskInstanceId].r2]
+            taskIdList && taskIdList.find(inTaskFn)
+        })()
+    })()
+}
+
 export const initWorkFlow = () => domConfWf().l.length && readAdnByIds(domConfWf().l
 ).then(() => deepN_readParent(deepNum, domConfWf().l, [], readTasks))
 

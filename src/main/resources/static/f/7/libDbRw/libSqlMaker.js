@@ -3,7 +3,7 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-const sqlMakerContainer = {}
+const sqlMakerComponent = {}
 // console.log(sqlMakerContainer)
 
 /**
@@ -67,4 +67,4 @@ const SqlSelectMaker = (smContainer, sqlTableName) => {
  * @returns 
  */
 export const initSelectMaker = (key, sqlTableName) =>
-    SqlSelectMaker(sqlMakerContainer[key] || (sqlMakerContainer[key] = {}), sqlTableName)
+    SqlSelectMaker(sqlMakerComponent[key] || (sqlMakerComponent[key] = {}), sqlTableName)

@@ -6,13 +6,14 @@
 import { initDomConfLogic, mcData, setDomComponent, getDomComponent, domConfWf, } from
     '/f/7/libDomGrid/libDomGrid.js'
 
-const domConf = initDomConfLogic(window.location.hash.substring(1))
-console.log(domConf, mcData)
-const codeMetaData = [368597, 367562,]
-    , codeRepresentation = [377146,]
+initDomConfLogic(window.location.hash.substring(1))
+console.log(domConfWf(), mcData)
+
+//init WF01 model
+const codeMetaData = [368597, 367562,], codeRepresentation = [377146,]
 domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170]
-domConfWf().reView = {}
+
 domConfWf().reView.afterReadCodes = () => {
     getDomComponent('cmd').count++
     getDomComponent('ccr').count++
@@ -41,7 +42,7 @@ ws.onopen = event => initWorkFlow()
 
 const { createApp } = Vue
 const wf01 = createApp({
-    data() { return { count: 0, rootId: domConf.wf.l[0] } },
+    data() { return { count: 0, rootId: domConfWf().l[0] } },
     mounted() { setDomComponent('wf01', this) }, methods: {
         adn(adnId) { return mcData.eMap[adnId] || {} },
         cr() { return codeRepresentation },
@@ -55,15 +56,14 @@ const wf01 = createApp({
     <div class="w3-half"><t-cmd :cmd="cmd()" /></div>
 </div>`,
 })
-import WfElement from '/f/7/libWF/WfElement.js'
+import { WfElement, CodeableConceptRepresentation, CodeMetaData } from '/f/7/libWF/WfElement.js'
 wf01.component('t-wf', WfElement)
-import { CodeableConceptRepresentation, CodeMetaData } from '/f/7/libWF/WfElement.js'
 wf01.component('t-ccr', CodeableConceptRepresentation)
 wf01.component('t-cmd', CodeMetaData)
 wf01.mount('#wf01')
 
 createApp({
-    data() { return { count: 0, rootId: domConf.wf.l[0] } },
+    data() { return { count: 0, rootId: domConfWf().l[0] } },
     mounted() { setDomComponent('workFlow', this) }, methods: {
         adn(adnId) { return mcData.eMap[adnId] || {} },
         parentChilds(adnId) { return mcData.parentChilds[adnId] || [] },

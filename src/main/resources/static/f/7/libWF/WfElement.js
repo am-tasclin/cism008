@@ -4,7 +4,6 @@
  * 
  */
 import { mcData, domConfWf, domConstants, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
-// import Task from '/f/7/libWF/Task.js'
 /**
  * 
  */
@@ -37,7 +36,7 @@ const taskType = { 371934: '⇥', 371936: '↦', }
 /**
  * WfElement
  */
-export default {
+export const WfElement = {
     props: { adnid: Number }, data() { return { count: 0, } },
     components: { Task, },
     mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: {
@@ -84,13 +83,12 @@ export default {
     </template>
 </div><span class="w3-hide">{{count}}</span>`,
 }
-
 /**
- * ⛋ -- Process in PlanDefinition
- * 𝑓 -- ActivityDefinition
- * 𝑡 -- Task
+ * ⛋   -- Process in PlanDefinition
+ * 𝑓    -- ActivityDefinition
+ * 𝑡    -- Task
  */
-const wfType = {
+export const wfType = {
     369782: '[]', 371575: '[]', 373500: '𝑓→', 371927: '𝑡→'
     , p: { 369782: '⛋', 371575: '⛋' }
 }
@@ -128,13 +126,18 @@ export const CodeableConceptRepresentation = {
     <caption class="w3-light-grey">{{crId}} {{adn(crId).vl_str}}</caption>
     <tr class="w3-tiny w3-opacity">
         <th class="w3-border-bottom w3-hover-shadow">
-            {{adn(adn(adn(parentChilds(crId)[0]).r).r).vl_str}}</th>
+            {{adn(adn(adn(parentChilds(crId)[0]).r).r).vl_str}}
+        </th>
         <th class="w3-border-bottom w3-border-left w3-hover-shadow">
             {{adn(adn(parentChilds(parentChilds(crId)[0])).r).vl_str}}</th>
     </tr>
     <tr v-for="adnId in parentChilds(crId)" class="w3-hover-shadow">
-        <td>{{adn(adnId).vl_str}}</td>
-        <td>{{adn(parentChilds(adnId)[0]).vl_str}}</td>
+        <td><span class="w3-tiny w3-right">{{adn(adnId).doc_id}}</span>
+            {{adn(adnId).vl_str}}
+        </td>
+        <td><span class="w3-tiny w3-right">{{adn(parentChilds(adnId)[0]).doc_id}}</span>
+            {{adn(parentChilds(adnId)[0]).vl_str}}
+        </td>
     </tr>
 </table>`,
 }

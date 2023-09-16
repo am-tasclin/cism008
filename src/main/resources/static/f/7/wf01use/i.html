@@ -27,7 +27,20 @@
         <a href="http://algoritmed.com/" class="am-0u w3-right w3-hover-shadow" target="_blank">&nbsp;<img
                 src="/f/img/algoritmed-logo.webp" style="width:75px;" />&nbsp;</a>
     </div>
-    wf01use
+
+    <div id="wf01use">
+        <span class="w3-right"> {{count}} </span>
+        <h6 :review="count" class="am-i w3-border-bottom"> {{adn(rootId).vl_str}} </h6>
+        <template v-for="adnId in parentChilds(parentChilds(rootId)[0])">
+            <div class="w3-hover-shadow" @click="onOffAction(adnId)">
+                <span class="w3-tiny">{{adnId}}</span>
+                {{adn(adnId).vl_str}}
+            </div>
+            <div v-if="isSelectedActionId(adnId)" class="w3-border">
+                a1
+            </div>
+        </template>
+    </div>
 </body>
 
 </html>
