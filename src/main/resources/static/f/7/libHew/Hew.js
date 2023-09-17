@@ -27,7 +27,8 @@ export default {
 </span>a1-{{hewid}}-{{count}}
 <template v-for="hewId2 in childIds()">
     <t-hew :hewid="hewId2" :hewdocid="hewdocid" ></t-hew>
-</template> <span class="w3-hide">{{count}}</span>`, components: {
+</template> <span class="w3-hide">{{count}}</span>`,
+    components: {
         'HtmlTag': {
             props: { adnId: Number, hewdocid: Number }, data() { return { count: 0 } },
             mounted() { domConfHew().hewTagComponent[this.adnId] = this },

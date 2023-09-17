@@ -40,6 +40,8 @@
                 <div v-for="adnId2 in parentChilds(adnId)">
                     <span class="w3-tiny">{{adnId2}}&nbsp;{{wfSymbolR2(adnId2)}}</span>
                     {{adn(adnId2).vl_str}}
+                    ?hasTask? {{childTaskId(adnId2)}}
+                    
                     <div class="w3-border-top w3-container" v-if="wfSymbolR2(adnId2)">
                         <span class="w3-opacity w3-right w3-tiny">actionByOpen</span>
                         <!-- <div class="w3-tiny">.

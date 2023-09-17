@@ -12,7 +12,7 @@ console.log(domConfWf(), mcData)
 //init WF01 model
 const codeMetaData = [368597, 367562,], codeRepresentation = [377146,]
 domConfWf().codes = codeMetaData.concat(codeRepresentation)
-domConfWf().loggedAttributes = [372052, 377121, 377149, 377170]
+domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
 domConfWf().reView.afterReadCodes = () => {
     getDomComponent('cmd').count++

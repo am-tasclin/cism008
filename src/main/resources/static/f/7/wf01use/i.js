@@ -11,10 +11,10 @@ console.log(domConfWf(),)
 //init WF01 model
 const codeMetaData = [368597, 367562,], codeRepresentation = [377146,]
 domConfWf().codes = codeMetaData.concat(codeRepresentation)
-domConfWf().loggedAttributes = [372052, 377121, 377149, 377170]
+domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initWorkFlow, actionByOpen, wfSymbolPR, wfSymbolR2 } from '/f/7/libWF/libWF.js'
+import { initWorkFlow, actionByOpen, wfSymbolPR, wfSymbolR2, childTaskId } from '/f/7/libWF/libWF.js'
 
 ws.onopen = event => initWorkFlow()
 domConfWf().reView.readParent = (list, prevList) => {
@@ -37,5 +37,5 @@ createApp({
 
             this.count++
         },
-    }, mcDataMethods, wfSymbolR2, wfSymbolPR)
+    }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId)
 }).mount('#wf01use')
