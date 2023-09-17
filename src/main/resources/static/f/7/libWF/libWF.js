@@ -7,25 +7,9 @@ import { adnIds, adn, parentChilds, notParentChilds, domConfWf, domConstants, } 
     '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByIds, readAdnByParentIds, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 
-/**
- * ⛋   -- Process in PlanDefinition
- * 𝑓    -- ActivityDefinition
- * 𝑡    -- Task
- */
-export const wfType = {
-    369782: '[]', 371575: '[]', 373500: '𝑓→', 371927: '𝑡→'
-    , p: { 369782: '⛋', 371575: '⛋' }
-}
 // console.log(wfType, Object.keys(wfType))
 export const wfSymbolPR = { wfSymbolPR: adnId => wfType.p[adn(adn(adnId).p).r] }
 export const wfSymbolR2 = { wfSymbolR2: adnId => wfType[adn(adnId).r2] }
-export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
-/**
- * 
- */
-domConstants.TaskIdList = [371927]
-domConstants.TaskIOAutoExecute = [377168]
-domConstants.ActivityDefinitionIdList = [373500]
 /**
  * 
  * @param {*} parentId 
@@ -35,9 +19,24 @@ export const childTaskId = {
     childTaskId: parentId => parentChilds(parentId)
         .find(i => domConstants.TaskIdList.includes(adn(i).r))
 }
-import {
-    executeSelectQuery, executeAdnInsertQuery, executeDeleteAdn1Query, executeUpdateString
-} from '/f/7/libDbRw/wsDbRw.js'
+export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
+/**
+ * 
+ */
+domConstants.TaskIdList = [2001]
+domConstants.ActivityDefinitionIdList = [2002]
+domConstants.TaskIOAutoExecute = [2005]
+/**
+ * ⛋   -- Process in PlanDefinition
+ * 𝑓    -- ActivityDefinition
+ * 𝑡    -- Task
+ */
+export const wfType = {
+    2001: '𝑡→', 2002: '𝑓→', 2003: '[]', 2004: '[]'
+    , p: { 2003: '⛋', 2004: '⛋' }
+}
+
+import { executeSelectQuery, } from '/f/7/libDbRw/wsDbRw.js'
 /**
  * 
  * @param {*} adnId 
