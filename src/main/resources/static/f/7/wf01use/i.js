@@ -24,18 +24,18 @@ domConfWf().reView.readParent = (list, prevList) => {
 const { createApp } = Vue
 createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },
-    mounted() { setDomComponent('wf01use', this) }, methods: Object.assign(mcDataMethods, {
-        isSelectedActionId: adnId => domConfWf().selectedActionId && domConfWf().selectedActionId.includes(adnId),
-        wfSymbolR2: adnId => wfSymbolR2(adnId),
-        wfSymbolPR: adnId => wfSymbolPR(adnId),
+    mounted() { setDomComponent('wf01use', this) }, methods: Object.assign({}, {
+        isSelectedActionId: adnId =>
+            domConfWf().selectedActionId && domConfWf().selectedActionId.includes(adnId),
+        actionData: adnId => domConfWf().actionData && domConfWf().actionData[adnId].list,
         onOffAction(adnId) {
             const selectedActionId = domConfWf().selectedActionId || (domConfWf().selectedActionId = [])
             !selectedActionId.includes(adnId) && selectedActionId.push(adnId)
                 || selectedActionId.splice(selectedActionId.indexOf(), 1)
 
-            selectedActionId.includes(adnId) && actionByOpen(adnId)
+            selectedActionId.includes(adnId) && actionByOpen(adnId, this)
 
             this.count++
         },
-    })
+    }, mcDataMethods, wfSymbolR2, wfSymbolPR)
 }).mount('#wf01use')

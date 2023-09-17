@@ -5,11 +5,8 @@
  */
 import { adnIds, adn, parentChilds, notParentChilds, domConfWf, domConstants, } from
     '/f/7/libDomGrid/libDomGrid.js'
-import { readAdnByIds, readAdnByParentIds } from '/f/7/libDbRw/libMcRDb.js'
+import { readAdnByIds, readAdnByParentIds, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 
-export const actionByOpen = adnId => findTaskInPDAction(adnId, inTaskId => {
-    console.log(adn(inTaskId))
-})
 /**
  * ⛋   -- Process in PlanDefinition
  * 𝑓    -- ActivityDefinition
@@ -19,31 +16,61 @@ export const wfType = {
     369782: '[]', 371575: '[]', 373500: '𝑓→', 371927: '𝑡→'
     , p: { 369782: '⛋', 371575: '⛋' }
 }
-console.log(wfType, Object.keys(wfType))
-export const wfSymbolPR = adnId => wfType.p[adn(adn(adnId).p).r]
-export const wfSymbolR2 = adnId => wfType[adn(adnId).r2]
-    /**
-     * 
-     */
-    domConstants.TaskIdList = [371927]
+// console.log(wfType, Object.keys(wfType))
+export const wfSymbolPR = { wfSymbolPR: adnId => wfType.p[adn(adn(adnId).p).r] }
+export const wfSymbolR2 = { wfSymbolR2: adnId => wfType[adn(adnId).r2] }
+export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
+/**
+ * 
+ */
+domConstants.TaskIdList = [371927]
+domConstants.TaskIOAutoExecute = [377168]
 domConstants.ActivityDefinitionIdList = [373500]
 /**
  * 
  * @param {*} parentId 
  * @returns 
  */
-export const childTaskId = parentId => parentChilds(parentId)
-    .find(i => domConstants.TaskIdList.includes(adn(i).r))
+export const childTaskId = {
+    childTaskId: parentId => parentChilds(parentId)
+        .find(i => domConstants.TaskIdList.includes(adn(i).r))
+}
+import {
+    executeSelectQuery, executeAdnInsertQuery, executeDeleteAdn1Query, executeUpdateString
+} from '/f/7/libDbRw/wsDbRw.js'
 /**
  * 
  * @param {*} adnId 
- * @param {*} inTaskFn 
+ * @returns 
  */
-const findTaskInPDAction = (adnId, inTaskFn) => {
+export const actionByOpen = (adnId, proxy) => findTasksInPDAction(adnId,
+    (activityDefinitionId, tasksInAD) => {
+        console.log(tasksInAD, domConstants.TaskIOAutoExecute)
+        const taskAutoExecuteId = tasksInAD.find(i =>
+            domConstants.TaskIOAutoExecute.includes(taskIOCmd(i)))
+        console.log(adnId, activityDefinitionId, taskAutoExecuteId, taskIOCmd(taskAutoExecuteId))
+        taskAutoExecuteId && (() => {
+            const sqlJson = JSON.parse(adn(taskAutoExecuteId).vl_str)
+                , sql = initNamedSql(sqlJson)
+            console.log(sql)
+            executeSelectQuery(sql).then(json => {
+                console.log(json, domConfWf())
+                const actionData = domConfWf().actionData || (domConfWf().actionData = {})
+                actionData[activityDefinitionId] = json
+                proxy.count++
+            })
+        })()
+    })
+/**
+ * 
+ * @param {*} adnId 
+ * @param {*} tasksInADFn 
+ */
+const findTasksInPDAction = (adnId, tasksInADFn) => {
     const activityDefinitionId = parentChilds(adnId) && parentChilds(adnId)
         .find(i => domConstants.ActivityDefinitionIdList.includes(adn(i).r2))
     activityDefinitionId &&
-        parentChilds(adn(childTaskId(activityDefinitionId)).r2).find(inTaskFn)
+        tasksInADFn(activityDefinitionId, parentChilds(adn(childTaskId.childTaskId(activityDefinitionId)).r2))
 }
 
 export const initWorkFlow = () => domConfWf().l.length && readAdnByIds(domConfWf().l)
@@ -57,8 +84,6 @@ const readTasks = (x, deepCount) => {
     ).then(() => deepN_readParent(deepNum, taskList, [], afterReadTasks))
 }
 
-// import {  initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
-// console.log(34, codes, initNamedSql({ n: 'selectDocVlStrByParentIds', l: [377108] }))
 const afterReadTasks = (x, deepCount) => readAdnByIds(domConfWf().codes)
     .then(() => deepN_readParent(deepNum, domConfWf().codes, [], afterReadCodes))
 

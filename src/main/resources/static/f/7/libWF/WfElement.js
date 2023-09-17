@@ -9,14 +9,15 @@ import { mcDataMethods, domConfWf, setDomComponent } from '/f/7/libDomGrid/libDo
  */
 const Task = {
     props: { adnId: Number }, data() { return { count: 0, } },
-    mounted() { domConfWf().taskComponent[this.adnId] = this }, methods: Object.assign(mcDataMethods, {
+    mounted() { domConfWf().taskComponent[this.adnId] = this }, methods: Object.assign({}, {
         taskSymbolR: adnId => taskType[mcDataMethods.adn(adnId).r],
-    }), template: `
+        taskIOCmd: adnId => taskIOCmd(adnId),
+    }, mcDataMethods), template: `
 {{adn(adnId).vl_str}}
 <div v-if="parentChilds(adnId).length" class="w3-container w3-border-left">
     <div v-for="adnId2 in parentChilds(adnId)">
         <span class="w3-tiny">{{adnId2}}&nbsp;</span>{{taskSymbolR(adnId2)}}
-        <span class="w3-opacity w3-small">{{adn(adn(adn(adn(adnId2).r2).r2).p).vl_str}}</span>
+        <span class="w3-opacity w3-small">{{adn(taskIOCmd(adnId2)).vl_str}}</span>
         {{adn(adnId2).vl_str}}
         <span v-if="parentChilds(adnId2)[0]">
             ⇸
@@ -31,18 +32,15 @@ const Task = {
  * 
  */
 const taskType = { 371934: '⇥', 371936: '↦', }
-import { childTaskId, wfType, wfSymbolPR, wfSymbolR2 } from '/f/7/libWF/libWF.js'
+import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, taskIOCmd } from '/f/7/libWF/libWF.js'
 /**
  * WfElement
  */
 export const WfElement = {
     props: { adnid: Number }, data() { return { count: 0, } }, components: { Task, },
-    mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: Object.assign(mcDataMethods, {
+    mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: Object.assign({}, {
         wfSymbolR: adnId => wfType[mcDataMethods.adn(adnId).r],
-        wfSymbolR2: adnId => wfSymbolR2(adnId),
-        wfSymbolPR: adnId => wfSymbolPR(adnId),
-        childTaskId: parentId => childTaskId(parentId),
-    }), template: `
+    }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId), template: `
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
     <template v-for="adnId2 in parentChilds(adnid)">
         <div class="w3-row" v-if="childTaskId(adnId2)">
