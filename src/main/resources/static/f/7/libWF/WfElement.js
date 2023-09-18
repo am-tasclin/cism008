@@ -32,7 +32,8 @@ const Task = {
  * 
  */
 const taskType = { 371934: '⇥', 371936: '↦', }
-import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, taskIOCmd } from '/f/7/libWF/libWF.js'
+import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, taskIOCmd } from
+    '/f/7/libWF/libWF.js'
 /**
  * WfElement
  */

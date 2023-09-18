@@ -14,7 +14,11 @@ domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initWorkFlow, actionByOpen, wfSymbolPR, wfSymbolR2, childTaskId } from '/f/7/libWF/libWF.js'
+import {
+    initWorkFlow, actionByOpen, wfSymbolPR, wfSymbolR2, childTaskId,
+    TaskTagIds, taskIOCmd
+} from
+    '/f/7/libWF/libWF.js'
 
 ws.onopen = event => initWorkFlow()
 domConfWf().reView.readParent = (list, prevList) => {
@@ -36,6 +40,14 @@ createApp({
             selectedActionId.includes(adnId) && actionByOpen(adnId, this)
 
             this.count++
+        }, taskTagName(adnId) {
+            const taskIcId = childTaskId.childTaskId(adnId)
+                , taskId = mcDataMethods.adn(taskIcId).r2
+                , taskTagId = taskIOCmd(mcDataMethods.parentChilds(taskId)
+                    .find(i => TaskTagIds.includes(taskIOCmd(i))))
+                , taskTagName = taskIcId && mcDataMethods.adn(taskTagId).vl_str.replace('.', '') || ''
+            // console.log(taskTagId, mcDataMethods.adn(taskTagId).vl_str)
+            return taskTagName
         },
     }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId)
 }).mount('#wf01use')

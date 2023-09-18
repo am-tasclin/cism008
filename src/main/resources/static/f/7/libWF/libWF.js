@@ -26,6 +26,7 @@ export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
 domConstants.TaskIdList = [2001]
 domConstants.ActivityDefinitionIdList = [2002]
 domConstants.TaskIOAutoExecute = [2005]
+export const TaskTagIds = domConstants.TaskTagIds = [2005]
 /**
  * ⛋   -- Process in PlanDefinition
  * 𝑓    -- ActivityDefinition
@@ -51,7 +52,7 @@ export const actionByOpen = (adnId, proxy) => findTasksInPDAction(adnId,
         taskAutoExecuteId && (() => {
             const sqlJson = JSON.parse(adn(taskAutoExecuteId).vl_str)
                 , sql = initNamedSql(sqlJson)
-            console.log(sql)
+            // console.log(sql)
             executeSelectQuery(sql).then(json => {
                 console.log(json, domConfWf())
                 const actionData = domConfWf().actionData || (domConfWf().actionData = {})
