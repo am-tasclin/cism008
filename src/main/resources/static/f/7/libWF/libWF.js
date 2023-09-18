@@ -40,37 +40,39 @@ export const wfType = {
 import { executeSelectQuery, } from '/f/7/libDbRw/wsDbRw.js'
 /**
  * 
+ * @param {*} taskIcId 
+ */
+export const initTaskIc = (taskIcId, proxy) => {
+    const tasksInAD = parentChilds(adn(taskIcId).r2)
+    console.log(adn(taskIcId).p, taskIcId, tasksInAD, domConstants.TaskIOAutoExecute)
+    const taskAutoExecuteId = tasksInAD.find(i => domConstants.TaskIOAutoExecute.includes(taskIOCmd(i)))
+    // console.log(adnId, taskAutoExecuteId, taskIOCmd(taskAutoExecuteId))
+    taskAutoExecuteId && (() => {
+        const sqlJson = JSON.parse(adn(taskAutoExecuteId).vl_str), sql = initNamedSql(sqlJson)
+        // console.log(sql)
+        executeSelectQuery(sql).then(json => {
+            console.log(json, domConfWf())
+            const actionData = domConfWf().actionData || (domConfWf().actionData = {}), activityDefinitionId = adn(taskIcId).p
+            actionData[activityDefinitionId] = json
+            proxy.count++
+        })
+    })()
+}
+/**
+ * 
  * @param {*} adnId 
  * @returns 
  */
-export const actionByOpen = (adnId, proxy) => findTasksInPDAction(adnId,
-    (activityDefinitionId, tasksInAD) => {
-        console.log(tasksInAD, domConstants.TaskIOAutoExecute)
-        const taskAutoExecuteId = tasksInAD.find(i =>
-            domConstants.TaskIOAutoExecute.includes(taskIOCmd(i)))
-        console.log(adnId, activityDefinitionId, taskAutoExecuteId, taskIOCmd(taskAutoExecuteId))
-        taskAutoExecuteId && (() => {
-            const sqlJson = JSON.parse(adn(taskAutoExecuteId).vl_str)
-                , sql = initNamedSql(sqlJson)
-            // console.log(sql)
-            executeSelectQuery(sql).then(json => {
-                console.log(json, domConfWf())
-                const actionData = domConfWf().actionData || (domConfWf().actionData = {})
-                actionData[activityDefinitionId] = json
-                proxy.count++
-            })
-        })()
-    })
+export const pdActionByOpen = (adnId, proxy) => findTasksInPDAction(adnId, proxy, initTaskIc)
 /**
  * 
  * @param {*} adnId 
  * @param {*} tasksInADFn 
  */
-const findTasksInPDAction = (adnId, tasksInADFn) => {
+const findTasksInPDAction = (adnId, proxy, tasksInADFn) => {
     const activityDefinitionId = parentChilds(adnId) && parentChilds(adnId)
         .find(i => domConstants.ActivityDefinitionIdList.includes(adn(i).r2))
-    activityDefinitionId &&
-        tasksInADFn(activityDefinitionId, parentChilds(adn(childTaskId.childTaskId(activityDefinitionId)).r2))
+    activityDefinitionId && tasksInADFn(childTaskId.childTaskId(activityDefinitionId), proxy)
 }
 
 export const initWorkFlow = () => domConfWf().l.length && readAdnByIds(domConfWf().l)

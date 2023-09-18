@@ -39,19 +39,18 @@
             <div v-if="isSelectedActionId(adnId)" class="w3-border-left w3-container">
                 <div v-for="adnId2 in parentChilds(adnId)">
                     <span class="w3-tiny">{{adnId2}}&nbsp;{{wfSymbolR2(adnId2)}}</span>
-                    {{adn(adnId2).vl_str}}
-                    ?hasTask? {{childTaskId(adnId2)}}
-                    --{{taskTagName(adnId2)}}
-                    <div class="w3-border-top w3-container" v-if="wfSymbolR2(adnId2)">
+                    -- {{adn(adnId2).vl_str}}
+                    <t-wf-part :adnid="adnId2"></t-wf-part>
+                    <!-- <div class="w3-border-top w3-container" v-if="wfSymbolR2(adnId2)">
                         <span class="w3-opacity w3-right w3-tiny">actionByOpen</span>
-                        <!-- <div class="w3-tiny">.
+                        <div class="w3-tiny">.
                             {{actionData(adnId2)}}
-                        </div> -->
+                        </div>
                         <div v-for="im in actionData(adnId2)" class="w3-hover-shadow">
                             <span class="w3-tiny">{{im.doc_id}}</span>
                             {{im.vl_str}}
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </template>
