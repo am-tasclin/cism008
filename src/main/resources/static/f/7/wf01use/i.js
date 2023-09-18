@@ -15,8 +15,8 @@ domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
 import {
-    initWorkFlow, initTaskIc, pdActionByOpen, wfSymbolPR, wfSymbolR2, childTaskId,
-    TaskTagIds, taskIOCmd
+    initWorkFlow, initTaskIc, wfSymbolPR, wfSymbolR2, childTaskId,
+    TaskTagIds, taskIOCmd, wfType, findTasksInPDAction
 } from '/f/7/libWF/libWF.js'
 
 ws.onopen = event => initWorkFlow()
@@ -26,24 +26,38 @@ domConfWf().reView.readParent = (list, prevList) => {
 
 const TitSelect = {
     props: { taskIcId: Number }, data() { return { count: 0 } },
-    mounted() { initTaskIc(this.taskIcId, this) }, methods: {
+    mounted() {
+        initTaskIc(this.taskIcId, this)
+        const pdActionIds = mcDataMethods.parentChilds(mcDataMethods
+            .parentChilds(mcDataMethods.adn(this.activityDefinitionId()).p)
+            .find(i => '[]' == wfType[mcDataMethods.adn(i).r]))
+        // console.log(pdActionIds)
+        pdActionIds.forEach(i => findTasksInPDAction(i, this, (taskIcId, proxy) => {
+            const taskId = mcDataMethods.adn(taskIcId).r2
+            console.log(i, taskIcId, taskId)
+            // this.count++
+        }))
+
+        // .forEach(i => {
+        //     console.log(i,)
+        // })
+    }, methods: {
         activityDefinitionId() { return mcDataMethods.adn(this.taskIcId).p },
         actionData() {
             return domConfWf().actionData && domConfWf()
                 .actionData[this.activityDefinitionId()].list
         },
         setSelectedId(adnId) {
-            console.log(adnId, domConfWf())
+            console.log(adnId, domConfWf(), wfType)
+
         },
     }, template: `
 <div class="w3-border-top w3-container">
-    <div>    
-        a11
+    <span class="w3-tiny w3-right">{{taskIcId}}:TitSelect</span>
+    <div class="w3-border-bottom">
+         {{count}} {{activityDefinitionId()}}
     </div>    
-    <span class="w3-tiny w3-right">{{taskIcId}}</span>
-     TitSelect {{count}}
-     {{activityDefinitionId()}}
-     <div @click="setSelectedId(im.doc_id) " v-for="im in actionData()" class="w3-hover-shadow">
+    <div @click="setSelectedId(im.doc_id) " v-for="im in actionData()" class="w3-hover-shadow">
         <span class="w3-tiny">{{im.doc_id}}</span>
         {{im.vl_str}}
     </div>
@@ -51,13 +65,9 @@ const TitSelect = {
 }
 
 const WfPart = {
-    props: { adnid: Number }, data() { return { count: 0 } },
     components: { TitSelect },
-    mounted() {
-        // setDomComponent('xtest', this)
-        const selectedActionId = domConfWf().selectedActionId || (domConfWf().selectedActionId = [])
-        console.log(this.adnid, selectedActionId, selectedActionId.includes(this.adnid))
-    }, methods: {
+    template: `<component :is="taskTagName()" :taskIcId="taskIcId()"></component>`,
+    props: { adnid: Number }, data() { return { count: 0 } }, methods: {
         taskIcId() { return childTaskId.childTaskId(this.adnid) },
         taskId() { return mcDataMethods.adn(this.taskIcId()).r2 },
         taskTagName() {
@@ -65,7 +75,7 @@ const WfPart = {
                 .find(i => TaskTagIds.includes(taskIOCmd(i))))
             return this.taskId() && mcDataMethods.adn(taskTagId).vl_str.replace('.', '')
         }
-    }, template: `<component :is="taskTagName()" :taskIcId="taskIcId()"></component>`,
+    },
 }
 
 const { createApp } = Vue
@@ -76,6 +86,7 @@ const wf01use = createApp({
             .selectedActionId.includes(adnId),
         actionData: adnId => domConfWf().actionData && domConfWf().actionData[adnId].list,
         onOffAction(adnId) {
+            console.log(adnId, domConfWf().selectedActionId)
             const selectedActionId = domConfWf().selectedActionId || (domConfWf().selectedActionId = [])
             !selectedActionId.includes(adnId) && selectedActionId.push(adnId)
                 || selectedActionId.splice(selectedActionId.indexOf(), 1)

@@ -44,16 +44,14 @@ import { executeSelectQuery, } from '/f/7/libDbRw/wsDbRw.js'
  */
 export const initTaskIc = (taskIcId, proxy) => {
     const tasksInAD = parentChilds(adn(taskIcId).r2)
-    console.log(adn(taskIcId).p, taskIcId, tasksInAD, domConstants.TaskIOAutoExecute)
     const taskAutoExecuteId = tasksInAD.find(i => domConstants.TaskIOAutoExecute.includes(taskIOCmd(i)))
-    // console.log(adnId, taskAutoExecuteId, taskIOCmd(taskAutoExecuteId))
     taskAutoExecuteId && (() => {
         const sqlJson = JSON.parse(adn(taskAutoExecuteId).vl_str), sql = initNamedSql(sqlJson)
-        // console.log(sql)
         executeSelectQuery(sql).then(json => {
-            console.log(json, domConfWf())
-            const actionData = domConfWf().actionData || (domConfWf().actionData = {}), activityDefinitionId = adn(taskIcId).p
+            const actionData = domConfWf().actionData || (domConfWf().actionData = {})
+                , activityDefinitionId = adn(taskIcId).p
             actionData[activityDefinitionId] = json
+            console.log(activityDefinitionId, taskIcId, domConfWf())
             proxy.count++
         })
     })()
@@ -62,15 +60,15 @@ export const initTaskIc = (taskIcId, proxy) => {
  * 
  * @param {*} adnId 
  * @returns 
- */
 export const pdActionByOpen = (adnId, proxy) => findTasksInPDAction(adnId, proxy, initTaskIc)
+ */
 /**
  * 
- * @param {*} adnId 
+ * @param {*} pdActionId -- PlanDefinition.action id
  * @param {*} tasksInADFn 
  */
-const findTasksInPDAction = (adnId, proxy, tasksInADFn) => {
-    const activityDefinitionId = parentChilds(adnId) && parentChilds(adnId)
+export const findTasksInPDAction = (pdActionId, proxy, tasksInADFn) => {
+    const activityDefinitionId = parentChilds(pdActionId) && parentChilds(pdActionId)
         .find(i => domConstants.ActivityDefinitionIdList.includes(adn(i).r2))
     activityDefinitionId && tasksInADFn(childTaskId.childTaskId(activityDefinitionId), proxy)
 }
