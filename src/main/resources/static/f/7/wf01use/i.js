@@ -5,6 +5,7 @@
  */
 import { initDomConfLogic, mcDataMethods, getDomComponent, setDomComponent, domConfWf, } from
     '/f/7/libDomGrid/libDomGrid.js'
+const adn = mcDataMethods.adn, parentChilds = mcDataMethods.parentChilds
 initDomConfLogic(window.location.hash.substring(1))
 console.log(domConfWf(),)
 
@@ -26,23 +27,21 @@ domConfWf().reView.readParent = (list, prevList) => {
 
 const TitSelect = {
     props: { taskIcId: Number }, data() { return { count: 0 } },
-    mounted() {
+    computed: {
+        pdActionIds() {
+            return parentChilds(parentChilds(adn(this.activityDefinitionId()).p)
+                .find(i => '[]' == wfType[adn(i).r]))
+        },
+    }, mounted() {
         initTaskIc(this.taskIcId, this)
-        const pdActionIds = mcDataMethods.parentChilds(mcDataMethods
-            .parentChilds(mcDataMethods.adn(this.activityDefinitionId()).p)
-            .find(i => '[]' == wfType[mcDataMethods.adn(i).r]))
-        // console.log(pdActionIds)
-        pdActionIds.forEach(i => findTasksInPDAction(i, this, (taskIcId, proxy) => {
-            const taskId = mcDataMethods.adn(taskIcId).r2
+        console.log(this.pdActionIds)
+        this.pdActionIds.forEach(i => findTasksInPDAction(i, this, (taskIcId, proxy) => {
+            const taskId = adn(taskIcId).r2
             console.log(i, taskIcId, taskId)
             // this.count++
         }))
-
-        // .forEach(i => {
-        //     console.log(i,)
-        // })
-    }, methods: {
-        activityDefinitionId() { return mcDataMethods.adn(this.taskIcId).p },
+    }, methods: Object.assign({}, {
+        activityDefinitionId() { return adn(this.taskIcId).p },
         actionData() {
             return domConfWf().actionData && domConfWf()
                 .actionData[this.activityDefinitionId()].list
@@ -51,12 +50,15 @@ const TitSelect = {
             console.log(adnId, domConfWf(), wfType)
 
         },
-    }, template: `
+    }, mcDataMethods), template: `
 <div class="w3-border-top w3-container">
-    <span class="w3-tiny w3-right">{{taskIcId}}:TitSelect</span>
+    <span class="w3-tiny w3-right">{{taskIcId}}:TitSelect:{{count}}</span>
     <div class="w3-border-bottom">
-         {{count}} {{activityDefinitionId()}}
-    </div>    
+        <div v-for="pdActionId in pdActionIds">
+            <span class="w3-tiny">{{pdActionId}}</span>
+            {{adn(pdActionId).vl_str}}
+        </div>
+    </div>
     <div @click="setSelectedId(im.doc_id) " v-for="im in actionData()" class="w3-hover-shadow">
         <span class="w3-tiny">{{im.doc_id}}</span>
         {{im.vl_str}}
@@ -69,11 +71,11 @@ const WfPart = {
     template: `<component :is="taskTagName()" :taskIcId="taskIcId()"></component>`,
     props: { adnid: Number }, data() { return { count: 0 } }, methods: {
         taskIcId() { return childTaskId.childTaskId(this.adnid) },
-        taskId() { return mcDataMethods.adn(this.taskIcId()).r2 },
+        taskId() { return adn(this.taskIcId()).r2 },
         taskTagName() {
-            const taskTagId = taskIOCmd(mcDataMethods.parentChilds(this.taskId())
+            const taskTagId = taskIOCmd(parentChilds(this.taskId())
                 .find(i => TaskTagIds.includes(taskIOCmd(i))))
-            return this.taskId() && mcDataMethods.adn(taskTagId).vl_str.replace('.', '')
+            return this.taskId() && adn(taskTagId).vl_str.replace('.', '')
         }
     },
 }
