@@ -17,14 +17,16 @@ domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
 import {
     initWorkFlow, initTaskIc, wfSymbolPR, wfSymbolR2, childTaskId,
-    TaskTagIds, taskIOCmd, wfType, findTasksInPDAction
+    TaskTagIds, taskIOCmd, wfType, findTasksInPDAction, findAdInPDAction
 } from '/f/7/libWF/libWF.js'
 
 ws.onopen = event => initWorkFlow()
 domConfWf().reView.readParent = (list, prevList) => {
     getDomComponent('wf01use').count++
 }
-
+/**
+ * 
+ */
 const TitSelect = {
     props: { taskIcId: Number }, data() { return { count: 0 } },
     computed: {
@@ -41,25 +43,31 @@ const TitSelect = {
             // this.count++
         }))
     }, methods: Object.assign({}, {
-        activityDefinitionId() { return adn(this.taskIcId).p },
-        actionData() {
+        findBtnAdId: pdActionId => findAdInPDAction(pdActionId)
+        , activityDefinitionId() { return adn(this.taskIcId).p }
+        , clickAdBtn(adId) {
+            console.log(adId, adn(adId))
+        }, actionData() {
             return domConfWf().actionData && domConfWf()
                 .actionData[this.activityDefinitionId()].list
-        },
-        setSelectedId(adnId) {
+        }, setSelectedId(adnId) {
             console.log(adnId, domConfWf(), wfType)
 
         },
     }, mcDataMethods), template: `
 <div class="w3-border-top w3-container">
     <span class="w3-tiny w3-right">{{taskIcId}}:TitSelect:{{count}}</span>
-    <div class="w3-border-bottom">
-        <div v-for="pdActionId in pdActionIds">
+    <div class="w3-border-bottom w3-leftbar">
+        <div v-for="pdActionId in pdActionIds">&nbsp;
             <span class="w3-tiny">{{pdActionId}}</span>
             {{adn(pdActionId).vl_str}}
+            {{findBtnAdId(pdActionId)}}
+            <button @click="clickAdBtn(findBtnAdId(pdActionId))" class="w3-leftbar">
+                {{adn(findBtnAdId(pdActionId)).vl_str}}
+            </button>
         </div>
     </div>
-    <div @click="setSelectedId(im.doc_id) " v-for="im in actionData()" class="w3-hover-shadow">
+    <div @click="setSelectedId(im.doc_id)" v-for="im in actionData()" class="w3-hover-shadow">
         <span class="w3-tiny">{{im.doc_id}}</span>
         {{im.vl_str}}
     </div>

@@ -63,13 +63,26 @@ export const initTaskIc = (taskIcId, proxy) => {
 export const pdActionByOpen = (adnId, proxy) => findTasksInPDAction(adnId, proxy, initTaskIc)
  */
 /**
+ * Find ActivityDefinition in PlanDefinition.action
+ * @param {Number} pdActionId 
+ * @returns 
+ */
+export const findAdInPDAction = pdActionId => parentChilds(pdActionId)
+    .find(i => domConstants.ActivityDefinitionIdList.includes(adn(i).r2))
+/**
  * 
- * @param {*} pdActionId -- PlanDefinition.action id
- * @param {*} tasksInADFn 
+ * @param {Number} adId 
+ */
+export const findTaskInAD = adId => parentChilds(adId)
+    .find(i => domConstants.TaskIdList.includes(adn(i).r2))
+/**
+ * 
+ * @param {Number} pdActionId -- PlanDefinition.action id
+ * @param {*} proxy 
+ * @param {Function} tasksInADFn 
  */
 export const findTasksInPDAction = (pdActionId, proxy, tasksInADFn) => {
-    const activityDefinitionId = parentChilds(pdActionId) && parentChilds(pdActionId)
-        .find(i => domConstants.ActivityDefinitionIdList.includes(adn(i).r2))
+    const activityDefinitionId = findAdInPDAction(pdActionId)
     activityDefinitionId && tasksInADFn(childTaskId.childTaskId(activityDefinitionId), proxy)
 }
 
