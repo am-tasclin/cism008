@@ -15,12 +15,14 @@ domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
+import { initWorkFlow } from '/f/7/libWF/libWF.js'
+ws.onopen = event => initWorkFlow()
+
 import {
-    initWorkFlow, initTaskIc, wfSymbolPR, wfSymbolR2, childTaskId,
+    initTaskIc, wfSymbolPR, wfSymbolR2, childTaskId,
     TaskTagIds, taskIOCmd, wfType, findTasksInPDAction, findAdInPDAction
 } from '/f/7/libWF/libWF.js'
 
-ws.onopen = event => initWorkFlow()
 domConfWf().reView.readParent = (list, prevList) => {
     getDomComponent('wf01use').count++
 }
@@ -42,7 +44,7 @@ const TitSelect = {
             console.log(i, taskIcId, taskId)
             // this.count++
         }))
-    }, methods: Object.assign({}, {
+    }, methods: Object.assign({
         findBtnAdId: pdActionId => findAdInPDAction(pdActionId)
         , activityDefinitionId() { return adn(this.taskIcId).p }
         , clickAdBtn(adId) {
@@ -61,7 +63,6 @@ const TitSelect = {
         <div v-for="pdActionId in pdActionIds">&nbsp;
             <span class="w3-tiny">{{pdActionId}}</span>
             {{adn(pdActionId).vl_str}}
-            {{findBtnAdId(pdActionId)}}
             <button @click="clickAdBtn(findBtnAdId(pdActionId))" class="w3-leftbar">
                 {{adn(findBtnAdId(pdActionId)).vl_str}}
             </button>
@@ -77,21 +78,21 @@ const TitSelect = {
 const WfPart = {
     components: { TitSelect },
     template: `<component :is="taskTagName()" :taskIcId="taskIcId()"></component>`,
-    props: { adnid: Number }, data() { return { count: 0 } }, methods: {
+    props: { adnid: Number }, methods: {
         taskIcId() { return childTaskId.childTaskId(this.adnid) },
         taskId() { return adn(this.taskIcId()).r2 },
         taskTagName() {
             const taskTagId = taskIOCmd(parentChilds(this.taskId())
                 .find(i => TaskTagIds.includes(taskIOCmd(i))))
             return this.taskId() && adn(taskTagId).vl_str.replace('.', '')
-        }
+        },
     },
 }
 
 const { createApp } = Vue
 const wf01use = createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },
-    mounted() { setDomComponent('wf01use', this) }, methods: Object.assign({}, {
+    mounted() { setDomComponent('wf01use', this) }, methods: Object.assign({
         isSelectedActionId: adnId => domConfWf().selectedActionId && domConfWf()
             .selectedActionId.includes(adnId),
         actionData: adnId => domConfWf().actionData && domConfWf().actionData[adnId].list,

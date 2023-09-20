@@ -89,6 +89,7 @@ export const findTasksInPDAction = (pdActionId, proxy, tasksInADFn) => {
 export const initWorkFlow = () => domConfWf().l.length && readAdnByIds(domConfWf().l)
     .then(() => deepN_readParent(deepNum, domConfWf().l, [], readTasks))
 
+
 const readTasks = (x, deepCount) => {
     const taskList = adnIds().reduce((l, i) => domConstants.TaskIdList
         .includes(adn(i).r) && l.push(adn(i).r2) && l || l, [])

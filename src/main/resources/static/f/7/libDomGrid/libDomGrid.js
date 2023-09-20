@@ -40,7 +40,10 @@ export const adnIds = () => Object.keys(mcData.eMap)
 export const adn = adnId => mcData.eMap[adnId] || {}
 export const parentChilds = adnId => mcData.parentChilds[adnId] || []
 export const notParentChilds = adnId => !mcData.parentChilds[adnId]
-export const mcDataMethods = { adn: adnId => adn(adnId), parentChilds: adnId => parentChilds(adnId), }
+export const mcDataMethods = {
+    adn: adnId => adn(adnId), parentChilds: adnId => parentChilds(adnId),
+    d: mcData,
+}
 /**
  * 
  */
@@ -69,6 +72,7 @@ export const domConfStrignify = () => {
 export const actuallyTreeObj = () => domConf().actuallyTreeObj
 export const domConfHew = () => domConf().hew
 export const domConfWf = () => domConf().wf
+export const domConfEMR = () => domConf().emr
 // export const confHew = () => domContainer.conf.hew // TO REMOVE
 export const setActuallyTreeObjFromPath = pathTreeStr =>
     domConf().actuallyTreeObj = pathTreeStr.split(',')
@@ -273,21 +277,23 @@ export const pathActuallyTreeObj = () =>
  */
 const initUriDomConf = (rawUriDomConf, ppId) => {
     !ppId && (ppId = 0)
+    // console.log(uriDomConf_l, ppId, 'hew' == uriDomConf_l[0]);
     rawUriDomConf.split(';').forEach(rawUriDomConf1 => {
         const uriDomConf_l = rawUriDomConf1.split(',')
-        // console.log(uriDomConf_l, ppId, 'hew' == uriDomConf_l[0]);
         'hew' == uriDomConf_l[0] && initHewUriDomConf(uriDomConf_l
-        ) || 'wf' == uriDomConf_l[0] && initWfUriDomConf(uriDomConf_l
+        ) || 'wf' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
+            , { l: [], wfComponent: {}, taskComponent: {}, reView: {}, }
+        ) || 'emr' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
+            , { l: [], }
         ) || initTreeUriDomConf(uriDomConf_l, ppId)
     })
     return domContainer.conf
 }
 
-const initWfUriDomConf = uriDomConf_l => {
-    console.log(uriDomConf_l)
-    const wf = domContainer.conf.wf || (domContainer.conf.wf
-        = { l: [], wfComponent: {}, taskComponent: {}, reView: {}, })
-    uriDomConf_l.slice(1).forEach(im => !wf.l.includes(im) && wf.l.push(im))
+const initConfTypePart = (uriDomConf_l, initJson,) => {
+    const confPart = domContainer.conf[uriDomConf_l[0]] || (domContainer.conf[uriDomConf_l[0]]
+        = initJson)
+    uriDomConf_l.slice(1).forEach(im => !confPart.l.includes(im) && confPart.l.push(im))
 }
 /**
  * 

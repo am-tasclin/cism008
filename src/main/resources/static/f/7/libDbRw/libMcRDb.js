@@ -62,6 +62,16 @@ export const addToParentChild = adnList => adnList.reduce((pl, adn) =>
     && pl || pl, [])
  */
 
+import { adnIds, notParentChilds } from '/f/7/libDomGrid/libDomGrid.js'
+export const deepNum = 6
+export const deepN_readParent = (deepCount, list, prevList, fn) => {
+    (deepCount == 0 || !list.length) && fn(list, deepCount)
+    deepCount > 0 && list.length && readAdnByParentIds(list).then(() => {
+        const newList = adnIds().filter(i => notParentChilds(i) && !prevList.includes(i))
+        deepN_readParent(--deepCount, newList, list.concat(newList), fn)
+    })
+}
+
 import { addNewMc, } from '/f/7/libDomGrid/libDomGrid.js'
 /**
  * 
