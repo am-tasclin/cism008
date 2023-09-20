@@ -122,4 +122,3 @@ sqlMakerCollection.selectDocVlStrByIds = selectDocVlStrMaker
 sqlMakerCollection.selectDocVlStrByParentIds = selectDocVlStrMaker
     .addLeftJoin('sort', 'doc_id=sort_id').initOrder('sort')
     .initWhere('parent IN (:idList)').get()
-

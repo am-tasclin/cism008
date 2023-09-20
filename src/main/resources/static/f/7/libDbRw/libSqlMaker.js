@@ -40,6 +40,10 @@ const SqlSelectMaker = (smContainer, sqlTableName) => {
         }, initWhere(where) {
             smContainer.where = where
             return this
+        }, andWhere(andWhere) {
+            smContainer.andWhere || (smContainer.andWhere = [])
+            smContainer.andWhere.push(andWhere)
+            return this
         }, get() {
             // console.log(smContainer)
             let sql = 'SELECT '.concat(this.getColumns())
@@ -51,6 +55,7 @@ const SqlSelectMaker = (smContainer, sqlTableName) => {
             smContainer.addLeftJoin && (sql += smContainer.addLeftJoin.reduce((s, lj) =>
                 s += concatLeftJoin(lj), ''))
             smContainer.where && (sql += '\n WHERE ' + smContainer.where)
+            smContainer.andWhere && (sql += ' AND ' + smContainer.andWhere.join(' AND '))
             smContainer.order && (sql += '\n ORDER BY ' + smContainer.order)
             // console.log(sql)
             return sql

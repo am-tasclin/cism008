@@ -26,7 +26,7 @@ const afterReadEMR = (x, deepCount) => {
 }
 
 const afterReadPatients = (x, deepCount) => {
-    console.log(x, deepCount, mcDataMethods.d)
+    console.log(x, deepCount, mcDataMethods.mcData())
     getDomComponent('emr01view').count++
 
 }

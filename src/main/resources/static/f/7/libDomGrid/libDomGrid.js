@@ -42,7 +42,7 @@ export const parentChilds = adnId => mcData.parentChilds[adnId] || []
 export const notParentChilds = adnId => !mcData.parentChilds[adnId]
 export const mcDataMethods = {
     adn: adnId => adn(adnId), parentChilds: adnId => parentChilds(adnId),
-    d: mcData,
+    mcData: () => mcData,
 }
 /**
  * 
@@ -73,6 +73,7 @@ export const actuallyTreeObj = () => domConf().actuallyTreeObj
 export const domConfHew = () => domConf().hew
 export const domConfWf = () => domConf().wf
 export const domConfEMR = () => domConf().emr
+export const domConfCP = () => domConf().cp
 // export const confHew = () => domContainer.conf.hew // TO REMOVE
 export const setActuallyTreeObjFromPath = pathTreeStr =>
     domConf().actuallyTreeObj = pathTreeStr.split(',')
@@ -284,6 +285,8 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
         ) || 'wf' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
             , { l: [], wfComponent: {}, taskComponent: {}, reView: {}, }
         ) || 'emr' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
+            , { l: [], }
+        ) || 'cp' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
             , { l: [], }
         ) || initTreeUriDomConf(uriDomConf_l, ppId)
     })

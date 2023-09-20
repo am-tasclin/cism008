@@ -35,7 +35,7 @@
         <div v-if="isPatientData(rootId)" class="w3-container w3-rightbar">
             <span class="w3-tiny w3-opacity">{{adn(rootId).r2}}</span>
             <span class="w3-right">🞖🧍</span>
-            <span class="am-i">&nbsp; {{adn(adn(rootId).r2).vl_str}}</span>
+            &nbsp; <span class="am-i am-u">{{adn(adn(rootId).r2).vl_str}}</span>
         </div>
         <div v-if="parentChilds(rootId)" class="w3-container w3-border-left">
             <div v-for="adnId in parentChilds(rootId)">
@@ -60,6 +60,7 @@
         🕅 ⌓℅ 😐 ⌔℅ ⌆⍼ № ℞ ⅌ ℣ ℟
         🕘-🕛
         🏥 🧍
+        ⛋ ⛒℅ 📋 ⛌
     </p>
 </body>
 

@@ -10,13 +10,14 @@ export const emrSymbolR = { emrSymbolR: adnId => emrType[adn(adnId).r] }
  */
 domConstants.PatientIdList = [2009]
 /**
- * ⌓℅ -- EpisodeOfCare (Segment Care of)
- * ⌔℅ -- Encounter (Sector Care of)
+ * ⌓℅ -- EpisodeOfCare (Segment, Care of)
+ * ⌔℅ -- Encounter (Sector, Care of)
+ * ⛒℅ -- CarePlan (Circled Crossing Lanes, Care of)
  */
 const emrType = {
-    2008: '⌔℅'   // Encounter.basedOn
-    , 2009: '⌓℅' // EpisodeOfCare.patient
-    , 2010: '🕘' // EpisodeOfCare.period
-    , 2011: '🕘' // Encounter.actualPeriod
-    , 2012: '🕛' // Period.end
+    2009: '⌓℅', // EpisodeOfCare.patient
+    2008: '⌔℅', // Encounter.basedOn
+    2010: '🕘', // EpisodeOfCare.period Period.start
+    2011: '🕘', // Encounter.actualPeriod Period.start
+    2012: '🕛', // Period.end
 }
