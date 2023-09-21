@@ -30,7 +30,9 @@
     <div id="wf01" class="w3-border-bottom"></div>
     <div id="workFlow" class="am-max-width-1">
         <span class="w3-right"> {{count}} </span>
-        <h6 :review="count" class="am-i"> {{adn(rootId).vl_str}} </h6>
+        <h6 :review="count" class="am-i"> 
+            <span class="w3-tiny w3-opacity">{{rootId}}</span>
+            {{adn(rootId).vl_str}} </h6>
     </div>
     <div class="w3-border-top">
         ⛋ 𝑓 𝑡 𝑇 𝐴 ⎹⎸⎹ 𝑓𝑇 𝑓𝐴 ⍿ - ⎹⎸

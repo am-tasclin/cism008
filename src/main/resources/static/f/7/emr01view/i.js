@@ -15,20 +15,21 @@ import { ws } from '/f/7/libDbRw/wsDbRw.js'
 ws.onopen = event => domConfEMR().l.length && readAdnByIds(domConfEMR().l)
     .then(() => deepN_readParent(6, domConfEMR().l, [], afterReadEMR))
 
-const isPatientData = adnId => domConstants
-    .PatientIdList.includes(mcDataMethods.adn(adnId).r)
-const afterReadEMR = (x, deepCount) => {
+const isEmrData = adnId =>
+    domConstants.EpisodeOfCareIds.includes(mcDataMethods.adn(adnId).r)
+    || domConstants.EncounterIds.includes(mcDataMethods.adn(adnId).r)
+
+const afterReadEMR = () => {
     getDomComponent('emr01view').count++
-    const patientList = adnIds().reduce((l, i) => isPatientData(i)
+    const emrR2DataList = adnIds().reduce((l, i) => isEmrData(i)
         && l.push(mcDataMethods.adn(i).r2) && l || l, [])
-    patientList.length && readAdnByIds(patientList)
-        .then(() => deepN_readParent(6, patientList, [], afterReadPatients))
+    emrR2DataList.length && readAdnByIds(emrR2DataList)
+        .then(() => deepN_readParent(6, emrR2DataList, [], afterReadEmrR2Data))
 }
 
-const afterReadPatients = (x, deepCount) => {
+const afterReadEmrR2Data = (x, deepCount) => {
     console.log(x, deepCount, mcDataMethods.mcData())
     getDomComponent('emr01view').count++
-
 }
 
 import { emrSymbolR } from '/f/7/emr01view/libEMR.js'
@@ -36,7 +37,7 @@ const { createApp } = Vue
 const emr01view = createApp({
     data() { return { count: 0, rootId: domConfEMR().l[0] } },
     mounted() { setDomComponent('emr01view', this) }, methods: Object.assign({
-        isPatientData: adnId => isPatientData(adnId),
+        isPatientData: adnId => isEmrData(adnId),
     }, mcDataMethods, emrSymbolR)
 })
 emr01view.mount('#emr01view')

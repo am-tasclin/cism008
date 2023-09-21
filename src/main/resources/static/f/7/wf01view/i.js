@@ -48,7 +48,7 @@ const wf01 = createApp({
         cr() { return codeRepresentation },
         cmd() { return codeMetaData },
     }, template: `
-<h2 :review="count"> {{adn(rootId).vl_str}} </h2>
+<h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}}</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
 <div class="w3-border-top w3-opacity"> Система кодування </div>
 <div class="w3-row w3-border-top">

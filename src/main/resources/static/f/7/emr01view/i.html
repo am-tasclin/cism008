@@ -28,20 +28,34 @@
                 src="/f/img/algoritmed-logo.webp" style="width:75px;" />&nbsp;</a>
     </div>
     <div id="emr01view">
-        <span class="w3-tiny w3-opacity w3-right">emr01view {{count}}</span>
+        <span class="w3-tiny w3-opacity w3-right"> {{count}} emr01view &nbsp;</span>
+        <span class="w3-tiny w3-opacity w3-right">{{adn(rootId).vl_str}}&nbsp;</span>
         <span class="w3-tiny w3-opacity">{{rootId}}&nbsp;</span>
-        <span class="w3-small">{{emrSymbolR(rootId)}}</span>
-        {{adn(rootId).vl_str}}
-        <div v-if="isPatientData(rootId)" class="w3-container w3-rightbar">
-            <span class="w3-tiny w3-opacity">{{adn(rootId).r2}}</span>
-            <span class="w3-right">🞖🧍</span>
-            &nbsp; <span class="am-i am-u">{{adn(adn(rootId).r2).vl_str}}</span>
-        </div>
+        <span class="w3-small w3-opacity">{{emrSymbolR(rootId)}}</span>
+        <span v-if="isPatientData(rootId)" class="w3-rightbar">
+            <span class="w3-small w3-opacity">.{{adn(rootId).r2}}</span>
+            &nbsp;<span class="am-i am-u">{{adn(adn(rootId).r2).vl_str}},
+                {{adn(parentChilds(adn(adn(rootId).r2).doc_id)[0]).vl_str}}
+            </span>
+            <span class="w3-opacity">&nbsp;&nbsp;🞖🧍</span>
+        </span>
         <div v-if="parentChilds(rootId)" class="w3-container w3-border-left">
             <div v-for="adnId in parentChilds(rootId)">
                 <span class="w3-tiny w3-opacity">{{adnId}}&nbsp;</span>
-                <span class="w3-small">{{emrSymbolR(adnId)}}</span>
-                {{adn(adnId).vl_str}}
+                {{emrSymbolR(adnId)}}
+                <span class="w3-small w3-opacity">
+                    {{emrSymbolR(adnId).includes('ꭍ')?('.'+adn(adnId).r2+emrSymbolR(adn(adnId).r2)):''}}
+                </span>
+                {{adn(adn(adnId).r2).vl_str}}
+                <span v-if="2015==adn(adn(adnId).r2).r">
+                    <span class="w3-tiny w3-opacity" v-for="cpElId in parentChilds(adn(adn(adnId).r2).doc_id)">
+                        {{cpElId}}.{{adn(cpElId).r2}}.{{emrSymbolR(cpElId)}};
+                    </span>
+                </span>
+                <span class="w3-right w3-tiny w3-opacity">
+                    {{adn(adnId).vl_str}}
+                </span>
+
                 <div v-if="parentChilds(adnId)" class="w3-container w3-border-left">
                     <div v-for="adnId2 in parentChilds(adnId)">
                         <span class="w3-tiny w3-opacity">{{adnId2}}&nbsp;{{emrSymbolR(adnId2)}}</span>

@@ -7,8 +7,8 @@ import { adn } from '/f/7/libDomGrid/libDomGrid.js'
 
 export const cpSymbolR = { cpSymbolR: adnId => cpType[adn(adnId).r] }
 /**
- * 💼 ⛋ -- instantiatesCanonical PlanDefinition
+ * 💼.⛋ -- instantiatesCanonical PlanDefinition
  */
 const cpType = {
-    2013: '💼 ⛋'
+    2013: '💼.⛋' // CarePlan.instantiatesCanonical PlanDefinition
 }
