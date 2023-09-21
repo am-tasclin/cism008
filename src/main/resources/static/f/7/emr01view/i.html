@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="/f/css/am.css">
 <script src="/webjars/vue/3.3.4/dist/vue.global.prod.js" type="application/javascript"></script>
 <script src="/webjars/marked/4.3.0/marked.min.js" type="module"></script>
+<script src="/webjars/moment/2.29.4/moment.js" ></script>
+<script src="/webjars/moment/2.29.4/locale/uk.js" ></script>
 <script src="i.js" type="module"></script>
 
 <body class="w3-container">
@@ -31,7 +33,7 @@
         <span class="w3-tiny w3-opacity w3-right"> {{count}} emr01view &nbsp;</span>
         <span class="w3-tiny w3-opacity w3-right">{{adn(rootId).vl_str}}&nbsp;</span>
         <span class="w3-tiny w3-opacity">{{rootId}}&nbsp;</span>
-        <span class="w3-small w3-opacity">{{emrSymbolR(rootId)}}</span>
+        <span class="am-b" title="EpisodeOfCare: Епізод догляду">{{emrSymbolR(rootId)}}</span>
         <span v-if="isPatientData(rootId)" class="w3-rightbar">
             <span class="w3-small w3-opacity">.{{adn(rootId).r2}}</span>
             &nbsp;<span class="am-i am-u">{{adn(adn(rootId).r2).vl_str}},
@@ -39,34 +41,40 @@
             </span>
             <span class="w3-opacity">&nbsp;&nbsp;🞖🧍</span>
         </span>
+        <span :title="startPeriodChild(rootId)">&nbsp;
+            {{emrSymbolR(startPeriodChild(rootId))}}
+            {{moment_lll(startPeriodChild(rootId))}}
+        </span>
         <div v-if="parentChilds(rootId)" class="w3-container w3-border-left">
             <div v-for="adnId in parentChilds(rootId)">
-                <span class="w3-tiny w3-opacity">{{adnId}}&nbsp;</span>
-                {{emrSymbolR(adnId)}}
-                <span class="w3-small w3-opacity">
-                    {{emrSymbolR(adnId).includes('ꭍ')?('.'+adn(adnId).r2+emrSymbolR(adn(adnId).r2)):''}}
-                </span>
-                {{adn(adn(adnId).r2).vl_str}}
-                <span v-if="2015==adn(adn(adnId).r2).r">
-                    <span class="w3-tiny w3-opacity" v-for="cpElId in parentChilds(adn(adn(adnId).r2).doc_id)">
-                        {{cpElId}}.{{adn(cpElId).r2}}.{{emrSymbolR(cpElId)}};
+                <template v-if="'🕘' != emrSymbolR(adnId)">
+                    <span class="w3-tiny w3-opacity">{{adnId}}&nbsp;</span>
+                    <span class="am-b" title="Encounter: Взаємодія">{{emrSymbolR(adnId)}}</span>
+                    <span class="w3-small w3-opacity">
+                        {{emrSymbolR(adnId).includes('ꭍ')?('.'+adn(adnId).r2+emrSymbolR(adn(adnId).r2)):''}}
                     </span>
-                </span>
-                <span class="w3-right w3-tiny w3-opacity">
-                    {{adn(adnId).vl_str}}
-                </span>
+                    {{adn(adn(adnId).r2).vl_str}}
+                    <span v-if="2015==adn(adn(adnId).r2).r">
+                        <span class="w3-tiny w3-opacity" v-for="cpElId in parentChilds(adn(adn(adnId).r2).doc_id)">
+                            {{cpElId}}.{{adn(cpElId).r2}}.{{emrSymbolR(cpElId)}};
+                        </span>
+                    </span>
+                    <span class="w3-right w3-tiny w3-opacity">
+                        {{adn(adnId).vl_str}}
+                    </span>
 
-                <div v-if="parentChilds(adnId)" class="w3-container w3-border-left">
-                    <div v-for="adnId2 in parentChilds(adnId)">
-                        <span class="w3-tiny w3-opacity">{{adnId2}}&nbsp;{{emrSymbolR(adnId2)}}</span>
-                        {{adn(adnId2).vl_str}}
-                        <div v-if="parentChilds(adnId2)" class="w3-container w3-border-left">
-                            <div v-for="adnId3 in parentChilds(adnId2)">
-                                {{adnId3}}---{{adn(adnId3).vl_str}}
+                    <div v-if="parentChilds(adnId)" class="w3-container w3-border-left">
+                        <div v-for="adnId2 in parentChilds(adnId)">
+                            <span class="w3-tiny w3-opacity">{{adnId2}}&nbsp;{{emrSymbolR(adnId2)}}</span>
+                            {{adn(adnId2).vl_str}}
+                            <div v-if="parentChilds(adnId2)" class="w3-container w3-border-left">
+                                <div v-for="adnId3 in parentChilds(adnId2)">
+                                    {{adnId3}}---{{adn(adnId3).vl_str}}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </template>
             </div>
         </div>
     </div>
