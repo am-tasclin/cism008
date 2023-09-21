@@ -11,6 +11,7 @@ export const emrSymbolR = { emrSymbolR: adnId => emrType[adn(adnId).r] }
 domConstants.EpisodeOfCareIds = [2009]
 domConstants.EncounterIds = [2008]
 domConstants.CarePlanIds = [2015]
+domConstants.DocumentReferenceIds = [2016]
 /**
  * ⌓℅ -- EpisodeOfCare (Segment, Care of)
  * ⌔℅ -- Encounter (Sector, Care of)

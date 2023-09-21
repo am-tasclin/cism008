@@ -12,7 +12,7 @@ moment.locale('uk')
 
 import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 initDomConfLogic(window.location.hash.substring(1))
-console.log(domConfEMR())
+// console.log(domConfEMR())
 import { readAdnByIds, deepN_readParent } from '/f/7/libDbRw/libMcRDb.js'
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
 ws.onopen = event => domConfEMR().l.length && readAdnByIds(domConfEMR().l)
@@ -21,6 +21,7 @@ ws.onopen = event => domConfEMR().l.length && readAdnByIds(domConfEMR().l)
 const isEmrData = adnId =>
     domConstants.EpisodeOfCareIds.includes(mcDataMethods.adn(adnId).r)
     || domConstants.EncounterIds.includes(mcDataMethods.adn(adnId).r)
+    || domConstants.DocumentReferenceIds.includes(mcDataMethods.adn(adnId).r)
 
 const afterReadEMR = () => {
     getDomComponent('emr01view').count++
@@ -30,20 +31,17 @@ const afterReadEMR = () => {
         .then(() => deepN_readParent(6, emrR2DataList, [], afterReadEmrR2Data))
 }
 
+const sql_ts = 'SELECT timestamp_id id, value::timestamp as ts FROM timestamp WHERE timestamp_id IN (:ids)'
 const afterReadEmrR2Data = (x, deepCount) => {
     console.log(x, deepCount, mcDataMethods.mcData())
     getDomComponent('emr01view').count++
-    const sql = 'SELECT timestamp_id, value::timestamp as ts FROM timestamp WHERE timestamp_id IN (:ids)'
-        .replace(':ids', adnIds().join(','))
-    console.log(sql, adnIds())
-    executeSelectQuery(sql).then(json => {
-        console.log(json)
-        json.list.forEach(tso => {
-            adn(tso.timestamp_id).ts = tso.ts
-            console.log(tso.timestamp_id, adn(tso.timestamp_id), tso
-                , moment(tso.ts).format('lll'))
-        })
+    // console.log(adnIds(), sql_ts)
+    executeSelectQuery(sql_ts.replace(':ids', adnIds().join(','))
+    ).then(json => {
+        json.list.forEach(tso => adn(tso.id).ts = tso.ts)
         getDomComponent('emr01view').count++
+    }).then(() => {
+        console.log(123)
     })
 }
 
@@ -55,7 +53,7 @@ const emr01view = createApp({
         isPatientData: adnId => isEmrData(adnId),
         startPeriodChild: adnId => parentChilds(adnId)
             .find(i => '🕘' == emrSymbolR.emrSymbolR(i)),
-        moment_lll: adnId => moment(adn(adnId).ts).format('lll'),
+        momentF: (adnId, f) => moment(adn(adnId).ts).format(f),
     }, mcDataMethods, emrSymbolR)
 })
 emr01view.mount('#emr01view')
