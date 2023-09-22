@@ -54,6 +54,10 @@ const emr01view = createApp({
         startPeriodChild: adnId => parentChilds(adnId)
             .find(i => '🕘' == emrSymbolR.emrSymbolR(i)),
         momentF: (adnId, f) => moment(adn(adnId).ts).format(f),
+        clickErBonCpPd(cpElId) {
+            console.log(cpElId, adn(cpElId).r2)
+        },
     }, mcDataMethods, emrSymbolR)
 })
 emr01view.mount('#emr01view')
+
