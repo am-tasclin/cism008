@@ -29,12 +29,14 @@
 
     <div id="cp01view" class="am-max-width-1">
         <span class="w3-tiny w3-opacity w3-right">cp01view {{count}}</span>
-        <span class="w3-tiny w3-opacity">{{rootId}}&nbsp;</span>
+        <span class="w3-tiny w3-opacity">{{rootId}}.{{cpSymbolR(rootId)}}</span>
         {{adn(rootId).vl_str}}
         <div v-if="parentChilds(rootId)" class="w3-container w3-border-left">
             <div v-for="adnId in parentChilds(rootId)">
                 <span class="w3-tiny w3-opacity">{{adnId}}&nbsp;</span>
-                {{cpSymbolR(adnId)}}
+                <span class="w3-small w3-opacity">
+                    :{{cpSymbolR(adnId)}}.{{adn(adnId).r2}}&nbsp;</span>
+
                 <a :href="'/f/7/wf01view/i.html#wf,'+adn(adnId).r2">
                     {{adn(adn(adnId).r2).vl_str}}
                 </a>
@@ -62,6 +64,7 @@
         : instantiatesCanonical: instance case 💼&nbsp;⛋
         basedOn ꭍ ↨ 𐄷
         document 🗎 🖹 🖻 🖺 ※
+        | ɛʃꭍ
     </p>
 </body>
 

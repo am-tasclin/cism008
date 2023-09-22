@@ -30,7 +30,9 @@
 
     <div id="wf01use">
         <span class="w3-right"> {{count}} </span>
-        <h6 :review="count" class="am-i w3-border-bottom"> {{adn(rootId).vl_str}} </h6>
+        <h6 :review="count" class="am-i w3-border-bottom">
+            <span class="w3-tiny w3-opacity">{{rootId}}</span>
+            {{adn(rootId).vl_str}} </h6>
         <template v-for="adnId in parentChilds(parentChilds(rootId)[0])">
             <div class="w3-hover-shadow" @click="onOffAction(adnId)">
                 <span class="w3-tiny">{{adnId}}&nbsp;{{wfSymbolPR(adnId)}}</span>

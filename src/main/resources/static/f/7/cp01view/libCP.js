@@ -10,5 +10,6 @@ export const cpSymbolR = { cpSymbolR: adnId => cpType[adn(adnId).r] }
  * 💼.⛋ -- instantiatesCanonical PlanDefinition
  */
 const cpType = {
-    2013: '💼.⛋' // CarePlan.instantiatesCanonical PlanDefinition
+    2013: '💼.⛋', // CarePlan.instantiatesCanonical PlanDefinition
+    2015: '⛒℅',   // CarePlan.title
 }
