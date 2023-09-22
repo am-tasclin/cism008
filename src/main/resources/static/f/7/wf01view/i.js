@@ -3,7 +3,7 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { initDomConfLogic, mcData, setDomComponent, getDomComponent, domConfWf, } from
+import { initDomConfLogic, adn, adnIds, mcData, setDomComponent, getDomComponent, domConfWf, } from
     '/f/7/libDomGrid/libDomGrid.js'
 
 initDomConfLogic(window.location.hash.substring(1))
@@ -14,12 +14,28 @@ const codeMetaData = [368597, 367562,], codeRepresentation = [377146,]
 domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
+import { ws } from '/f/7/libDbRw/wsDbRw.js'
+import { initWorkFlow } from '/f/7/libWF/libWF.js'
+import { initSelectMaker } from '/f/7/libDbRw/libSqlMaker.js'
+import { readAdnByIds } from '/f/7/libDbRw/libMcRDb.js'
+
+ws.onopen = event => initWorkFlow()
+
+const sqlCarePlanIcPdMaker = initSelectMaker('sqlCarePlanIcPdMaker', 'doc')
+    .initColumns('parent').initWhere('reference=2013 AND reference2 IN (:pdIds)')
+
 domConfWf().reView.afterReadCodes = () => {
     getDomComponent('cmd').count++
     getDomComponent('ccr').count++
     console.log(domConfWf().taskComponent)
     Object.keys(domConfWf().taskComponent).forEach(i =>
         domConfWf().taskComponent[i].count++)
+    console.log('END Read WF')
+    readAdnByIds([sqlCarePlanIcPdMaker.get().replace(':pdIds', domConfWf().l.join(','))]).then(() => {
+        domConfWf().cpIds = adnIds().filter(i => adn(i).r == 2015)
+        console.log(mcData, domConfWf().cpIds)
+        getDomComponent('wf01').count++
+    })
 }
 domConfWf().reView.readParent = (list, prevList) => {
     getDomComponent('workFlow').count++
@@ -36,10 +52,6 @@ domConfWf().reView.readParent = (list, prevList) => {
         domConfWf().wfComponent[mcData.eMap[i].p].count++)
 }
 
-import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initWorkFlow } from '/f/7/libWF/libWF.js'
-ws.onopen = event => initWorkFlow()
-
 const { createApp } = Vue
 const wf01 = createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },
@@ -47,13 +59,20 @@ const wf01 = createApp({
         adn(adnId) { return mcData.eMap[adnId] || {} },
         cr() { return codeRepresentation },
         cmd() { return codeMetaData },
+        cpIds: () => domConfWf().cpIds
     }, template: `
 <h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}}</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
 <div class="w3-border-top w3-opacity"> Система кодування </div>
 <div class="w3-row w3-border-top">
     <div class="w3-half"><t-ccr :cr="cr()" /></div>
-    <div class="w3-half"><t-cmd :cmd="cmd()" /></div>
+    <div class="w3-quarter"><t-cmd :cmd="cmd()" /></div>
+    <div class="w3-quarter"><div class="w3-tiny w3-light-grey">CarePlan.instantiatesCanonical</div>
+        <div v-for="cpId in cpIds()" class="w3-hover-shadow">
+            <span class="w3-tiny w3-opacity">{{cpId}}</span>
+            {{adn(cpId).vl_str}}
+        </div>
+    </div>
 </div>`,
 })
 import { WfElement, CodeableConceptRepresentation, CodeMetaData } from '/f/7/libWF/WfElement.js'

@@ -29,8 +29,8 @@ domConstants.TaskIOAutoExecute = [2005]
 export const TaskTagIds = domConstants.TaskTagIds = [2005]
 /**
  * ⛋   -- Process in PlanDefinition
- * 𝑓    -- ActivityDefinition
- * 𝑡    -- Task
+ * 𝑓   -- ActivityDefinition
+ * 𝑡   -- Task
  */
 export const wfType = {
     2001: '𝑡→', 2002: '𝑓→', 2003: '[]', 2004: '[]'
