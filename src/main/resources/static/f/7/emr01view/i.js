@@ -13,10 +13,10 @@ moment.locale('uk')
 import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 initDomConfLogic(window.location.hash.substring(1))
 // console.log(domConfEMR())
-import { readAdnByIds, deepN_readParent } from '/f/7/libDbRw/libMcRDb.js'
+import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-ws.onopen = event => domConfEMR().l.length && readAdnByIds(domConfEMR().l)
-    .then(() => deepN_readParent(6, domConfEMR().l, [], afterReadEMR))
+
+ws.onopen = event => readOntologyTree(domConfEMR().l, afterReadEMR)
 
 const isEmrData = adnId =>
     domConstants.EpisodeOfCareIds.includes(mcDataMethods.adn(adnId).r)
@@ -27,8 +27,7 @@ const afterReadEMR = () => {
     getDomComponent('emr01view').count++
     const emrR2DataList = adnIds().reduce((l, i) => isEmrData(i)
         && l.push(mcDataMethods.adn(i).r2) && l || l, [])
-    emrR2DataList.length && readAdnByIds(emrR2DataList)
-        .then(() => deepN_readParent(6, emrR2DataList, [], afterReadEmrR2Data))
+    readOntologyTree(emrR2DataList, afterReadEmrR2Data)
 }
 
 const sql_ts = 'SELECT timestamp_id id, value::timestamp as ts FROM timestamp WHERE timestamp_id IN (:ids)'
@@ -41,7 +40,7 @@ const afterReadEmrR2Data = (x, deepCount) => {
         json.list.forEach(tso => adn(tso.id).ts = tso.ts)
         getDomComponent('emr01view').count++
     }).then(() => {
-        console.log(123)
+        console.log(1123)
     })
 }
 

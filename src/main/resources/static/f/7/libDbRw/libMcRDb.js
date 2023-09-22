@@ -53,6 +53,15 @@ export const readAdnByIds = id_list => {
 }
 /**
  * 
+ * @param {*} l 
+ * @param {*} afterReadFn 
+ * @returns 
+ */
+export const readOntologyTree = (l, afterReadFn) => l.length && readAdnByIds(l)
+    .then(() => deepN_readParent(6, l, [], afterReadFn))
+
+/**
+ * 
  * @param {*} adnList 
  * @returns 
 export const addToParentChild = adnList => adnList.reduce((pl, adn) =>
