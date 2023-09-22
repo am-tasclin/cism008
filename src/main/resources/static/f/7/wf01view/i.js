@@ -52,25 +52,31 @@ domConfWf().reView.readParent = (list, prevList) => {
         domConfWf().wfComponent[mcData.eMap[i].p].count++)
 }
 
+import { cpSymbolR } from '/f/7/cp01view/libCP.js'
 const { createApp } = Vue
 const wf01 = createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },
-    mounted() { setDomComponent('wf01', this) }, methods: {
+    mounted() { setDomComponent('wf01', this) }, methods: Object.assign({
         adn(adnId) { return mcData.eMap[adnId] || {} },
         cr() { return codeRepresentation },
         cmd() { return codeMetaData },
         cpIds: () => domConfWf().cpIds
-    }, template: `
+    }, cpSymbolR), template: `
 <h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}}</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
 <div class="w3-border-top w3-opacity"> Система кодування </div>
 <div class="w3-row w3-border-top">
     <div class="w3-half"><t-ccr :cr="cr()" /></div>
-    <div class="w3-quarter"><t-cmd :cmd="cmd()" /></div>
-    <div class="w3-quarter"><div class="w3-tiny w3-light-grey">CarePlan.instantiatesCanonical</div>
-        <div v-for="cpId in cpIds()" class="w3-hover-shadow">
-            <span class="w3-tiny w3-opacity">{{cpId}}</span>
-            {{adn(cpId).vl_str}}
+    <div class="w3-half">
+        <div class="w3-row">
+            <div class="w3-third"><t-cmd :cmd="cmd()" /></div>
+            <div class="w3-twothird">
+                <div class="w3-tiny w3-light-grey">CarePlan.instantiatesCanonical</div>
+                <div v-for="cpId in cpIds()" class="w3-hover-shadow">
+                    <span class="w3-tiny w3-opacity">{{cpId}}.{{cpSymbolR(cpId)}}</span>
+                    {{adn(cpId).vl_str}}
+                </div>
+            </div>
         </div>
     </div>
 </div>`,
