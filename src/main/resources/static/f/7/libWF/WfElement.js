@@ -38,7 +38,10 @@ const taskType = { 371934: '⇥', 371936: '↦', }
 // import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, } from '/f/7/libWF/libWF.js'
 //export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
 
-import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, taskIOCmd } from '/f/7/wf02view/libWF.js'
+import {
+    childTaskId, wfType, wfSymbolPR, wfSymbolR2,
+    codeMetaData, taskIOCmd
+} from '/f/7/wf02view/libWF.js'
 /**
  * WfElement
  */
@@ -103,10 +106,21 @@ export const CodeMetaData = {
  * 
  */
 export const CodeableConceptRepresentation = {
-    props: { cr: Object }, data() { return { count: 0, } },
-    mounted() { setDomComponent('ccr', this) }, methods: mcDataMethods, template: `
-<table :review="count" v-for="crId in cr" class="w3-small am-width-100pr" >
-    <caption class="w3-light-grey">{{crId}} {{adn(crId).vl_str}}</caption>
+    props: { cr: Object }, data() { return { count: 0, } }, components: { CodeMetaData },
+    mounted() { setDomComponent('ccr', this) }, methods: Object.assign({
+        cmd: () => codeMetaData
+    }, mcDataMethods), template: `
+<template v-for="crId in cr">
+    <div class="w3-light-grey w3-small">
+        <div class="w3-left w3-dropdown-hover" title="codeMetaData">
+            CMD
+            <div class="w3-dropdown-content w3-card" style="width: 14em;">
+                <CodeMetaData :cmd="cmd()" />
+            </div>
+        </div>
+        <div style="text-align: center;">{{crId}} {{adn(crId).vl_str}}</div>
+    </div>
+<table :review="count" class="w3-small am-width-100pr" >
     <tr class="w3-tiny w3-opacity">
         <th class="w3-border-bottom w3-hover-shadow">
             {{adn(adn(adn(parentChilds(crId)[0]).r).r).vl_str}}
@@ -122,5 +136,5 @@ export const CodeableConceptRepresentation = {
             {{adn(parentChilds(adnId)[0]).vl_str}}
         </td>
     </tr>
-</table>`,
+</table></template>`,
 }

@@ -7,12 +7,12 @@ import { initDomConfLogic, mcDataMethods, getDomComponent, setDomComponent, domC
     '/f/7/libDomGrid/libDomGrid.js'
 initDomConfLogic(window.location.hash.substring(1))
 console.log(domConfWf(),)
+console.log(domConfWf().reView)
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
 import { initWorkFlow, codeRepresentation } from '/f/7/wf02view/libWF.js'
 ws.onopen = event => initWorkFlow()
 
-console.log(codeRepresentation)
 domConfWf().reView.readAfterPD = () => {
     getDomComponent('wf02').count++
 }

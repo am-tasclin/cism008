@@ -8,10 +8,11 @@ import { readOntologyTree, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 import { adnIds, adn, parentChilds, domConfWf, domConstants, getDomComponent } from
     '/f/7/libDomGrid/libDomGrid.js'
 
-export const codeRepresentation = [377146,]
+export const codeRepresentation = [377146,] //'ccr'
+    , codeMetaData = [368597, 367562,] // 'cmd'
 const loggedAttributes = [372052, 377121, 377149, 377170, 377176]
-    , codeMetaDataIds = codeRepresentation.concat(loggedAttributes)
-
+    , codeMetaDataIds = codeRepresentation.concat(codeMetaData).concat(loggedAttributes)
+    , componentCMD = ['ccr', 'cmd']
 export const initWorkFlow = () =>
     readOntologyTree(domConfWf().l, readAfterPD)
 
@@ -20,12 +21,15 @@ const readAfterPD = (x, deepCount) => {
     Object.keys(domConfWf().wfComponent).forEach(i =>
         domConfWf().wfComponent[i].count++)
 
-    domConfWf().reView && domConfWf().reView.readAfterPD()
+    console.log(domConfWf().reView)
+
+    domConfWf().reView.readAfterPD && domConfWf().reView.readAfterPD()
     readOntologyTree(codeMetaDataIds, readCodeMetaData)
 }, readCodeMetaData = (x, deepCount) => {
     console.log(deepCount)
-    getDomComponent('ccr') &&
-        getDomComponent('ccr').count++
+    componentCMD.forEach(n => getDomComponent(n) &&
+        getDomComponent(n).count++)
+    // getDomComponent('ccr') && getDomComponent('ccr').count++
     const taskList = adnIds().reduce((l, i) => domConstants.TaskIdList
         .includes(adn(i).r) && l.push(adn(i).r2) && l || l, [])
     readOntologyTree(taskList, readAfterTask)
@@ -35,7 +39,6 @@ const readAfterPD = (x, deepCount) => {
     Object.keys(domConfWf().taskComponent).forEach(i =>
         domConfWf().taskComponent[i].count++)
 }
-
 
 export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
 /**
@@ -94,13 +97,11 @@ export const childTaskId = {
     childTaskId: parentId => parentChilds(parentId)
         .find(i => domConstants.TaskIdList.includes(adn(i).r))
 }
-
 /**
  * 
  */
 domConstants.ActivityDefinitionIdList = [2002]
 domConstants.TaskIdList = [2001]
 domConstants.TaskIOAutoExecute = [2005]
-
 
 export const TaskTagIds = domConstants.TaskTagIds = [2005]

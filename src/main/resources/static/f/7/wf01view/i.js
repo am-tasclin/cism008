@@ -53,6 +53,10 @@ domConfWf().reView.readParent = (list, prevList) => {
         domConfWf().wfComponent[mcData.eMap[i].p].count++)
 }
 
+domConfWf().reView.readAfterPD = () => {
+    getDomComponent('wf01').count++
+}
+
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
 const { createApp } = Vue
 const wf01 = createApp({
