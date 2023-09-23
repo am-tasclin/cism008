@@ -15,7 +15,8 @@ domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initWorkFlow } from '/f/7/libWF/libWF.js'
+// import { initWorkFlow } from '/f/7/libWF/libWF.js'
+import { initWorkFlow } from '/f/7/wf02view/libWF.js'
 import { initSelectMaker } from '/f/7/libDbRw/libSqlMaker.js'
 import { readAdnByIds } from '/f/7/libDbRw/libMcRDb.js'
 

@@ -15,13 +15,18 @@ domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initWorkFlow } from '/f/7/libWF/libWF.js'
+// import { initWorkFlow } from '/f/7/libWF/libWF.js'
+import { initWorkFlow } from '/f/7/wf02view/libWF.js'
 ws.onopen = event => initWorkFlow()
-
+domConfWf().reView.readAfterPD = () => {
+    getDomComponent('wf01use').count++
+}
 import {
     initTaskIc, wfSymbolPR, wfSymbolR2, childTaskId,
     TaskTagIds, taskIOCmd, wfType, findTasksInPDAction, findAdInPDAction
-} from '/f/7/libWF/libWF.js'
+} from
+    '/f/7/wf02view/libWF.js'
+// '/f/7/libWF/libWF.js'
 
 domConfWf().reView.readParent = (list, prevList) => {
     getDomComponent('wf01use').count++

@@ -3,6 +3,7 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
+// DEPRECATED
 import { adnIds, adn, parentChilds, notParentChilds, domConfWf, domConstants, } from
     '/f/7/libDomGrid/libDomGrid.js'
 import { readAdnByIds, readAdnByParentIds, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'

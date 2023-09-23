@@ -5,7 +5,6 @@
  */
 import { mcDataMethods, adn, domConfWf, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
 
-export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
 
 /**
  * 
@@ -36,8 +35,10 @@ const Task = {
  */
 const taskType = { 371934: '⇥', 371936: '↦', }
 // import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, taskIOCmd } from
-import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, } from
-    '/f/7/libWF/libWF.js'
+// import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, } from '/f/7/libWF/libWF.js'
+//export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
+
+import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, taskIOCmd } from '/f/7/wf02view/libWF.js'
 /**
  * WfElement
  */
