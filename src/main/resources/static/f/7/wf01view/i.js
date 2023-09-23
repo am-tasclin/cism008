@@ -20,7 +20,7 @@ import { initWorkFlow } from '/f/7/wf02view/libWF.js'
 import { initSelectMaker } from '/f/7/libDbRw/libSqlMaker.js'
 import { readAdnByIds } from '/f/7/libDbRw/libMcRDb.js'
 
-ws.onopen = event => initWorkFlow()
+ws.onopen = event => initWorkFlow(domConfWf().l)
 
 const sqlCarePlanIcPdMaker = initSelectMaker('sqlCarePlanIcPdMaker', 'doc')
     .initColumns('parent').initWhere('reference=2013 AND reference2 IN (:pdIds)')
@@ -53,9 +53,6 @@ domConfWf().reView.readParent = (list, prevList) => {
         domConfWf().wfComponent[mcData.eMap[i].p].count++)
 }
 
-domConfWf().reView.readAfterPD = () => {
-    getDomComponent('wf01').count++
-}
 
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
 const { createApp } = Vue
@@ -91,6 +88,10 @@ wf01.component('t-wf', WfElement)
 wf01.component('t-ccr', CodeableConceptRepresentation)
 wf01.component('t-cmd', CodeMetaData)
 wf01.mount('#wf01')
+domConfWf().reView.initAfterPD = () => {
+    getDomComponent('wf01').count++
+}
+
 
 createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },

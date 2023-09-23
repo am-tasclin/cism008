@@ -4,7 +4,6 @@
  * DOM grid editor logic
  * 
  */
-
 const eMap = {}, parentChilds0 = {}, constants = {}
 /**
  * Container of data and structures for build and use the DOM Grid
@@ -287,7 +286,7 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
         ) || 'emr' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
             , { l: [], }
         ) || 'cp' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
-            , { l: [], }
+            , { l: [], reView: {}, }
         ) || initTreeUriDomConf(uriDomConf_l, ppId)
     })
     return domContainer.conf

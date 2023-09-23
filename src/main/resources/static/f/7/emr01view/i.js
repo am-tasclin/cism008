@@ -4,9 +4,8 @@
  * 
  */
 import {
-    initDomConfLogic, domConfEMR, mcDataMethods, parentChilds
-    , getDomComponent, setDomComponent
-    , adn, adnIds, domConstants
+    initDomConfLogic, domConfEMR, mcDataMethods, parentChilds,
+    adn, adnIds, domConstants, getDomComponent, setDomComponent,
 } from '/f/7/libDomGrid/libDomGrid.js'
 moment.locale('uk')
 

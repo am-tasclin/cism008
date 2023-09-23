@@ -35,10 +35,10 @@ const afterReadR2 = () => {
         const parentIds = json.list.reduce((l, o) => l.push(o.doc_id) && l, [])
         domConfCP().basedOnCP = parentIds
         // console.log(parentIds, json)
-        readOntologyTree(parentIds, afterBasdOn)
+        readOntologyTree(parentIds, afterBasedOn)
     })
 }
-const afterBasdOn = (x, deepCount) => {
+const afterBasedOn = (x, deepCount) => {
     console.log(x, deepCount, mcDataMethods.mcData())
     getDomComponent('cp01view').count++
 }

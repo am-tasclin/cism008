@@ -17,8 +17,8 @@ export const wfSymbolR2 = { wfSymbolR2: adnId => wfType[adn(adnId).r2] }
  * @returns 
  */
 export const childTaskId = {
-    childTaskId: parentId => parentChilds(parentId)
-        .find(i => domConstants.TaskIdList.includes(adn(i).r))
+    childTaskId: parentId => parentChilds(parentId
+    ).find(i => domConstants.TaskIdList.includes(adn(i).r))
 }
 export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
 /**

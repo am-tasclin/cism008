@@ -3,43 +3,88 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { executeSelectQuery, } from '/f/7/libDbRw/wsDbRw.js'
+import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 import { readOntologyTree, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
-import { adnIds, adn, parentChilds, domConfWf, domConstants, getDomComponent } from
+import { domConfCP, adnIds, adn, parentChilds, domConfWf, domConstants, getDomComponent } from
     '/f/7/libDomGrid/libDomGrid.js'
+/**
+ * Build CarePlan Meta-Content code
+ * @param {Array} l 
+ * @returns 
+ */
+export const initCarePlan = l => readOntologyTree(l, initAfterCarePlan)
+const initAfterCarePlan = () => {
+    domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
+    const r2List = adnIds().reduce((l, i) => adn(i).r2 && l.push(adn(i).r2) && l || l, [])
+    console.log(r2List)
+    readOntologyTree(r2List, initAfterCpR2)
+}, initAfterCpR2 = () => {
+    domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
+    // console.log('find basedOn this CarePlan?')
+    const sql = selectOnBasedOnMaker.get().replace(':idList', domConfCP().l.join(','))
+    // console.log(sql)
+    executeSelectQuery(sql).then(json => {
+        const parentIds = json.list.reduce((l, o) => l.push(o.doc_id) && l, [])
+        domConfCP().basedOnCP = parentIds
+        // console.log(parentIds, json)
+        readOntologyTree(parentIds, afterBasedOn)
+    })
+}, afterBasedOn = (x, deepCount) => {
+    domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
+    console.log(x, deepCount)
+
+}
+import { initSelectMaker } from '/f/7/libDbRw/libSqlMaker.js'
+const selectOnBasedOnMaker = initSelectMaker('selectOnBasedOn', 'doc')
+    .initColumns('doc_id').initLeftJoin(
+        '(SELECT doc_id basedon_id FROM doc WHERE reference=2014) x', 'reference=basedon_id')
+    .initWhere('reference2 IN (:idList)').andWhere('reference!=2008') //Encounter.basedOn
 
 export const codeRepresentation = [377146,] //'ccr'
     , codeMetaData = [368597, 367562,] // 'cmd'
 const loggedAttributes = [372052, 377121, 377149, 377170, 377176]
     , codeMetaDataIds = codeRepresentation.concat(codeMetaData).concat(loggedAttributes)
     , componentCMD = ['ccr', 'cmd']
-export const initWorkFlow = () =>
-    readOntologyTree(domConfWf().l, readAfterPD)
-
-const readAfterPD = (x, deepCount) => {
+/**
+ * Build PlanDefinition Meta-Content code
+ * @param {Array} l 
+ * @returns 
+ */
+export const initWorkFlow = l => readOntologyTree(l, initAfterPD)
+/**
+ * library: initWorkFlow
+ */
+const initAfterPD = (x, deepCount) => {
     console.log(deepCount)
     Object.keys(domConfWf().wfComponent).forEach(i =>
         domConfWf().wfComponent[i].count++)
 
     console.log(domConfWf().reView)
 
-    domConfWf().reView.readAfterPD && domConfWf().reView.readAfterPD()
-    readOntologyTree(codeMetaDataIds, readCodeMetaData)
-}, readCodeMetaData = (x, deepCount) => {
+    domConfWf().reView.initAfterPD && domConfWf().reView.initAfterPD()
+    readOntologyTree(codeMetaDataIds, initCodeMetaData)
+}, initCodeMetaData = (x, deepCount) => {
     console.log(deepCount)
     componentCMD.forEach(n => getDomComponent(n) &&
         getDomComponent(n).count++)
     // getDomComponent('ccr') && getDomComponent('ccr').count++
     const taskList = adnIds().reduce((l, i) => domConstants.TaskIdList
         .includes(adn(i).r) && l.push(adn(i).r2) && l || l, [])
-    readOntologyTree(taskList, readAfterTask)
-}, readAfterTask = (x, deepCount) => {
+    readOntologyTree(taskList, initAfterTask)
+}, initAfterTask = (x, deepCount) => {
     console.log(deepCount)
     console.log(x, domConfWf().codes, domConfWf().taskComponent)
     Object.keys(domConfWf().taskComponent).forEach(i =>
         domConfWf().taskComponent[i].count++)
 }
-
+/**
+ * Task part of WorkFlow code
+ */
+/**
+ * 
+ * @param {Number} adnId 
+ * @returns 
+ */
 export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
 /**
  * Find ActivityDefinition in PlanDefinition.action

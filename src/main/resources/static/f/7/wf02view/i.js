@@ -11,9 +11,9 @@ console.log(domConfWf().reView)
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
 import { initWorkFlow, codeRepresentation } from '/f/7/wf02view/libWF.js'
-ws.onopen = event => initWorkFlow()
+ws.onopen = event => initWorkFlow(domConfWf().l)
 
-domConfWf().reView.readAfterPD = () => {
+domConfWf().reView.initAfterPD = () => {
     getDomComponent('wf02').count++
 }
 
