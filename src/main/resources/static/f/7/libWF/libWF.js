@@ -38,6 +38,7 @@ export const wfType = {
 }
 
 import { executeSelectQuery, } from '/f/7/libDbRw/wsDbRw.js'
+// import { taskIOCmd, } from '/f/7/libWF/WfElement.js'
 /**
  * 
  * @param {*} taskIcId 
@@ -93,7 +94,7 @@ export const initWorkFlow = () => domConfWf().l.length && readAdnByIds(domConfWf
 const readTasks = (x, deepCount) => {
     const taskList = adnIds().reduce((l, i) => domConstants.TaskIdList
         .includes(adn(i).r) && l.push(adn(i).r2) && l || l, [])
-    // console.log(deepCount, taskList)
+    console.log(deepCount, taskList)
     taskList.length && readAdnByIds(taskList
     ).then(() => deepN_readParent(deepNum, taskList, [], afterReadTasks))
 }

@@ -3,7 +3,10 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { mcDataMethods, domConfWf, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
+import { mcDataMethods, adn, domConfWf, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
+
+export const taskIOCmd = adnId => adn(adn(adn(adnId).r2).r2).p
+
 /**
  * 
  */
@@ -32,14 +35,15 @@ const Task = {
  * 
  */
 const taskType = { 371934: '⇥', 371936: '↦', }
-import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, taskIOCmd } from
+// import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, taskIOCmd } from
+import { childTaskId, wfType, wfSymbolPR, wfSymbolR2, } from
     '/f/7/libWF/libWF.js'
 /**
  * WfElement
  */
 export const WfElement = {
     props: { adnid: Number }, data() { return { count: 0, } }, components: { Task, },
-    mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: Object.assign({}, {
+    mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: Object.assign({
         wfSymbolR: adnId => wfType[mcDataMethods.adn(adnId).r],
     }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId), template: `
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
@@ -82,13 +86,14 @@ export const CodeMetaData = {
     props: { cmd: Array }, data() { return { count: 0, } },
     mounted() { setDomComponent('cmd', this) }, methods: mcDataMethods, template: `
 <div :review="count" v-for="cmdId in cmd" class="w3-hover-shadow">
-    <span class="w3-tiny">{{cmdId}}</span>
-    {{adn(cmdId).vl_str}}
+    <span class="w3-tiny w3-opacity">{{cmdId}}&nbsp;</span>
+    <span class="w3-small">{{adn(cmdId).vl_str}}</span>
     <div v-if="parentChilds(cmdId)" class="w3-container w3-border-left">
         <div v-for="adnId in parentChilds(cmdId)" class="w3-hover-shadow">
-            <span class="w3-tiny">{{adnId}}</span>
-            {{adn(adnId).vl_str}}
-            <span v-if="adn(adnId).r">:{{adn(adn(adnId).r).vl_str}}</span>
+            <span class="w3-tiny w3-opacity">{{adnId}}&nbsp;</span>
+            <span class="w3-small">{{adn(adnId).vl_str}}
+                <span v-if="adn(adnId).r">:{{adn(adn(adnId).r).vl_str}}</span>
+            </span>
         </div>
     </div>
 </div>`,
