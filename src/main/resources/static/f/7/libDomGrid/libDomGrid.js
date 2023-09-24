@@ -47,6 +47,7 @@ export const mcDataMethods = {
  * 
  */
 const domConf = () => domContainer.conf
+export const getDomConf = n => domContainer.conf[n]
 
 const domConfStrignifyList = ['mcElement', 'actuallyTreeObj', 'actuallyEdit'
     , 'hewComponent', 'hewTagComponent', 'adnEditPanelSubMenu']
@@ -282,7 +283,7 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
         const uriDomConf_l = rawUriDomConf1.split(',')
         'hew' == uriDomConf_l[0] && initHewUriDomConf(uriDomConf_l
         ) || 'wf' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
-            , { l: [], wfComponent: {}, taskComponent: {}, reView: {}, }
+            , { l: [], wfComponent: {}, taskComponent: {},  reView: {}, }
         ) || 'emr' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
             , { l: [], }
         ) || 'cp' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
@@ -293,8 +294,8 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
 }
 
 const initConfTypePart = (uriDomConf_l, initJson,) => {
-    const confPart = domContainer.conf[uriDomConf_l[0]] || (domContainer.conf[uriDomConf_l[0]]
-        = initJson)
+    const confPart = domContainer.conf[uriDomConf_l[0]] || (
+        domContainer.conf[uriDomConf_l[0]] = initJson)
     uriDomConf_l.slice(1).forEach(im => !confPart.l.includes(im) && confPart.l.push(im))
 }
 /**

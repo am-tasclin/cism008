@@ -14,13 +14,11 @@ console.log(domConfWf(),)
 // domConfWf().codes = codeMetaData.concat(codeRepresentation)
 // domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
-// import { initWorkFlow } from '/f/7/libWF/libWF.js'
-import { initWorkFlow } from '/f/7/wf02view/libWF.js'
+import { initWorkFlowFn } from '/f/7/wf02view/libWF.js'
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-ws.onopen = event => initWorkFlow(domConfWf().l)
-domConfWf().reView.initAfterPD = () => {
-    getDomComponent('wf01use').count++
-}
+import { readOntologyMC } from '/f/7/libDbRw/libMcRDb.js'
+initWorkFlowFn()
+ws.onopen = event => readOntologyMC('wf', domConfWf().l)
 
 import {
     initTaskIc, wfSymbolPR, wfSymbolR2, childTaskId,
@@ -29,9 +27,6 @@ import {
     '/f/7/wf02view/libWF.js'
 // '/f/7/libWF/libWF.js'
 
-domConfWf().reView.readParent = (list, prevList) => {
-    getDomComponent('wf01use').count++
-}
 /**
  * 
  */
@@ -116,3 +111,9 @@ const wf01use = createApp({
 })
 wf01use.component('t-wf-part', WfPart)
 wf01use.mount('#wf01use')
+domConfWf().reView.initAfterPD = () => {
+    getDomComponent('wf01use').count++
+}
+domConfWf().reView.readParent = (list, prevList) => {
+    getDomComponent('wf01use').count++
+}

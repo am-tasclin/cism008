@@ -14,13 +14,14 @@ const codeMetaData = [368597, 367562,], codeRepresentation = [377146,]
 domConfWf().codes = codeMetaData.concat(codeRepresentation)
 domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
 
+import { initWorkFlowFn } from '/f/7/wf02view/libWF.js'
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-// import { initWorkFlow } from '/f/7/libWF/libWF.js'
-import { initWorkFlow } from '/f/7/wf02view/libWF.js'
+import { readOntologyMC } from '/f/7/libDbRw/libMcRDb.js'
+initWorkFlowFn()
+ws.onopen = event => readOntologyMC('wf', domConfWf().l)
+
 import { initSelectMaker } from '/f/7/libDbRw/libSqlMaker.js'
 import { readAdnByIds } from '/f/7/libDbRw/libMcRDb.js'
-
-ws.onopen = event => initWorkFlow(domConfWf().l)
 
 const sqlCarePlanIcPdMaker = initSelectMaker('sqlCarePlanIcPdMaker', 'doc')
     .initColumns('parent').initWhere('reference=2013 AND reference2 IN (:pdIds)')
@@ -52,7 +53,6 @@ domConfWf().reView.readParent = (list, prevList) => {
     list.forEach(i => mcData.eMap[i] && domConfWf().wfComponent[mcData.eMap[i].p] &&
         domConfWf().wfComponent[mcData.eMap[i].p].count++)
 }
-
 
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
 const { createApp } = Vue
@@ -91,7 +91,6 @@ wf01.mount('#wf01')
 domConfWf().reView.initAfterPD = () => {
     getDomComponent('wf01').count++
 }
-
 
 createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },

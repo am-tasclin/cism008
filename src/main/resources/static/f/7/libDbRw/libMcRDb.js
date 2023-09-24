@@ -3,11 +3,13 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { initNewMc, reViewAdn } from '/f/7/libDomGrid/libDomGrid.js'
+import { initNewMc, reViewAdn, mcData, getDomConf } from '/f/7/libDomGrid/libDomGrid.js'
+import { addNewMc, adnIds, notParentChilds } from '/f/7/libDomGrid/libDomGrid.js'
+
 import {
     executeSelectQuery, executeAdnInsertQuery, executeDeleteAdn1Query, executeUpdateString
 } from './wsDbRw.js'
-import { mcData } from '../libDomGrid/libDomGrid.js'
+// import { mcData } from '../libDomGrid/libDomGrid.js'
 /**
  * 
  * @param {*} adnJson 
@@ -53,6 +55,16 @@ export const readAdnByIds = id_list => {
 }
 /**
  * 
+ * @param {Array} l 
+ * @param {String} n 
+ */
+export const readOntologyMC = (n, l) => {
+    console.log(getDomConf(n).startAfterReadOntologyTreeFn)
+    readOntologyTree(l, getDomConf(n).startAfterReadOntologyTreeFn)
+}
+
+/**
+ * 
  * @param {*} l 
  * @param {*} afterReadFn 
  * @returns 
@@ -71,7 +83,6 @@ export const addToParentChild = adnList => adnList.reduce((pl, adn) =>
     && pl || pl, [])
  */
 
-import { adnIds, notParentChilds } from '/f/7/libDomGrid/libDomGrid.js'
 export const deepNum = 6
 export const deepN_readParent = (deepCount, list, prevList, fn) => {
     (deepCount == 0 || !list.length) && fn(list, deepCount)
@@ -81,7 +92,6 @@ export const deepN_readParent = (deepCount, list, prevList, fn) => {
     })
 }
 
-import { addNewMc, } from '/f/7/libDomGrid/libDomGrid.js'
 /**
  * 
  * @param {*} parentId_list 

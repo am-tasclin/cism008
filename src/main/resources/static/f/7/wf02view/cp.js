@@ -9,8 +9,9 @@ initDomConfLogic(window.location.hash.substring(1))
 console.log(domConfCP())
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { initCarePlan, } from '/f/7/wf02view/libWF.js'
-ws.onopen = event => initCarePlan(domConfCP().l)
+import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
+import { initAfterCarePlan } from '/f/7/wf02view/libWF.js'
+ws.onopen = event => readOntologyTree(domConfCP().l, initAfterCarePlan)
 
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
 import { setDomComponent, getDomComponent, } from '/f/7/libDomGrid/libDomGrid.js'
