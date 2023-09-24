@@ -23,26 +23,35 @@ const wf02 = createApp({
         cr: () => codeRepresentation,
         cpIcPdList: () => domConfWf().cpIcPdList,
         onOffCp: adnId => {
-            console.log(adnId)
-        },
+            console.log(adnId);
+            (domConfWf().openedCP || (domConfWf().openedCP = [])
+            ).includes(adnId)
+                && domConfWf().openedCP.splice(domConfWf().openedCP.indexOf(adnId), 1)
+                || domConfWf().openedCP.push(adnId)
+            console.log(domConfWf().openedCP)
+            getDomComponent('wf02').count++
+        }, isOpenedCP: adnId => domConfWf().openedCP &&
+            domConfWf().openedCP.includes(adnId),
     }, mcDataMethods, cpSymbolR),
     template: `
 <h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}}</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
-<p>
-<div class="w3-row w3-border-top">
+<p><div class="w3-row w3-border-top">
     <div class="w3-half">
         <div class="w3-tiny w3-light-grey">CarePlan.instantiatesCanonical</div>
-        <div @click="onOffCp(cp.doc_id)" v-for="cp in cpIcPdList()" class="w3-hover-shadow">
+        <template v-for="cp in cpIcPdList()">
+        <div @click="onOffCp(cp.doc_id)"  class="w3-hover-shadow">
             <span class="w3-tiny w3-opacity">{{cp.doc_id}}.{{cpSymbolR(cp.doc_id)}}
             </span>&nbsp;
             <a :href="'/f/7/wf02view/cp.html#cp,'+cp.doc_id">{{cp.vl_str}}</a>
         </div>
+        <div v-if="isOpenedCP(cp.doc_id)" class="w3-container w3-border-left">
+            {{isOpenedCP(cp.doc_id)}}
+        </div>
+        </template>
     </div>
     <div class="w3-half"><t-ccr :cr="cr()" /></div>
-</div>
-</p>
-`,
+</div></p>`,
 })
 import { WfElement, CodeableConceptRepresentation, CodeMetaData } from '/f/7/libWF/WfElement.js'
 wf02.component('t-wf', WfElement)
