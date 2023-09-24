@@ -17,6 +17,8 @@ ws.onopen = event => readOntologyMC('wf', domConfWf().l)
 const { createApp } = Vue
 import { codeRepresentation } from '/f/7/wf02view/libWF.js'
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
+import { CpBody } from '/f/7/wf02view/libWF.js'
+
 const wf02 = createApp({
     data() { return { count: 0, rootId: domConfWf().l[0] } },
     mounted() { setDomComponent('wf02', this) }, methods: Object.assign({
@@ -32,7 +34,7 @@ const wf02 = createApp({
             getDomComponent('wf02').count++
         }, isOpenedCP: adnId => domConfWf().openedCP &&
             domConfWf().openedCP.includes(adnId),
-    }, mcDataMethods, cpSymbolR),
+    }, mcDataMethods, cpSymbolR), components: { CpBody },
     template: `
 <h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}}</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
@@ -45,9 +47,10 @@ const wf02 = createApp({
             </span>&nbsp;
             <a :href="'/f/7/wf02view/cp.html#cp,'+cp.doc_id">{{cp.vl_str}}</a>
         </div>
-        <div v-if="isOpenedCP(cp.doc_id)" class="w3-container w3-border-left">
+        <template v-if="isOpenedCP(cp.doc_id)">
             {{isOpenedCP(cp.doc_id)}}
-        </div>
+            <CpBody :rootId="cp.doc_id"/>
+        </template>
         </template>
     </div>
     <div class="w3-half"><t-ccr :cr="cr()" /></div>

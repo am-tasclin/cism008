@@ -168,3 +168,20 @@ domConstants.TaskIdList = [2001]
 domConstants.TaskIOAutoExecute = [2005]
 
 export const TaskTagIds = domConstants.TaskTagIds = [2005]
+
+import { mcDataMethods, } from
+    '/f/7/libDomGrid/libDomGrid.js'
+/**
+ * 
+ */
+export const CpBody = {
+    methods: Object.assign({
+        basedOnCP: () => domConfCP().basedOnCP
+    }, mcDataMethods), props: { rootId: Number }, template: `
+<div v-if="parentChilds(rootId)" class="w3-container w3-border-left">
+    a22 {{rootId}}
+</div>
+<div v-if="basedOnCP()" class="w3-border-left">
+    a33 {{rootId}}
+</div>`,
+}
