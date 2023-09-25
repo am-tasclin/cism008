@@ -19,7 +19,7 @@ domConstants.DocumentReferenceIds = [2016]
  */
 const emrType = {
     2009: '⌓℅', // EpisodeOfCare.patient
-    2008: '⌔℅ꭍ', // Encounter.basedOn
+    2008: '⌔℅∮', // Encounter.basedOn
     2015: '⛒℅', // CarePlan.title
     2013: '💼.⛋', // CarePlan.instantiatesCanonical PlanDefinition
     2016: '🔗', // Attachment.url

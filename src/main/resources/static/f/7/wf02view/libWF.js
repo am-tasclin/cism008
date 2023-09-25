@@ -10,6 +10,9 @@ import { domConfCP, parentChilds, domConfWf, domConstants, getDomComponent } fro
 import { getDomConf, adnIds, adn, mcData } from
     '/f/7/libDomGrid/libDomGrid.js'
 
+const reViewInit = (nl, nF) => nl.forEach(n =>
+    getDomConf(n) && getDomConf(n).reView && getDomConf(n).reView[nF] && getDomConf(n).reView[nF]())
+
 /**
 * Build CarePlan Meta-Content code
 * @param {Array} l 
@@ -17,24 +20,27 @@ import { getDomConf, adnIds, adn, mcData } from
 */
 //export const initCarePlan = l => readOntologyTree(l, initAfterCarePlan)
 export const initAfterCarePlan = () => {
-    domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
+    reViewInit(['cp', 'wf'], 'initAfterCarePlan')
+    // domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
     const r2List = adnIds().reduce((l, i) => adn(i).r2 && l.push(adn(i).r2) && l || l, [])
     console.log(r2List)
     readOntologyTree(r2List, initAfterCpR2)
 }
 const initAfterCpR2 = () => {
-    domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
+    // reViewInit('cp','initAfterCarePlan')
+    // domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
     // console.log('find basedOn this CarePlan?')
     const sql = selectOnBasedOnMaker.get().replace(':idList', domConfCP().l.join(','))
     console.log(sql)
     executeSelectQuery(sql).then(json => {
         const parentIds = json.list.reduce((l, o) => l.push(o.doc_id) && l, [])
         domConfCP().basedOnCP = parentIds
-        // console.log(parentIds, json)
+        console.log(parentIds, json)
         readOntologyTree(parentIds, afterBasedOn)
     })
 }, afterBasedOn = (x, deepCount) => {
-    domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
+    reViewInit(['cp', 'wf'], 'initAfterCarePlan')
+    // domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
     console.log(x, deepCount)
 
 }
@@ -42,7 +48,7 @@ import { initSelectMaker } from '/f/7/libDbRw/libSqlMaker.js'
 const selectOnBasedOnMaker = initSelectMaker('selectOnBasedOn', 'doc')
     .initColumns('doc_id').initLeftJoin(
         '(SELECT doc_id basedon_id FROM doc WHERE reference=2014) x', 'reference=basedon_id')
-    .initWhere('reference2 IN (:idList)').andWhere('reference!=2008') //Encounter.basedOn
+    .initWhere('reference2 IN (:idList)').andWhere('reference!=2008') // !Encounter.basedOn (NOT)
 
 export const codeRepresentation = [377146,] //'ccr'
     , codeMetaData = [368597, 367562,] // 'cmd'
@@ -77,7 +83,7 @@ const initCodeMetaData = (x, deepCount) => {
         .includes(adn(i).r) && l.push(adn(i).r2) && l || l, [])
     readOntologyTree(taskList, initAfterTask)
 }, initAfterTask = (x, deepCount) => {
-    console.log(x, domConfWf().codes, domConfWf().taskComponent)
+    // console.log(x, domConfWf().codes, domConfWf().taskComponent)
     Object.keys(domConfWf().taskComponent).forEach(i =>
         domConfWf().taskComponent[i].count++)
     executeSelectQuery(selectCarePlanIcPdMaker.get().replace(':planDefinitionIds'
@@ -169,19 +175,42 @@ domConstants.TaskIOAutoExecute = [2005]
 
 export const TaskTagIds = domConstants.TaskTagIds = [2005]
 
-import { mcDataMethods, } from
-    '/f/7/libDomGrid/libDomGrid.js'
+import { mcDataMethods, } from '/f/7/libDomGrid/libDomGrid.js'
+import { setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
+import { cpSymbolR } from '/f/7/cp01view/libCP.js'
+
 /**
  * 
  */
 export const CpBody = {
-    methods: Object.assign({
-        basedOnCP: () => domConfCP().basedOnCP
-    }, mcDataMethods), props: { rootId: Number }, template: `
+    data() { return { count: 0, } },
+    mounted() { setDomComponent('cpBody', this) }, methods: Object.assign({
+        basedOnCP: () => domConfCP() && domConfCP().basedOnCP || []
+    }, mcDataMethods, cpSymbolR), props: { rootId: Number }, template: `
 <div v-if="parentChilds(rootId)" class="w3-container w3-border-left">
-    a22 {{rootId}}
+    <div v-for="adnId in parentChilds(rootId)">
+        <span class="w3-tiny w3-opacity">{{adnId}}&nbsp;</span>
+        <span class="w3-small w3-opacity">
+            :{{cpSymbolR(adnId)}}.{{adn(adnId).r2}}&nbsp;</span>
+        <a :href="'/f/7/wf02view/i.html#wf,'+adn(adnId).r2" class="w3-small">
+            {{adn(adn(adnId).r2).vl_str}}
+        </a>
+    </div>
 </div>
 <div v-if="basedOnCP()" class="w3-border-left">
-    a33 {{rootId}}
-</div>`,
+    <template v-for="boaId in basedOnCP()">
+        <template v-if="adn(boaId).r2==rootId">
+            <div class="w3-border-top">
+                &nbsp;<span class="w3-tiny w3-opacity">{{boaId}}</span>
+                {{adn(boaId).vl_str}}
+            </div>
+            <div v-if="parentChilds(boaId)" class="w3-border-top w3-container">
+                <div v-for="boId in parentChilds(boaId)" class="w3-hover-shadow">
+                    <span class="w3-tiny w3-opacity">{{boId}}</span>
+                    {{adn(boId).vl_str}}
+                </div>
+            </div>
+        </template>
+    </template>
+</div><span class="w3-hide">{{count}}</span>`,
 }

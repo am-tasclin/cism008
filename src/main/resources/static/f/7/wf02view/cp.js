@@ -40,4 +40,5 @@ import { getDomComponent, } from '/f/7/libDomGrid/libDomGrid.js'
 domConfCP().reView.initAfterCarePlan = () => {
     getDomComponent('cp01view').count++
     getDomComponent('cp02view').count++
+    getDomComponent('cpBody').count++
 }
