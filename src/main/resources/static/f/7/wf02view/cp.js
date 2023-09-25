@@ -3,7 +3,7 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { mcDataMethods, adnIds, adn, initDomConfLogic, domConfCP, } from
+import { mcDataMethods, initDomConfLogic, domConfCP, } from
     '/f/7/libDomGrid/libDomGrid.js'
 initDomConfLogic(window.location.hash.substring(1))
 console.log(domConfCP())
@@ -30,15 +30,17 @@ createApp({
 `,
 }).mount('#cp02view')
 
-createApp({
-    data() { return { count: 0, rootId: domConfCP().l[0], } },
-    mounted() { setDomComponent('cp01view', this) }, methods: Object.assign({
-        basedOnCP: () => domConfCP().basedOnCP
-    }, mcDataMethods, cpSymbolR)
-}).mount('#cp01view')
 import { getDomComponent, } from '/f/7/libDomGrid/libDomGrid.js'
 domConfCP().reView.initAfterCarePlan = () => {
-    getDomComponent('cp01view').count++
+    // getDomComponent('cp01view').count++
     getDomComponent('cp02view').count++
     getDomComponent('cpBody').count++
 }
+
+// createApp({
+//     data() { return { count: 0, rootId: domConfCP().l[0], } },
+//     mounted() { setDomComponent('cp01view', this) }, methods: Object.assign({
+//         basedOnCP: () => domConfCP().basedOnCP
+//     }, mcDataMethods, cpSymbolR)
+// }).mount('#cp01view')
+

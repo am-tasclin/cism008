@@ -10,8 +10,6 @@ import { domConfCP, parentChilds, domConfWf, domConstants, getDomComponent } fro
 import { getDomConf, adnIds, adn, mcData } from
     '/f/7/libDomGrid/libDomGrid.js'
 
-const reViewInit = (nl, nF) => nl.forEach(n =>
-    getDomConf(n) && getDomConf(n).reView && getDomConf(n).reView[nF] && getDomConf(n).reView[nF]())
 
 /**
 * Build CarePlan Meta-Content code
@@ -27,11 +25,7 @@ export const initAfterCarePlan = () => {
     readOntologyTree(r2List, initAfterCpR2)
 }
 const initAfterCpR2 = () => {
-    // reViewInit('cp','initAfterCarePlan')
-    // domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
-    // console.log('find basedOn this CarePlan?')
     const sql = selectOnBasedOnMaker.get().replace(':idList', domConfCP().l.join(','))
-    console.log(sql)
     executeSelectQuery(sql).then(json => {
         const parentIds = json.list.reduce((l, o) => l.push(o.doc_id) && l, [])
         domConfCP().basedOnCP = parentIds
@@ -44,6 +38,10 @@ const initAfterCpR2 = () => {
     console.log(x, deepCount)
 
 }
+
+const reViewInit = (nl, nF) => nl.forEach(n =>
+    getDomConf(n) && getDomConf(n).reView && getDomConf(n).reView[nF] && getDomConf(n).reView[nF]())
+
 import { initSelectMaker } from '/f/7/libDbRw/libSqlMaker.js'
 const selectOnBasedOnMaker = initSelectMaker('selectOnBasedOn', 'doc')
     .initColumns('doc_id').initLeftJoin(

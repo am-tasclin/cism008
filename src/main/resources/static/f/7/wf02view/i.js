@@ -3,53 +3,47 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { initDomConfLogic, mcDataMethods, getDomComponent, setDomComponent, domConfWf, } from
-    '/f/7/libDomGrid/libDomGrid.js'
-
+import { initDomConfLogic } from '/f/7/libDomGrid/libDomGrid.js'
 initDomConfLogic(window.location.hash.substring(1))
-console.log(domConfWf(),)
+console.log(getDomConf('wf'),)
 
-import { initWorkFlowFn } from '/f/7/wf02view/libWF.js'
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { readOntologyMC } from '/f/7/libDbRw/libMcRDb.js'
-initWorkFlowFn()
-ws.onopen = event => readOntologyMC('wf', domConfWf().l)
+import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
+import { initAfterPD } from '/f/7/wf02view/libWF.js'
+ws.onopen = event => readOntologyTree(getDomConf('wf').l, initAfterPD)
 
 const { createApp } = Vue
-import { codeRepresentation } from '/f/7/wf02view/libWF.js'
+import { mcDataMethods, getDomComponent, setDomComponent, setDomConfPart } from
+    '/f/7/libDomGrid/libDomGrid.js'
+import { codeRepresentation, CpBody, initAfterCarePlan } from '/f/7/wf02view/libWF.js'
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
-import { CpBody } from '/f/7/wf02view/libWF.js'
-import { setDomConfPart } from '/f/7/libDomGrid/libDomGrid.js'
-import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
-import { initAfterCarePlan } from '/f/7/wf02view/libWF.js'
-
 const wf02 = createApp({
-    data() { return { count: 0, rootId: domConfWf().l[0] } },
+    data() { return { count: 0, rootId: getDomConf('wf').l[0] } },
     mounted() { setDomComponent('wf02', this) }, methods: Object.assign({
         cr: () => codeRepresentation,
-        cpIcPdList: () => domConfWf().cpIcPdList,
+        cpIcPdList: () => getDomConf('wf').cpIcPdList,
         onOffCp: cpId => {
-            (domConfWf().openedCP || (domConfWf().openedCP = [])
-            ).includes(cpId)
-                && domConfWf().openedCP.splice(domConfWf().openedCP.indexOf(cpId), 1)
-                || domConfWf().openedCP.push(cpId)
-            getDomComponent('wf02').count++
-            const cpList = domConfWf().cpIcPdList.reduce((l, cp) => l.push(cp.doc_id) && l, [])
             !getDomConf('cp') && (() => {
+                const cpList = getDomConf('wf').cpIcPdList.reduce((l, cp) =>
+                    l.push(cp.doc_id) && l, [])
                 setDomConfPart('cp', { l: cpList, })
-                // console.log(cpId, domConfWf().openedCP, getDomConf('cp'))
-                // console.log(cpList)
                 readOntologyTree(cpList, initAfterCarePlan)
-            })()
-        }, isOpenedCP: adnId => domConfWf().openedCP &&
-            domConfWf().openedCP.includes(adnId),
+            })();
+            (getDomConf('wf').openedCP || (getDomConf('wf').openedCP = [])
+            ).includes(cpId)
+                && getDomConf('wf').openedCP.splice(getDomConf('wf').openedCP.indexOf(cpId), 1)
+                || getDomConf('wf').openedCP.push(cpId)
+            getDomComponent('wf02').count++
+        }, isOpenedCP: adnId => getDomConf('wf').openedCP &&
+            getDomConf('wf').openedCP.includes(adnId),
     }, mcDataMethods, cpSymbolR), components: { CpBody },
     template: `
 <h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}}</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
 <p><div class="w3-row w3-border-top">
     <div class="w3-half">
-        <div class="w3-tiny w3-light-grey">CarePlan.instantiatesCanonical</div>
+        <div style="text-align: center;"
+            class="w3-light-grey am-b am-i">CarePlan.instantiatesCanonical</div>
         <template v-for="cp in cpIcPdList()">
             <div @click="onOffCp(cp.doc_id)"  class="w3-hover-shadow">
                 <span class="w3-tiny w3-opacity">{{cp.doc_id}}.{{cpSymbolR(cp.doc_id)}}
@@ -64,7 +58,7 @@ const wf02 = createApp({
     <div class="w3-half"><t-ccr :cr="cr()" /></div>
 </div></p>`,
 })
-import { WfElement, CodeableConceptRepresentation, CodeMetaData } from '/f/7/libWF/WfElement.js'
+import { WfElement, CodeableConceptRepresentation, } from '/f/7/libWF/WfElement.js'
 wf02.component('t-wf', WfElement)
 wf02.component('t-ccr', CodeableConceptRepresentation)
 wf02.mount('#wf02')
