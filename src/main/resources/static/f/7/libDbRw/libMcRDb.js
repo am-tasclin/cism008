@@ -58,7 +58,7 @@ export const readAdnByIds = id_list => {
  * @param {Array} l 
  * @param {String} n 
  */
-export const readOntologyMC = (n, l) => {
+export const readOntologyMC = (n, l) => {//DEPRECATED
     console.log(getDomConf(n).startAfterReadOntologyTreeFn)
     readOntologyTree(l, getDomConf(n).startAfterReadOntologyTreeFn)
 }

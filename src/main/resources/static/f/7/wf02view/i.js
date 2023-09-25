@@ -4,6 +4,7 @@
  * 
  */
 import { initDomConfLogic } from '/f/7/libDomGrid/libDomGrid.js'
+import { getDomConf } from '/f/7/libDomGrid/libDomGrid.js'
 initDomConfLogic(window.location.hash.substring(1))
 console.log(getDomConf('wf'),)
 
@@ -62,7 +63,6 @@ import { WfElement, CodeableConceptRepresentation, } from '/f/7/libWF/WfElement.
 wf02.component('t-wf', WfElement)
 wf02.component('t-ccr', CodeableConceptRepresentation)
 wf02.mount('#wf02')
-import { getDomConf } from '/f/7/libDomGrid/libDomGrid.js'
 getDomConf('wf').reView.initAfterPD = () => {
     getDomComponent('wf02').count++
 }

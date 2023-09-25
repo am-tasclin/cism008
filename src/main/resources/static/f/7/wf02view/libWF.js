@@ -239,3 +239,105 @@ export const CpBody = {
     </template>
 </div><span class="w3-hide">{{count}}</span>`,
 }
+
+    /**
+     * 
+     */
+    , TitSelect = {
+        props: { taskIcId: Number }, data() { return { count: 0 } },
+        computed: {
+            pdActionIds() {
+                return parentChilds(parentChilds(adn(this.activityDefinitionId()).p)
+                    .find(i => '[]' == wfType[adn(i).r]))
+            },
+        }, mounted() {
+            initTaskIc(this.taskIcId, this)
+            console.log(this.pdActionIds)
+            this.pdActionIds.forEach(i => findTasksInPDAction(i, this, (taskIcId, proxy) => {
+                const taskId = adn(taskIcId).r2
+                console.log(i, taskIcId, taskId)
+                // this.count++
+            }))
+        }, methods: Object.assign({
+            findBtnAdId: pdActionId => findAdInPDAction(pdActionId)
+            , activityDefinitionId() { return adn(this.taskIcId).p }
+            , clickAdBtn(adId) {
+                console.log(adId, adn(adId))
+            }, actionData() {
+                return getDomConf('wf').actionData && getDomConf('wf')
+                    .actionData[this.activityDefinitionId()].list
+            }, setSelectedId(adnId) {
+                console.log(adnId, getDomConf('wf'), wfType)
+
+            },
+        }, mcDataMethods), template: `
+<div class="w3-border-top w3-container">
+    <span class="w3-tiny w3-right">{{taskIcId}}:TitSelect:{{count}}</span>
+    <div class="w3-border-bottom w3-leftbar">
+        <div v-for="pdActionId in pdActionIds">&nbsp;
+            <span class="w3-tiny">{{pdActionId}}</span>
+            {{adn(pdActionId).vl_str}}
+            <button @click="clickAdBtn(findBtnAdId(pdActionId))" class="w3-leftbar">
+                {{adn(findBtnAdId(pdActionId)).vl_str}}
+            </button>
+        </div>
+    </div>
+    <div @click="setSelectedId(im.doc_id)" v-for="im in actionData()" class="w3-hover-shadow">
+        <span class="w3-tiny">{{im.doc_id}}</span>
+        {{im.vl_str}}
+    </div>
+</div>`,
+    }
+
+    /**
+     * WorkFlow part - try dynamic component
+     */
+    , WfPart = {
+        components: { TitSelect },
+        template: `<component :is="taskTagName()" :taskIcId="taskIcId()"></component>`,
+        props: { adnid: Number }, methods: {
+            taskIcId() { return childTaskId.childTaskId(this.adnid) },
+            taskId() { return adn(this.taskIcId()).r2 },
+            taskTagName() {
+                const taskTagId = taskIOCmd(parentChilds(this.taskId())
+                    .find(i => TaskTagIds.includes(taskIOCmd(i))))
+                return this.taskId() && adn(taskTagId).vl_str.replace('.', '')
+            },
+        },
+    }
+    /**
+     * 
+     */
+    , Wf02Use = {
+        data: () => { return { count: 0, rootId: getDomConf('wf').l[0] } },
+        mounted() { setDomComponent('wf02use', this) }, methods: Object.assign({
+            isSelectedActionId: adnId => getDomConf('wf').selectedActionId && getDomConf('wf')
+                .selectedActionId.includes(adnId),
+            onOffAction(adnId) {
+                console.log(adnId, getDomConf('wf').selectedActionId)
+                const selectedActionId = getDomConf('wf').selectedActionId || (getDomConf('wf').selectedActionId = [])
+                !selectedActionId.includes(adnId) && selectedActionId.push(adnId)
+                    || selectedActionId.splice(selectedActionId.indexOf(), 1)
+                this.count++
+            },
+        }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId),
+        components: { WfPart }, template: `
+    <span class="w3-right"> {{count}} </span>
+    <h6 :review="count" class="am-i w3-border-bottom">
+        <span class="w3-tiny w3-opacity">{{rootId}}</span>
+        {{adn(rootId).vl_str}}
+    </h6>
+    <template v-for="adnId in parentChilds(parentChilds(rootId)[0])">
+        <div class="w3-hover-shadow" @click="onOffAction(adnId)">
+            <span class="w3-tiny">{{adnId}}&nbsp;{{wfSymbolPR(adnId)}}</span>
+            {{adn(adnId).vl_str}}
+        </div>
+        <div v-if="isSelectedActionId(adnId)" class="w3-border-left w3-container">
+            <div v-for="adnId2 in parentChilds(adnId)">
+                <span class="w3-tiny">{{adnId2}}&nbsp;{{wfSymbolR2(adnId2)}}</span>
+                {{adn(adnId2).vl_str}}
+                <WfPart :adnid="adnId2"></WfPart>
+            </div></div>
+    </template>
+    `,
+    }

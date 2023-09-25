@@ -3,103 +3,40 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { initDomConfLogic, mcDataMethods, getDomComponent, setDomComponent, domConfWf, } from
+import { initDomConfLogic, getDomComponent, } from
     '/f/7/libDomGrid/libDomGrid.js'
-const adn = mcDataMethods.adn, parentChilds = mcDataMethods.parentChilds
+import { getDomConf } from '/f/7/libDomGrid/libDomGrid.js'
+
 initDomConfLogic(window.location.hash.substring(1))
-console.log(domConfWf(),)
+console.log(getDomConf('wf'),)
 
-//init WF01 model
-// const codeMetaData = [368597, 367562,], codeRepresentation = [377146,]
-// domConfWf().codes = codeMetaData.concat(codeRepresentation)
-// domConfWf().loggedAttributes = [372052, 377121, 377149, 377170, 377176]
-
-import { initWorkFlowFn } from '/f/7/wf02view/libWF.js'
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
-import { readOntologyMC } from '/f/7/libDbRw/libMcRDb.js'
-initWorkFlowFn()
-ws.onopen = event => readOntologyMC('wf', domConfWf().l)
-
-import {
-    initTaskIc, wfSymbolPR, wfSymbolR2, childTaskId,
-    TaskTagIds, taskIOCmd, wfType, findTasksInPDAction, findAdInPDAction
-} from
-    '/f/7/wf02view/libWF.js'
-// '/f/7/libWF/libWF.js'
-
-/**
- * 
- */
-const TitSelect = {
-    props: { taskIcId: Number }, data() { return { count: 0 } },
-    computed: {
-        pdActionIds() {
-            return parentChilds(parentChilds(adn(this.activityDefinitionId()).p)
-                .find(i => '[]' == wfType[adn(i).r]))
-        },
-    }, mounted() {
-        initTaskIc(this.taskIcId, this)
-        console.log(this.pdActionIds)
-        this.pdActionIds.forEach(i => findTasksInPDAction(i, this, (taskIcId, proxy) => {
-            const taskId = adn(taskIcId).r2
-            console.log(i, taskIcId, taskId)
-            // this.count++
-        }))
-    }, methods: Object.assign({
-        findBtnAdId: pdActionId => findAdInPDAction(pdActionId)
-        , activityDefinitionId() { return adn(this.taskIcId).p }
-        , clickAdBtn(adId) {
-            console.log(adId, adn(adId))
-        }, actionData() {
-            return domConfWf().actionData && domConfWf()
-                .actionData[this.activityDefinitionId()].list
-        }, setSelectedId(adnId) {
-            console.log(adnId, domConfWf(), wfType)
-
-        },
-    }, mcDataMethods), template: `
-<div class="w3-border-top w3-container">
-    <span class="w3-tiny w3-right">{{taskIcId}}:TitSelect:{{count}}</span>
-    <div class="w3-border-bottom w3-leftbar">
-        <div v-for="pdActionId in pdActionIds">&nbsp;
-            <span class="w3-tiny">{{pdActionId}}</span>
-            {{adn(pdActionId).vl_str}}
-            <button @click="clickAdBtn(findBtnAdId(pdActionId))" class="w3-leftbar">
-                {{adn(findBtnAdId(pdActionId)).vl_str}}
-            </button>
-        </div>
-    </div>
-    <div @click="setSelectedId(im.doc_id)" v-for="im in actionData()" class="w3-hover-shadow">
-        <span class="w3-tiny">{{im.doc_id}}</span>
-        {{im.vl_str}}
-    </div>
-</div>`,
-}
-
-const WfPart = {
-    components: { TitSelect },
-    template: `<component :is="taskTagName()" :taskIcId="taskIcId()"></component>`,
-    props: { adnid: Number }, methods: {
-        taskIcId() { return childTaskId.childTaskId(this.adnid) },
-        taskId() { return adn(this.taskIcId()).r2 },
-        taskTagName() {
-            const taskTagId = taskIOCmd(parentChilds(this.taskId())
-                .find(i => TaskTagIds.includes(taskIOCmd(i))))
-            return this.taskId() && adn(taskTagId).vl_str.replace('.', '')
-        },
-    },
-}
+import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
+import { initAfterPD } from '/f/7/wf02view/libWF.js'
+ws.onopen = event => readOntologyTree(getDomConf('wf').l, initAfterPD)
 
 const { createApp } = Vue
+import { Wf02Use } from '/f/7/wf02view/libWF.js'
+createApp(Wf02Use).mount('#wf02use')
+getDomConf('wf').reView.initAfterPD = () => {
+    // getDomComponent('wf01use').count++
+    getDomComponent('wf02use').count++
+}
+getDomConf('wf').reView.readParent = () => {
+    // getDomComponent('wf01use').count++
+    getDomComponent('wf02use').count++
+}
+
+/*
 const wf01use = createApp({
-    data() { return { count: 0, rootId: domConfWf().l[0] } },
+    data: () => { return { count: 0, rootId: getDomConf('wf').l[0] } },
     mounted() { setDomComponent('wf01use', this) }, methods: Object.assign({
-        isSelectedActionId: adnId => domConfWf().selectedActionId && domConfWf()
+        isSelectedActionId: adnId => getDomConf('wf').selectedActionId && getDomConf('wf')
             .selectedActionId.includes(adnId),
-        actionData: adnId => domConfWf().actionData && domConfWf().actionData[adnId].list,
+        actionData: adnId => getDomConf('wf').actionData && getDomConf('wf').actionData[adnId].list,
         onOffAction(adnId) {
-            console.log(adnId, domConfWf().selectedActionId)
-            const selectedActionId = domConfWf().selectedActionId || (domConfWf().selectedActionId = [])
+            console.log(adnId, getDomConf('wf').selectedActionId)
+            const selectedActionId = getDomConf('wf').selectedActionId || (getDomConf('wf').selectedActionId = [])
             !selectedActionId.includes(adnId) && selectedActionId.push(adnId)
                 || selectedActionId.splice(selectedActionId.indexOf(), 1)
 
@@ -111,9 +48,4 @@ const wf01use = createApp({
 })
 wf01use.component('t-wf-part', WfPart)
 wf01use.mount('#wf01use')
-domConfWf().reView.initAfterPD = () => {
-    getDomComponent('wf01use').count++
-}
-domConfWf().reView.readParent = (list, prevList) => {
-    getDomComponent('wf01use').count++
-}
+*/
