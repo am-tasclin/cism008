@@ -12,9 +12,9 @@ moment.locale('uk')
 import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 initDomConfLogic(window.location.hash.substring(1))
 // console.log(domConfEMR())
-import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
-import { ws } from '/f/7/libDbRw/wsDbRw.js'
 
+import { ws } from '/f/7/libDbRw/wsDbRw.js'
+import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
 ws.onopen = event => readOntologyTree(domConfEMR().l, afterReadEMR)
 
 const isEmrData = adnId =>
@@ -58,4 +58,3 @@ const emr01view = createApp({
     }, mcDataMethods, emrSymbolR)
 })
 emr01view.mount('#emr01view')
-

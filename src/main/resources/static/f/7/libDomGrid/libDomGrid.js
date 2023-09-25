@@ -285,7 +285,7 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
         ) || 'wf' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
             , { l: [], wfComponent: {}, taskComponent: {}, reView: {}, }
         ) || 'emr' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
-            , { l: [], }
+            , { l: [], reView: {}, }
         ) || 'cp' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
             , { l: [], reView: {}, }
         ) || initTreeUriDomConf(uriDomConf_l, ppId)

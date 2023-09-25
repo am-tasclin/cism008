@@ -3,14 +3,41 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
+import {
+    getDomConf, adnIds, adn, mcData,
+    domConfCP, parentChilds, domConfWf, domConstants, getDomComponent
+} from '/f/7/libDomGrid/libDomGrid.js'
 import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 import { readOntologyTree, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
-import { domConfCP, parentChilds, domConfWf, domConstants, getDomComponent } from
-    '/f/7/libDomGrid/libDomGrid.js'
-import { getDomConf, adnIds, adn, mcData } from
-    '/f/7/libDomGrid/libDomGrid.js'
+/**
+ * Build EMR -- Electronic Medical Record
+ */
+export const afterReadEMR = () => {
+    // getDomComponent('emr01view').count++
+    reViewInit(['emr'], 'afterReadEMR')
+    const emrR2DataList = adnIds().reduce((l, i) => isEmrData(i)
+        && l.push(mcDataMethods.adn(i).r2) && l || l, [])
+    readOntologyTree(emrR2DataList, afterReadEmrR2Data)
+}, isEmrData = adnId =>
+    domConstants.EpisodeOfCareIds.includes(mcDataMethods.adn(adnId).r)
+    || domConstants.EncounterIds.includes(mcDataMethods.adn(adnId).r)
+    || domConstants.DocumentReferenceIds.includes(mcDataMethods.adn(adnId).r)
+const sql_ts = 'SELECT timestamp_id id, value::timestamp as ts FROM timestamp WHERE timestamp_id IN (:ids)'
 
-
+const afterReadEmrR2Data = (x, deepCount) => {
+    console.log(x, deepCount, mcDataMethods.mcData())
+    // getDomComponent('emr01view').count++
+    reViewInit(['emr'], 'afterReadEMR')
+    // console.log(adnIds(), sql_ts)
+    executeSelectQuery(sql_ts.replace(':ids', adnIds().join(','))
+    ).then(json => {
+        json.list.forEach(tso => adn(tso.id).ts = tso.ts)
+        // getDomComponent('emr01view').count++
+        reViewInit(['emr'], 'afterReadEMR')
+    }).then(() => {
+        console.log(1123)
+    })
+}
 /**
 * Build CarePlan Meta-Content code
 * @param {Array} l 
@@ -60,9 +87,9 @@ const loggedAttributes = [372052, 377121, 377149, 377170, 377176]
  */
 //export const initWorkFlow = l => readOntologyTree(l, initAfterPD)
 /**
- * library: initWorkFlow
+ * library: initWorkFlow DEPRECATED
  */
-export const initWorkFlowFn = () => {
+export const initWorkFlowFn_d = () => {
     getDomConf('wf').startAfterReadOntologyTreeFn = initAfterPD
 }
 export const initAfterPD = (x, deepCount) => {
