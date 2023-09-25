@@ -4,8 +4,7 @@
  * 
  */
 import {
-    getDomConf, adnIds, adn, mcData,
-    domConfCP, parentChilds, domConfWf, domConstants, getDomComponent
+    getDomConf, adnIds, adn, mcData, domConfCP, parentChilds, domConfWf, domConstants, getDomComponent
 } from '/f/7/libDomGrid/libDomGrid.js'
 import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 import { readOntologyTree, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'

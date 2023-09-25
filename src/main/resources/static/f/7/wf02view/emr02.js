@@ -33,3 +33,9 @@ emr02.mount('#emr02')
 getDomConf('emr').reView.afterReadEMR = () => {
     getDomComponent('emr02').count++
 }
+createApp({
+template:`
+<div class="w3-light-grey am-b" style="text-align: center;">⛋&nbsp;WF03:</div>
+a1
+`,
+}).mount('#wf03')
