@@ -9,11 +9,14 @@ import {
 import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 import { readOntologyTree, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 /**
- * Build EMR -- Electronic Medical Record
+ * Build EMR -- Electronic Medical Record - meta-content
  */
 export const afterReadEMR = () => {
     // getDomComponent('emr01view').count++
     reViewInit(['emr'], 'afterReadEMR')
+    /**
+     * Read R2 -- data list
+     */
     const emrR2DataList = adnIds().reduce((l, i) => isEmrData(i)
         && l.push(mcDataMethods.adn(i).r2) && l || l, [])
     readOntologyTree(emrR2DataList, afterReadEmrR2Data)
@@ -28,6 +31,9 @@ const afterReadEmrR2Data = (x, deepCount) => {
     // getDomComponent('emr01view').count++
     reViewInit(['emr'], 'afterReadEMR')
     // console.log(adnIds(), sql_ts)
+    /**
+     * Read timestamp data
+     */
     executeSelectQuery(sql_ts.replace(':ids', adnIds().join(','))
     ).then(json => {
         json.list.forEach(tso => adn(tso.id).ts = tso.ts)
@@ -62,7 +68,6 @@ const initAfterCpR2 = () => {
     reViewInit(['cp', 'wf'], 'initAfterCarePlan')
     // domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
     console.log(x, deepCount)
-
 }
 
 const reViewInit = (nl, nF) => nl.forEach(n =>
@@ -204,38 +209,30 @@ import { setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
 
 /**
- * 
+ * CarePlan body
  */
 export const CpBody = {
-    data() { return { count: 0, } },
+    props: { rootId: Number }, data() { return { count: 0, } },
     mounted() { setDomComponent('cpBody', this) }, methods: Object.assign({
         basedOnCP: () => domConfCP() && domConfCP().basedOnCP || []
-    }, mcDataMethods, cpSymbolR), props: { rootId: Number }, template: `
+    }, mcDataMethods, cpSymbolR), template: `
 <div v-if="parentChilds(rootId)" class="w3-container w3-border-left">
     <div v-for="adnId in parentChilds(rootId)">
         <span class="w3-tiny w3-opacity">{{adnId}}&nbsp;</span>
         <span class="w3-small w3-opacity">
             :{{cpSymbolR(adnId)}}.{{adn(adnId).r2}}&nbsp;</span>
         <a :href="'/f/7/wf02view/i.html#wf,'+adn(adnId).r2" class="w3-small">
-            {{adn(adn(adnId).r2).vl_str}}
-        </a>
-    </div>
-</div>
+            {{adn(adn(adnId).r2).vl_str}} </a> </div></div>
 <div v-if="basedOnCP()" class="w3-border-left">
     <template v-for="boaId in basedOnCP()">
         <template v-if="adn(boaId).r2==rootId">
             <div class="w3-border-top">
                 &nbsp;<span class="w3-tiny w3-opacity">{{boaId}}</span>
-                {{adn(boaId).vl_str}}
-            </div>
+                {{adn(boaId).vl_str}} </div>
             <div v-if="parentChilds(boaId)" class="w3-border-top w3-container">
                 <div v-for="boId in parentChilds(boaId)" class="w3-hover-shadow">
                     <span class="w3-tiny w3-opacity">{{boId}}</span>
-                    {{adn(boId).vl_str}}
-                </div>
-            </div>
-        </template>
-    </template>
+                    {{adn(boId).vl_str}} </div> </div> </template> </template>
 </div><span class="w3-hide">{{count}}</span>`,
 }
 

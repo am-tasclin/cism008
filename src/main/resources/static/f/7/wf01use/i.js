@@ -3,10 +3,8 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { initDomConfLogic, getDomComponent, } from
-    '/f/7/libDomGrid/libDomGrid.js'
+import { initDomConfLogic, getDomComponent, } from '/f/7/libDomGrid/libDomGrid.js'
 import { getDomConf } from '/f/7/libDomGrid/libDomGrid.js'
-
 initDomConfLogic(window.location.hash.substring(1))
 console.log(getDomConf('wf'),)
 

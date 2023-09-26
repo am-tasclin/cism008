@@ -282,21 +282,24 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
     rawUriDomConf.split(';').forEach(rawUriDomConf1 => {
         const uriDomConf_l = rawUriDomConf1.split(',')
         'hew' == uriDomConf_l[0] && initHewUriDomConf(uriDomConf_l
-        ) || 'wf' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
-            , { l: [], wfComponent: {}, taskComponent: {}, reView: {}, }
-        ) || 'emr' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
-            , { l: [], reView: {}, }
-        ) || 'cp' == uriDomConf_l[0] && initConfTypePart(uriDomConf_l
-            , { l: [], reView: {}, }
+        ) || 'wf' == uriDomConf_l[0] && initConfTypePartList(uriDomConf_l
+        ) || 'emr' == uriDomConf_l[0] && initConfTypePartList(uriDomConf_l
+        ) || 'cp' == uriDomConf_l[0] && initConfTypePartList(uriDomConf_l
         ) || initTreeUriDomConf(uriDomConf_l, ppId)
     })
     return domContainer.conf
 }
-export const setDomConfPart = (n, initJson) => domContainer.conf[n] || (
-    domContainer.conf[n] = initJson)
 
-const initConfTypePart = (uriDomConf_l, initJson,) => {
-    const confPart = setDomConfPart(uriDomConf_l[0], initJson)
+const domConfPart = {
+    wf: { l: [], wfComponent: {}, taskComponent: {}, reView: {}, },
+    cp: { l: [], reView: {}, },
+    emr: { l: [], reView: {}, },
+}
+export const initDomConfPart = (n) => domContainer.conf[n] || (
+    domContainer.conf[n] = domConfPart[n])
+
+const initConfTypePartList = (uriDomConf_l) => {
+    const confPart = initDomConfPart(uriDomConf_l[0])
     uriDomConf_l.slice(1).forEach(im => !confPart.l.includes(im) && confPart.l.push(im))
 }
 /**

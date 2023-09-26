@@ -14,7 +14,7 @@ import { initAfterPD } from '/f/7/wf02view/libWF.js'
 ws.onopen = event => readOntologyTree(getDomConf('wf').l, initAfterPD)
 
 const { createApp } = Vue
-import { mcDataMethods, getDomComponent, setDomComponent, setDomConfPart } from
+import { mcDataMethods, getDomComponent, setDomComponent, initDomConfPart } from
     '/f/7/libDomGrid/libDomGrid.js'
 import { codeRepresentation, CpBody, initAfterCarePlan } from '/f/7/wf02view/libWF.js'
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
@@ -27,7 +27,7 @@ const wf02 = createApp({
             !getDomConf('cp') && (() => {
                 const cpList = getDomConf('wf').cpIcPdList.reduce((l, cp) =>
                     l.push(cp.doc_id) && l, [])
-                setDomConfPart('cp', { l: cpList, })
+                initDomConfPart('cp').l = cpList
                 readOntologyTree(cpList, initAfterCarePlan)
             })();
             (getDomConf('wf').openedCP || (getDomConf('wf').openedCP = [])
@@ -43,19 +43,15 @@ const wf02 = createApp({
 <t-wf :adnid="rootId"></t-wf>
 <p><div class="w3-row w3-border-top">
     <div class="w3-half">
-        <div style="text-align: center;"
-            class="w3-light-grey am-b am-i">CarePlan.instantiatesCanonical</div>
+        <div style="text-align: center;" class="w3-light-grey am-b "> 
+            ⛒℅ <span class="am-i">CarePlan.instantiatesCanonical</span></div>
         <template v-for="cp in cpIcPdList()">
             <div @click="onOffCp(cp.doc_id)"  class="w3-hover-shadow">
                 <span class="w3-tiny w3-opacity">{{cp.doc_id}}.{{cpSymbolR(cp.doc_id)}}
                 </span>&nbsp;
-                <a :href="'/f/7/wf02view/cp.html#cp,'+cp.doc_id">{{cp.vl_str}}</a>
-            </div>
+                <a :href="'/f/7/wf02view/cp.html#cp,'+cp.doc_id">{{cp.vl_str}}</a> </div>
             <template v-if="isOpenedCP(cp.doc_id)">
-                <CpBody :rootId="cp.doc_id"/>
-            </template>
-        </template>
-    </div>
+                <CpBody :rootId="cp.doc_id"/> </template> </template> </div>
     <div class="w3-half"><t-ccr :cr="cr()" /></div>
 </div></p>`,
 })
