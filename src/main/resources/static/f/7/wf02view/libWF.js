@@ -52,13 +52,16 @@ const afterReadEmrR2Data = (x, deepCount) => {
 export const initAfterCarePlan = () => {
     reViewInit(['cp', 'wf'], 'initAfterCarePlan')
     /**
-     * Read R2 -- data list
+     * Read R2 -- data list of this CarePlans
      */
     const r2List = adnIds().reduce((l, i) => adn(i).r2 && l.push(adn(i).r2) && l || l, [])
     console.log(r2List)
     readOntologyTree(r2List, initAfterCpR2)
 }
 const initAfterCpR2 = () => {
+    /**
+     * Read basdOn this CarePlans
+     */
     const sql = selectOnBasedOnMaker.get().replace(':idList', getDomConf('cp').l.join(','))
     executeSelectQuery(sql).then(json => {
         const parentIds = json.list.reduce((l, o) => l.push(o.doc_id) && l, [])
@@ -86,23 +89,19 @@ export const codeRepresentation = [377146,] //'ccr'
 const loggedAttributes = [372052, 377121, 377149, 377170, 377176]
     , codeMetaDataIds = codeRepresentation.concat(codeMetaData).concat(loggedAttributes)
     , componentCMD = ['ccr', 'cmd']
+
 /**
- * Build PlanDefinition Meta-Content code, alias WorkFlow
- * @param {Array} l 
- * @returns 
+ * Read WorkFlow.PlanDefinition meta-content code data
  */
-//export const initWorkFlow = l => readOntologyTree(l, initAfterPD)
-/**
- * library: initWorkFlow DEPRECATED
- */
-export const initWorkFlowFn_d = () => {
-    getDomConf('wf').startAfterReadOntologyTreeFn = initAfterPD
-}
-export const initAfterPD = (x, deepCount) => {
+export const initAfterPD = () => {
     // console.log(deepCount)
     Object.keys(getDomConf('wf').wfComponent).forEach(i =>
         getDomConf('wf').wfComponent[i].count++)
-    getDomConf('wf').reView.initAfterPD && getDomConf('wf').reView.initAfterPD()
+    // getDomConf('wf').reView.initAfterPD && getDomConf('wf').reView.initAfterPD()
+    reViewInit(['emr', 'wf'], 'initAfterPD')
+    /**
+     * Read Meta-data for this WorkFlow code
+     */
     readOntologyTree(codeMetaDataIds, initCodeMetaData)
 }
 const initCodeMetaData = (x, deepCount) => {
@@ -110,6 +109,9 @@ const initCodeMetaData = (x, deepCount) => {
     componentCMD.forEach(n => getDomComponent(n) &&
         getDomComponent(n).count++)
     // getDomComponent('ccr') && getDomComponent('ccr').count++
+    /**
+     * Read Task for this WorkFlows
+     */
     const taskList = adnIds().reduce((l, i) => domConstants.TaskIdList
         .includes(adn(i).r) && l.push(adn(i).r2) && l || l, [])
     readOntologyTree(taskList, initAfterTask)
@@ -117,11 +119,16 @@ const initCodeMetaData = (x, deepCount) => {
     // console.log(x, getDomConf('wf').codes, getDomConf('wf').taskComponent)
     Object.keys(getDomConf('wf').taskComponent).forEach(i =>
         getDomConf('wf').taskComponent[i].count++)
+    /**
+     * Read CarePlans for this WorkFolws
+     */
     executeSelectQuery(selectCarePlanIcPdMaker.get().replace(':planDefinitionIds'
         , getDomConf('wf').l.join(','))).then(json => cpIcPdList(json))
 }, cpIcPdList = cpIcPdList => {
     (getDomConf('wf').cpIcPdList = cpIcPdList.list).forEach(cp => mcData.eMap[cp.cp_id] = cp)
-    getDomConf('wf').reView.initAfterPD && getDomConf('wf').reView.initAfterPD()
+    // getDomConf('wf').reView.initAfterPD && getDomConf('wf').reView.initAfterPD()
+    reViewInit(['emr', 'wf'], 'initAfterPD')
+
 }
 /**
  * CarePlan.instantiatesCanonical to PlanDefinition request
@@ -131,7 +138,6 @@ const selectCarePlanIcPdMaker = initSelectMaker('selectCarePlanIcPdMaker', 'doc'
     .andWhere('reference=2013')
     .initLeftJoin('string', 'parent=string_id')
     .initColumns('parent doc_id, parent cp_id, 2015 r, reference2 pd_id, value vl_str')
-
 /**
  * Task part of WorkFlow code
  */
@@ -288,7 +294,7 @@ export const CpBody = {
     }
 
     /**
-     * WorkFlow part - try dynamic component
+     * WorkFlow.PlanDefinition part - try dynamic component
      */
     , WfPart = {
         components: { TitSelect },
@@ -304,7 +310,7 @@ export const CpBody = {
         },
     }
     /**
-     * 
+     * WorkFlow.PlanDefinition -- usage in EMR
      */
     , Wf02Use = {
         data: () => { return { count: 0, rootId: getDomConf('wf') && getDomConf('wf').l[0] } },
@@ -319,8 +325,8 @@ export const CpBody = {
                 this.count++
             },
         }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId),
+        // <span class="w3-tiny w3-opacity w3-right"> {{count}} </span>
         components: { WfPart }, template: `
-    <span class="w3-right"> {{count}} </span>
     <h6 :review="count" class="am-i w3-border-bottom">
         <span class="w3-tiny w3-opacity">{{rootId}}</span>
         {{adn(rootId).vl_str}}

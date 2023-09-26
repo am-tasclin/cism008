@@ -40,9 +40,14 @@ getDomConf('emr').reView.afterReadEMR = () => {
 import { Wf02Use } from '/f/7/wf02view/libWF.js'
 createApp({
     data() { return { count: 0 } },
+    mounted() { setDomComponent('wf03', this) },
     components: { Wf02Use }, template: `
 <div class="w3-light-grey am-b" style="text-align: center;">⛋&nbsp;WF03:{{count}}</div>
-a1
 <Wf02Use />
 `,
 }).mount('#wf03')
+initDomConfPart('wf')
+getDomConf('wf').reView.initAfterPD = () => {
+    console.log(getDomConf('wf'))
+    getDomComponent('wf02use').rootId = getDomConf('wf').l[0]
+}
