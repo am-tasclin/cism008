@@ -13,7 +13,8 @@ import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
 import { afterReadEMR } from '/f/7/wf02view/libWF.js'
 ws.onopen = event => readOntologyTree(getDomConf('emr').l, afterReadEMR)
 
-import { mcDataMethods, adn, parentChilds, setDomComponent, getDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
+import { mcDataMethods, adn, parentChilds, initDomConfPart, setDomComponent, getDomComponent } from
+    '/f/7/libDomGrid/libDomGrid.js'
 import { emrSymbolR } from '/f/7/emr01view/libEMR.js'
 import { initAfterPD, isEmrData } from '/f/7/wf02view/libWF.js'
 const { createApp } = Vue
@@ -26,8 +27,9 @@ const emr02 = createApp({
         isPatientData: adnId => isEmrData(adnId),
         clickErBonCpPd(cpElId) {
             console.log(cpElId, adn(cpElId).r2)
-            getDomConf('emr').activePdId = adn(cpElId).r2
-            readOntologyTree([getDomConf('emr').activePdId], initAfterPD)
+            const activePdId = getDomConf('emr').activePdId = adn(cpElId).r2
+            initDomConfPart('wf').l = [activePdId]
+            readOntologyTree([activePdId], initAfterPD)
         },
     }, mcDataMethods, emrSymbolR)
 })
@@ -35,9 +37,12 @@ emr02.mount('#emr02')
 getDomConf('emr').reView.afterReadEMR = () => {
     getDomComponent('emr02').count++
 }
+import { Wf02Use } from '/f/7/wf02view/libWF.js'
 createApp({
-    template: `
-<div class="w3-light-grey am-b" style="text-align: center;">⛋&nbsp;WF03:</div>
+    data() { return { count: 0 } },
+    components: { Wf02Use }, template: `
+<div class="w3-light-grey am-b" style="text-align: center;">⛋&nbsp;WF03:{{count}}</div>
 a1
+<Wf02Use />
 `,
 }).mount('#wf03')

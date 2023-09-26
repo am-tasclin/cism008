@@ -4,7 +4,7 @@
  * 
  */
 import {
-    getDomConf, adnIds, adn, mcData, domConfCP, parentChilds, domConfWf, domConstants, getDomComponent
+    getDomConf, adnIds, adn, mcData, parentChilds, domConstants, getDomComponent
 } from '/f/7/libDomGrid/libDomGrid.js'
 import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 import { readOntologyTree, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
@@ -51,22 +51,24 @@ const afterReadEmrR2Data = (x, deepCount) => {
 //export const initCarePlan = l => readOntologyTree(l, initAfterCarePlan)
 export const initAfterCarePlan = () => {
     reViewInit(['cp', 'wf'], 'initAfterCarePlan')
-    // domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
+    /**
+     * Read R2 -- data list
+     */
     const r2List = adnIds().reduce((l, i) => adn(i).r2 && l.push(adn(i).r2) && l || l, [])
     console.log(r2List)
     readOntologyTree(r2List, initAfterCpR2)
 }
 const initAfterCpR2 = () => {
-    const sql = selectOnBasedOnMaker.get().replace(':idList', domConfCP().l.join(','))
+    const sql = selectOnBasedOnMaker.get().replace(':idList', getDomConf('cp').l.join(','))
     executeSelectQuery(sql).then(json => {
         const parentIds = json.list.reduce((l, o) => l.push(o.doc_id) && l, [])
-        domConfCP().basedOnCP = parentIds
+        getDomConf('cp').basedOnCP = parentIds
         console.log(parentIds, json)
         readOntologyTree(parentIds, afterBasedOn)
     })
 }, afterBasedOn = (x, deepCount) => {
     reViewInit(['cp', 'wf'], 'initAfterCarePlan')
-    // domConfCP().reView.initAfterCarePlan && domConfCP().reView.initAfterCarePlan()
+    // getDomConf('cp').reView.initAfterCarePlan && getDomConf('cp').reView.initAfterCarePlan()
     console.log(x, deepCount)
 }
 
@@ -85,7 +87,7 @@ const loggedAttributes = [372052, 377121, 377149, 377170, 377176]
     , codeMetaDataIds = codeRepresentation.concat(codeMetaData).concat(loggedAttributes)
     , componentCMD = ['ccr', 'cmd']
 /**
- * Build PlanDefinition Meta-Content code
+ * Build PlanDefinition Meta-Content code, alias WorkFlow
  * @param {Array} l 
  * @returns 
  */
@@ -98,9 +100,9 @@ export const initWorkFlowFn_d = () => {
 }
 export const initAfterPD = (x, deepCount) => {
     // console.log(deepCount)
-    Object.keys(domConfWf().wfComponent).forEach(i =>
-        domConfWf().wfComponent[i].count++)
-    domConfWf().reView.initAfterPD && domConfWf().reView.initAfterPD()
+    Object.keys(getDomConf('wf').wfComponent).forEach(i =>
+        getDomConf('wf').wfComponent[i].count++)
+    getDomConf('wf').reView.initAfterPD && getDomConf('wf').reView.initAfterPD()
     readOntologyTree(codeMetaDataIds, initCodeMetaData)
 }
 const initCodeMetaData = (x, deepCount) => {
@@ -112,14 +114,14 @@ const initCodeMetaData = (x, deepCount) => {
         .includes(adn(i).r) && l.push(adn(i).r2) && l || l, [])
     readOntologyTree(taskList, initAfterTask)
 }, initAfterTask = (x, deepCount) => {
-    // console.log(x, domConfWf().codes, domConfWf().taskComponent)
-    Object.keys(domConfWf().taskComponent).forEach(i =>
-        domConfWf().taskComponent[i].count++)
+    // console.log(x, getDomConf('wf').codes, getDomConf('wf').taskComponent)
+    Object.keys(getDomConf('wf').taskComponent).forEach(i =>
+        getDomConf('wf').taskComponent[i].count++)
     executeSelectQuery(selectCarePlanIcPdMaker.get().replace(':planDefinitionIds'
-        , domConfWf().l.join(','))).then(json => cpIcPdList(json))
+        , getDomConf('wf').l.join(','))).then(json => cpIcPdList(json))
 }, cpIcPdList = cpIcPdList => {
-    (domConfWf().cpIcPdList = cpIcPdList.list).forEach(cp => mcData.eMap[cp.cp_id] = cp)
-    domConfWf().reView.initAfterPD && domConfWf().reView.initAfterPD()
+    (getDomConf('wf').cpIcPdList = cpIcPdList.list).forEach(cp => mcData.eMap[cp.cp_id] = cp)
+    getDomConf('wf').reView.initAfterPD && getDomConf('wf').reView.initAfterPD()
 }
 /**
  * CarePlan.instantiatesCanonical to PlanDefinition request
@@ -166,10 +168,10 @@ export const initTaskIc = (taskIcId, proxy) => {
     taskAutoExecuteId && (() => {
         const sqlJson = JSON.parse(adn(taskAutoExecuteId).vl_str), sql = initNamedSql(sqlJson)
         executeSelectQuery(sql).then(json => {
-            const actionData = domConfWf().actionData || (domConfWf().actionData = {})
+            const actionData = getDomConf('wf').actionData || (getDomConf('wf').actionData = {})
                 , activityDefinitionId = adn(taskIcId).p
             actionData[activityDefinitionId] = json
-            console.log(activityDefinitionId, taskIcId, domConfWf())
+            console.log(activityDefinitionId, taskIcId, getDomConf('wf'))
             proxy.count++
         })
     })()
@@ -214,7 +216,7 @@ import { cpSymbolR } from '/f/7/cp01view/libCP.js'
 export const CpBody = {
     props: { rootId: Number }, data() { return { count: 0, } },
     mounted() { setDomComponent('cpBody', this) }, methods: Object.assign({
-        basedOnCP: () => domConfCP() && domConfCP().basedOnCP || []
+        basedOnCP: () => getDomConf('cp') && getDomConf('cp').basedOnCP || []
     }, mcDataMethods, cpSymbolR), template: `
 <div v-if="parentChilds(rootId)" class="w3-container w3-border-left">
     <div v-for="adnId in parentChilds(rootId)">
@@ -305,7 +307,7 @@ export const CpBody = {
      * 
      */
     , Wf02Use = {
-        data: () => { return { count: 0, rootId: getDomConf('wf').l[0] } },
+        data: () => { return { count: 0, rootId: getDomConf('wf') && getDomConf('wf').l[0] } },
         mounted() { setDomComponent('wf02use', this) }, methods: Object.assign({
             isSelectedActionId: adnId => getDomConf('wf').selectedActionId && getDomConf('wf')
                 .selectedActionId.includes(adnId),

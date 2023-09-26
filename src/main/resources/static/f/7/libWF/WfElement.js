@@ -3,15 +3,14 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import { mcDataMethods, adn, domConfWf, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
-
+import { mcDataMethods, getDomConf, setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
 
 /**
  * 
  */
 const Task = {
     props: { adnId: Number }, data() { return { count: 0, } },
-    mounted() { domConfWf().taskComponent[this.adnId] = this }, methods: Object.assign({}, {
+    mounted() { getDomConf('wf').taskComponent[this.adnId] = this }, methods: Object.assign({}, {
         taskSymbolR: adnId => taskType[mcDataMethods.adn(adnId).r],
         taskIOCmd: adnId => taskIOCmd(adnId),
     }, mcDataMethods), template: `
@@ -47,7 +46,7 @@ import {
  */
 export const WfElement = {
     props: { adnid: Number }, data() { return { count: 0, } }, components: { Task, },
-    mounted() { domConfWf().wfComponent[this.adnid] = this }, methods: Object.assign({
+    mounted() { getDomConf('wf').wfComponent[this.adnid] = this }, methods: Object.assign({
         wfSymbolR: adnId => wfType[mcDataMethods.adn(adnId).r],
     }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId), template: `
 <div v-if="parentChilds(adnid).length" class="w3-container w3-border-left">
