@@ -48,6 +48,5 @@ createApp({
 }).mount('#wf03')
 initDomConfPart('wf')
 getDomConf('wf').reView.initAfterPD = () => {
-    console.log(getDomConf('wf'))
     getDomComponent('wf02use').rootId = getDomConf('wf').l[0]
 }

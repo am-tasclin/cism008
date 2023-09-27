@@ -16,14 +16,8 @@ ws.onopen = event => readOntologyTree(getDomConf('wf').l, initAfterPD)
 const { createApp } = Vue
 import { Wf02Use } from '/f/7/wf02view/libWF.js'
 createApp(Wf02Use).mount('#wf02use')
-getDomConf('wf').reView.initAfterPD = () => {
-    // getDomComponent('wf01use').count++
-    getDomComponent('wf02use').count++
-}
-getDomConf('wf').reView.readParent = () => {
-    // getDomComponent('wf01use').count++
-    getDomComponent('wf02use').count++
-}
+getDomConf('wf').reView.initAfterPD = () => getDomComponent('wf02use').count++
+getDomConf('wf').reView.readParent = () => getDomComponent('wf02use').count++
 
 /*
 const wf01use = createApp({

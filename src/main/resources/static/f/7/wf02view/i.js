@@ -39,7 +39,7 @@ const wf02 = createApp({
             getDomConf('wf').openedCP.includes(adnId),
     }, mcDataMethods, cpSymbolR), components: { CpBody },
     template: `
-<h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}}</span> {{adn(rootId).vl_str}} </h2>
+<h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}} 🮿</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
 <p><div class="w3-row w3-border-top">
     <div class="w3-half">

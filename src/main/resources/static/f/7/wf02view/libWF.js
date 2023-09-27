@@ -325,23 +325,22 @@ export const CpBody = {
                 this.count++
             },
         }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId),
-        // <span class="w3-tiny w3-opacity w3-right"> {{count}} </span>
+// <span class="w3-tiny w3-opacity w3-right"> {{count}} </span>
         components: { WfPart }, template: `
-    <h6 :review="count" class="am-i w3-border-bottom">
-        <span class="w3-tiny w3-opacity">{{rootId}}</span>
-        {{adn(rootId).vl_str}}
-    </h6>
-    <template v-for="adnId in parentChilds(parentChilds(rootId)[0])">
-        <div class="w3-hover-shadow" @click="onOffAction(adnId)">
-            <span class="w3-tiny">{{adnId}}&nbsp;{{wfSymbolPR(adnId)}}</span>
-            {{adn(adnId).vl_str}}
-        </div>
-        <div v-if="isSelectedActionId(adnId)" class="w3-border-left w3-container">
-            <div v-for="adnId2 in parentChilds(adnId)">
-                <span class="w3-tiny">{{adnId2}}&nbsp;{{wfSymbolR2(adnId2)}}</span>
-                {{adn(adnId2).vl_str}}
-                <WfPart :adnid="adnId2"></WfPart>
-            </div></div>
-    </template>
-    `,
+<h6 :review="count" class="w3-border-bottom">
+    <span class="w3-tiny w3-opacity">{{rootId}} 🮿&nbsp;</span>
+    <span class="am-i">{{adn(rootId).vl_str}}</span>
+</h6>
+<template v-for="adnId in parentChilds(parentChilds(rootId)[0])">
+    <div class="w3-hover-shadow" @click="onOffAction(adnId)">
+        <span class="w3-tiny">{{adnId}}&nbsp;{{wfSymbolPR(adnId)}}</span>
+        {{adn(adnId).vl_str}}
+    </div>
+    <div v-if="isSelectedActionId(adnId)" class="w3-border-left w3-container">
+        <div v-for="adnId2 in parentChilds(adnId)">
+            <span class="w3-tiny">{{adnId2}}&nbsp;{{wfSymbolR2(adnId2)}}</span>
+            {{adn(adnId2).vl_str}}
+            <WfPart :adnid="adnId2"></WfPart>
+        </div></div>
+</template>`,
     }
