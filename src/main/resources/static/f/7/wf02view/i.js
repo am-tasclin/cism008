@@ -6,7 +6,7 @@
 import { initDomConfLogic } from '/f/7/libDomGrid/libDomGrid.js'
 import { getDomConf } from '/f/7/libDomGrid/libDomGrid.js'
 initDomConfLogic(window.location.hash.substring(1))
-console.log(getDomConf('wf'),)
+console.log(getDomConf('wf'))
 
 import { ws } from '/f/7/libDbRw/wsDbRw.js'
 import { readOntologyTree } from '/f/7/libDbRw/libMcRDb.js'
@@ -16,14 +16,15 @@ ws.onopen = event => readOntologyTree(getDomConf('wf').l, initAfterPD)
 const { createApp } = Vue
 import { mcDataMethods, getDomComponent, setDomComponent, initDomConfPart } from
     '/f/7/libDomGrid/libDomGrid.js'
-import { codeRepresentation, CpBody, initAfterCarePlan } from '/f/7/wf02view/libWF.js'
+import { codeRepresentation, initAfterCarePlan } from '/f/7/wf02view/libWF.js'
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
+import { CpBody, Wf02Use } from '/f/7/wf02view/libWF.js'
 const wf02 = createApp({
     data() { return { count: 0, rootId: getDomConf('wf').l[0] } },
     mounted() { setDomComponent('wf02', this) }, methods: Object.assign({
         cr: () => codeRepresentation,
         cpIcPdList: () => getDomConf('wf').cpIcPdList,
-        onOffCp: cpId => {
+        onOffCp(cpId) {
             !getDomConf('cp') && (() => {
                 const cpList = getDomConf('wf').cpIcPdList.reduce((l, cp) =>
                     l.push(cp.doc_id) && l, [])
@@ -34,11 +35,18 @@ const wf02 = createApp({
             ).includes(cpId)
                 && getDomConf('wf').openedCP.splice(getDomConf('wf').openedCP.indexOf(cpId), 1)
                 || getDomConf('wf').openedCP.push(cpId)
-            getDomComponent('wf02').count++
+            this.count++
         }, isOpenedCP: adnId => getDomConf('wf').openedCP &&
-            getDomConf('wf').openedCP.includes(adnId),
-    }, mcDataMethods, cpSymbolR), components: { CpBody },
-    template: `
+            getDomConf('wf').openedCP.includes(adnId)
+        , isUsageView: () => getDomConf('wf').onOffUsageView
+        , onOffUsageView() {
+            getDomConf('wf').onOffUsageView = !getDomConf('wf').onOffUsageView
+            this.count++
+        },
+    }, mcDataMethods, cpSymbolR), components: { CpBody, Wf02Use }, template: `
+<div v-if="isUsageView()"><Wf02Use /></div>
+<div @click="onOffUsageView" class="w3-light-grey w3-hover-shadow" style="text-align: center;"
+    >usageView {{isUsageView()?'🡅':'🡇'}} </div>
 <h2 :review="count"> <span class="w3-tiny w3-opacity">{{rootId}} 🮿</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
 <p><div class="w3-row w3-border-top">
@@ -59,9 +67,6 @@ import { WfElement, CodeableConceptRepresentation, } from '/f/7/libWF/WfElement.
 wf02.component('t-wf', WfElement)
 wf02.component('t-ccr', CodeableConceptRepresentation)
 wf02.mount('#wf02')
-getDomConf('wf').reView.initAfterPD = () => {
-    getDomComponent('wf02').count++
-}
-getDomConf('wf').reView.initAfterCarePlan = () => {
-    getDomComponent('cpBody').count++
-}
+getDomConf('wf').reView.initAfterPD = () => getDomComponent('wf02').count++
+getDomConf('wf').reView.initAfterCarePlan = () => getDomComponent('cpBody').count++
+

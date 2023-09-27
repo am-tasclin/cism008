@@ -243,7 +243,6 @@ export const CpBody = {
                     {{adn(boId).vl_str}} </div> </div> </template> </template>
 </div><span class="w3-hide">{{count}}</span>`,
 }
-
     /**
      * 
      */
@@ -287,7 +286,6 @@ export const CpBody = {
     </div>
 </div>`,
     }
-
     /**
      * WorkFlow.PlanDefinition part - try dynamic component
      */

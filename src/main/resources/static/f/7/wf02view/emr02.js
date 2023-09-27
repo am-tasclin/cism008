@@ -25,7 +25,7 @@ const emr02 = createApp({
             .find(i => '🕘' == emrSymbolR.emrSymbolR(i)),
         momentF: (adnId, f) => moment(adn(adnId).ts).format(f),
         isPatientData: adnId => isEmrData(adnId),
-        clickErBonCpPd(cpElId) {
+        clickEmr_basedOnCpPd(cpElId) {
             console.log(cpElId, adn(cpElId).r2)
             const activePdId = getDomConf('emr').activePdId = adn(cpElId).r2
             initDomConfPart('wf').l = [activePdId]
