@@ -3,9 +3,14 @@
  * Algoritmed ©, Licence EUPL-1.2 or later.
  * 
  */
-import {
-    getDomConf, adnIds, adn, mcData, parentChilds, domConstants, getDomComponent
-} from '/f/7/libDomGrid/libDomGrid.js'
+import { getDomConf } from '/f/7/libDomGrid/libDomGrid.js'
+const reViewInit = (nl, nF) => nl.forEach(n => getDomConf(n) && getDomConf(n).reView
+    && getDomConf(n).reView[nF] && getDomConf(n).reView[nF]())
+const taskWfExe = (nl, nF, props) => nl.forEach(n => getDomConf(n) && getDomConf(n).taskWfExe
+    && getDomConf(n).taskWfExe[nF] && getDomConf(n).taskWfExe[nF](props))
+
+import { mcDataMethods, adnIds, adn, parentChilds, domConstants, getDomComponent } from
+    '/f/7/libDomGrid/libDomGrid.js'
 import { executeSelectQuery } from '/f/7/libDbRw/wsDbRw.js'
 import { readOntologyTree, initNamedSql } from '/f/7/libDbRw/libMcRDb.js'
 /**
@@ -75,14 +80,12 @@ const initAfterCpR2 = () => {
     console.log(x, deepCount)
 }
 
-const reViewInit = (nl, nF) => nl.forEach(n =>
-    getDomConf(n) && getDomConf(n).reView && getDomConf(n).reView[nF] && getDomConf(n).reView[nF]())
 
 import { initSelectMaker } from '/f/7/libDbRw/libSqlMaker.js'
-const selectOnBasedOnMaker = initSelectMaker('selectOnBasedOn', 'doc')
-    .initColumns('doc_id').initLeftJoin(
-        '(SELECT doc_id basedon_id FROM doc WHERE reference=2014) x', 'reference=basedon_id')
-    .initWhere('reference2 IN (:idList)').andWhere('reference!=2008') // !Encounter.basedOn (NOT)
+const selectOnBasedOnMaker = initSelectMaker('selectOnBasedOn', 'doc').initColumns('doc_id')
+    .initLeftJoin(
+        '(SELECT doc_id basedon_id FROM doc WHERE reference=2014) x', 'reference=basedon_id'
+    ).initWhere('reference2 IN (:idList)').andWhere('reference!=2008') // !Encounter.basedOn (NOT)
 
 export const codeRepresentation = [377146,] //'ccr'
     , codeMetaData = [368597, 367562,] // 'cmd'
@@ -125,7 +128,7 @@ const initCodeMetaData = (x, deepCount) => {
     executeSelectQuery(selectCarePlanIcPdMaker.get().replace(':planDefinitionIds'
         , getDomConf('wf').l.join(','))).then(json => cpIcPdList(json))
 }, cpIcPdList = cpIcPdList => {
-    (getDomConf('wf').cpIcPdList = cpIcPdList.list).forEach(cp => mcData.eMap[cp.cp_id] = cp)
+    (getDomConf('wf').cpIcPdList = cpIcPdList.list).forEach(cp => mcDataMethods.mcData().eMap[cp.cp_id] = cp)
     // getDomConf('wf').reView.initAfterPD && getDomConf('wf').reView.initAfterPD()
     reViewInit(['emr', 'wf'], 'initAfterPD')
 
@@ -134,10 +137,9 @@ const initCodeMetaData = (x, deepCount) => {
  * CarePlan.instantiatesCanonical to PlanDefinition request
  */
 const selectCarePlanIcPdMaker = initSelectMaker('selectCarePlanIcPdMaker', 'doc')
-    .initWhere('reference2 IN (:planDefinitionIds)')
-    .andWhere('reference=2013')
-    .initLeftJoin('string', 'parent=string_id')
     .initColumns('parent doc_id, parent cp_id, 2015 r, reference2 pd_id, value vl_str')
+    .initLeftJoin('string', 'parent=string_id')
+    .initWhere('reference2 IN (:planDefinitionIds)').andWhere('reference=2013')
 /**
  * Task part of WorkFlow code
  */
@@ -212,7 +214,6 @@ domConstants.TaskIOAutoExecute = [2005]
 
 export const TaskTagIds = domConstants.TaskTagIds = [2005]
 
-import { mcDataMethods, } from '/f/7/libDomGrid/libDomGrid.js'
 import { setDomComponent } from '/f/7/libDomGrid/libDomGrid.js'
 import { cpSymbolR } from '/f/7/cp01view/libCP.js'
 
@@ -257,7 +258,8 @@ export const CpBody = {
             findBtnAdId: pdActionId => findAdInPDAction(pdActionId)
             , activityDefinitionId() { return adn(this.taskIcId).p }
             , clickAdBtn(adId) {
-                console.log(adId, adn(adId))
+                console.log(adId, adn(adId), this.pdActionIds)
+                taskWfExe(['wf'], 'clickAdBtn', { adId: adId, taskIcId: this.taskIcId })
             }, actionData() {
                 return getDomConf('wf').actionData && getDomConf('wf')
                     .actionData[this.activityDefinitionId()] || {}
@@ -276,14 +278,11 @@ export const CpBody = {
             {{adn(pdActionId).vl_str}}
             <button @click="clickAdBtn(findBtnAdId(pdActionId))" class="w3-leftbar">
                 {{adn(findBtnAdId(pdActionId)).vl_str}}
-            </button>
-        </div>
-    </div>
+            </button> </div> </div>
     <div @click="setSelectedId(im.doc_id)" v-for="im in actionData().list" class="w3-hover-shadow"
         :class="{'w3-light-grey':isSelectedId(im.doc_id)}">
         <span class="w3-tiny">{{im.doc_id}}</span>
-        {{im.vl_str}}
-    </div>
+        {{im.vl_str}} </div>
 </div>`,
     }
     /**
@@ -321,18 +320,15 @@ export const CpBody = {
         components: { WfPart }, template: `
 <h6 :review="count" class="w3-border-bottom">
     <span class="w3-tiny w3-opacity">{{rootId}} 🮿&nbsp;</span>
-    <span class="am-i">{{adn(rootId).vl_str}}</span>
-</h6>
+    <span class="am-i">{{adn(rootId).vl_str}}</span></h6>
 <template v-for="adnId in parentChilds(parentChilds(rootId)[0])">
     <div class="w3-hover-shadow" @click="onOffAction(adnId)">
         <span class="w3-tiny">{{adnId}}&nbsp;{{wfSymbolPR(adnId)}}</span>
-        {{adn(adnId).vl_str}}
-    </div>
+        {{adn(adnId).vl_str}}</div>
     <div v-if="isSelectedActionId(adnId)" class="w3-border-left w3-container">
         <div v-for="adnId2 in parentChilds(adnId)">
             <span class="w3-tiny">{{adnId2}}&nbsp;{{wfSymbolR2(adnId2)}}</span>
             {{adn(adnId2).vl_str}}
-            <WfPart :adnid="adnId2"></WfPart>
-        </div></div>
+            <WfPart :adnid="adnId2"></WfPart></div></div>
 </template>`,
     }

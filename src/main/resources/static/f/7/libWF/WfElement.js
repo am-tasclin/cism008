@@ -55,8 +55,7 @@ export const WfElement = {
             <div class="w3-half">
                 <div class="w3-hover-shadow">
                     <span class="w3-tiny w3-opacity">{{adnId2}}&nbsp;𝑓→</span>
-                    {{adn(adnId2).vl_str}}
-                </div>
+                    {{adn(adnId2).vl_str}} </div>
             </div>
             <div class="w3-half">
                 <div class="w3-tiny w3-light-grey"> 𝑡→ Task</div> 
@@ -65,11 +64,7 @@ export const WfElement = {
                         <span class="w3-tiny w3-opacity">
                         {{adnId3}}.{{adn(adnId3).r2}}
                         &nbsp;𝑡→</span>&nbsp;
-                        <Task :adnId="adn(adnId3).r2"/>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <Task :adnId="adn(adnId3).r2"/> </div> </div> </div> </div>
         <template v-else>
             <div class="w3-hover-shadow">
                 <span class="w3-tiny w3-opacity">{{adnId2}}&nbsp;
@@ -77,9 +72,7 @@ export const WfElement = {
                 </span> {{adn(adnId2).vl_str}}
                 <!--span class="w3-right w3-tiny w3-opacity">{{adn(adnId2).r}}|{{adn(adnId2).r2}}</span-->
             </div>
-            <t-wf :adnid="adnId2"></t-wf>
-        </template>
-    </template>
+            <t-wf :adnid="adnId2"></t-wf> </template> </template>
 </div><span class="w3-hide">{{count}}</span>`,
 }
 /**
@@ -122,18 +115,15 @@ export const CodeableConceptRepresentation = {
 <table :review="count" class="w3-small am-width-100pr" >
     <tr class="w3-tiny w3-opacity">
         <th class="w3-border-bottom w3-hover-shadow">
-            {{adn(adn(adn(parentChilds(crId)[0]).r).r).vl_str}}
-        </th>
+            {{adn(adn(adn(parentChilds(crId)[0]).r).r).vl_str}} </th>
         <th class="w3-border-bottom w3-border-left w3-hover-shadow">
             {{adn(adn(parentChilds(parentChilds(crId)[0])).r).vl_str}}</th>
     </tr>
     <tr v-for="adnId in parentChilds(crId)" class="w3-hover-shadow">
         <td><span class="w3-tiny w3-opacity w3-right">{{adn(adnId).doc_id}}</span>
-            {{adn(adnId).vl_str}}
-        </td>
+            {{adn(adnId).vl_str}} </td>
         <td><span class="w3-tiny w3-opacity w3-right">{{adn(parentChilds(adnId)[0]).doc_id}}</span>
-            {{adn(parentChilds(adnId)[0]).vl_str}}
-        </td>
+            {{adn(parentChilds(adnId)[0]).vl_str}} </td>
     </tr>
 </table></template>`,
 }

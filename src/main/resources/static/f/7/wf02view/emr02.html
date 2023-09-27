@@ -62,9 +62,10 @@
                         </span>
                         {{adn(adn(adnId).r2).vl_str}}
                         <span v-if="2015==adn(adn(adnId).r2).r">
+                            {{adnId}}
                             <span class="w3-tiny w3-opacity" v-for="cpElId in parentChilds(adn(adn(adnId).r2).doc_id)">
                                 {{cpElId}}:
-                                <button @click="clickEmr_basedOnCpPd(cpElId)" class="w3-btn w3-padding-small w3-leftbar w3-border">
+                                <button @click="clickEmr_basedOnCpPd(adnId,cpElId)" class="w3-btn w3-padding-small w3-leftbar w3-border">
                                     {{emrSymbolR(cpElId)}}.{{adn(cpElId).r2}};
                                 </button>
                             </span>

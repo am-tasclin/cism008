@@ -154,15 +154,13 @@ export const initNewMc = adnList => adnList.forEach(adn => {
  * @param {*} adn 
  * @returns 
  */
-export const setToEMap = adn =>
-    mcData.eMap[adn.doc_id] = adn
+export const setToEMap = adn => mcData.eMap[adn.doc_id] = adn
 /**
  * 
  * @param {*} adnList 
  * @returns 
  */
-export const addNewMc = adnList => adnList
-    .forEach(adn => setToEMap(adn))
+export const addNewMc = adnList => adnList .forEach(adn => setToEMap(adn))
 
 /**
  * 
@@ -267,8 +265,7 @@ const initJsonDomConf = rawConfStr => {
  * 
  * @returns 
  */
-export const pathActuallyTreeObj = () =>
-    domContainer.conf.pathActuallyTreeObj
+export const pathActuallyTreeObj = () => domContainer.conf.pathActuallyTreeObj
 /**
  * Primary initialization from simple URI syntax
  * Первинна ініціалізація з простого синтаксису URI
@@ -291,7 +288,7 @@ const initUriDomConf = (rawUriDomConf, ppId) => {
 }
 
 const domConfPart = {
-    wf: { l: [], wfComponent: {}, taskComponent: {}, reView: {}, },
+    wf: { l: [], wfComponent: {}, taskComponent: {}, taskWfExe:{}, reView: {}, },
     cp: { l: [], reView: {}, },
     emr: { l: [], reView: {}, },
 }
