@@ -297,7 +297,6 @@ export const CpBody = {
      * WorkFlow.PlanDefinition part - try dynamic component
      */
     , WfPart = {
-        components: { TitSelect },
         template: `<component :is="taskTagName()" :taskIcId="taskIcId()"></component>`,
         props: { adnid: Number }, methods: {
             taskIcId() { return childTaskId.childTaskId(this.adnid) },
@@ -307,7 +306,7 @@ export const CpBody = {
                     .find(i => TaskTagIds.includes(taskIOCmd(i))))
                 return this.taskId() && adn(taskTagId).vl_str.replace('.', '')
             },
-        },
+        }, components: { TitSelect },
     }
     /**
      * WorkFlow.PlanDefinition -- usage in EMR
@@ -325,7 +324,7 @@ export const CpBody = {
                 this.count++
             },
         }, mcDataMethods, wfSymbolR2, wfSymbolPR, childTaskId),
-// <span class="w3-tiny w3-opacity w3-right"> {{count}} </span>
+        // <span class="w3-tiny w3-opacity w3-right"> {{count}} </span>
         components: { WfPart }, template: `
 <h6 :review="count" class="w3-border-bottom">
     <span class="w3-tiny w3-opacity">{{rootId}} 🮿&nbsp;</span>
