@@ -254,26 +254,20 @@ export const CpBody = {
                 return parentChilds(parentChilds(adn(this.activityDefinitionId()).p)
                     .find(i => '[]' == wfType[adn(i).r]))
             },
-        }, mounted() {
-            initTaskIc(this.taskIcId, this)
-            console.log(this.pdActionIds)
-            this.pdActionIds.forEach(i => findTasksInPDAction(i, this, (taskIcId, proxy) => {
-                const taskId = adn(taskIcId).r2
-                console.log(i, taskIcId, taskId)
-                // this.count++
-            }))
-        }, methods: Object.assign({
+        }, mounted() { initTaskIc(this.taskIcId, this) }, methods: Object.assign({
             findBtnAdId: pdActionId => findAdInPDAction(pdActionId)
             , activityDefinitionId() { return adn(this.taskIcId).p }
             , clickAdBtn(adId) {
                 console.log(adId, adn(adId))
             }, actionData() {
                 return getDomConf('wf').actionData && getDomConf('wf')
-                    .actionData[this.activityDefinitionId()].list
+                    .actionData[this.activityDefinitionId()] || {}
             }, setSelectedId(adnId) {
                 console.log(adnId, getDomConf('wf'), wfType)
-
-            },
+                this.actionData().selectedId = adnId
+                this.count++
+            }, isSelectedId(adnId) { return this.actionData().selectedId == adnId }
+            ,
         }, mcDataMethods), template: `
 <div class="w3-border-top w3-container">
     <span class="w3-tiny w3-right">{{taskIcId}}:TitSelect:{{count}}</span>
@@ -286,7 +280,8 @@ export const CpBody = {
             </button>
         </div>
     </div>
-    <div @click="setSelectedId(im.doc_id)" v-for="im in actionData()" class="w3-hover-shadow">
+    <div @click="setSelectedId(im.doc_id)" v-for="im in actionData().list" class="w3-hover-shadow"
+        :class="{'w3-light-grey':isSelectedId(im.doc_id)}">
         <span class="w3-tiny">{{im.doc_id}}</span>
         {{im.vl_str}}
     </div>
