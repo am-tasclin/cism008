@@ -52,6 +52,7 @@ initDomConfPart('wf')
 getDomConf('wf').reView.initAfterPD = () =>
     getDomComponent('wf02use').rootId = getDomConf('wf').l[0]
 
+import { execute_SQL_API } from '/f/7/libDbRw/wsDbRw.js'
 getDomConf('wf').taskWfExe.clickAdBtn = props => {
     // console.log(getDomConf('emr').encounterId, props, adn(props.adId),)
     const actionDataId = adn(props.taskIcId).p
@@ -76,4 +77,8 @@ getDomConf('wf').taskWfExe.clickAdBtn = props => {
     )
 
     console.log(mcJson)
+
+    execute_SQL_API(mcJson).then(json => {
+        console.log(json)
+    })
 }

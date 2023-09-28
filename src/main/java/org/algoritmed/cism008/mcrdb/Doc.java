@@ -57,11 +57,12 @@ public class Doc {
         return s;
     }
 
-
     public Doc(Long nextDnId, Map<String, Object> mapIn) {
         this(nextDnId);
         if (mapIn.containsKey("parent"))
             this.parent = Long.parseLong(mapIn.get("parent").toString());
+        if (mapIn.containsKey("p"))
+            this.parent = Long.parseLong(mapIn.get("p").toString());
         if (mapIn.containsKey("r") && mapIn.get("r") != null)
             this.reference = Long.parseLong(mapIn.get("r").toString());
         if (mapIn.containsKey("r2") && mapIn.get("r2") != null)
