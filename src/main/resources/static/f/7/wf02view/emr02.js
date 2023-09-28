@@ -31,6 +31,7 @@ const Emr02View = {
             const activePdId = getDomConf('emr').activePdId = adn(cpElId).r2
             initDomConfPart('wf').l = [activePdId]
             readOntologyTree([activePdId], initAfterPD)
+            console.log(adn(377131))
         },
     }, mcDataMethods, emrSymbolR)
 }
@@ -53,14 +54,15 @@ getDomConf('wf').reView.initAfterPD = () =>
     getDomComponent('wf02use').rootId = getDomConf('wf').l[0]
 
 import { execute_SQL_API } from '/f/7/libDbRw/wsDbRw.js'
+import { readAdnByIds } from '/f/7/libDbRw/libMcRDb.js'
+
 getDomConf('wf').taskWfExe.clickAdBtn = props => {
     // console.log(getDomConf('emr').encounterId, props, adn(props.adId),)
     const actionDataId = adn(props.taskIcId).p
         , actionData = getDomConf('wf').actionData[actionDataId]
         , selectedIdForAd = actionData.selectedId
         , taskId = adn(parentChilds(props.adId).find(i => 2001 == adn(i).r)).r2
-    console.log(JSON.stringify(props), taskId
-        , parentChilds(taskId), selectedIdForAd, getDomConf('emr').encounterId)
+    // console.log(JSON.stringify(props), taskId, parentChilds(taskId), selectedIdForAd, getDomConf('emr').encounterId)
     const mcJson = {}
         , taskInputId = parentChilds(taskId)[0]
         , taskOutputId = parentChilds(taskId)[1]
@@ -69,7 +71,7 @@ getDomConf('wf').taskWfExe.clickAdBtn = props => {
     taskInputPattern.pValue && (mcJson.p = getDomConf('emr')[taskInputPattern.pValue])
     taskOutputPattern.cmd && (mcJson.cmd = taskOutputPattern.cmd)
     const tirr2Id = parentChilds(taskInputId)[0]
-    console.log(tirr2Id, adn(tirr2Id))
+    // console.log(tirr2Id, adn(tirr2Id))
     adn(tirr2Id) && adn(tirr2Id).r && (mcJson.r = adn(tirr2Id).r)
     adn(tirr2Id) && adn(tirr2Id).r2 && (mcJson.r2 = adn(tirr2Id).r2)
     taskInputPattern.r2Value && (mcJson.r2 = getDomConf('emr')[taskInputPattern.r2Value]
@@ -77,8 +79,18 @@ getDomConf('wf').taskWfExe.clickAdBtn = props => {
     )
 
     console.log(mcJson)
-
+    /**
+     * Save EMR and reView it.
+     */
     execute_SQL_API(mcJson).then(json => {
-        console.log(json)
+        json.d.p = json.d.parent
+        json.d.r = json.d.reference
+        json.d.r2 = json.d.reference2
+        mcDataMethods.mcData().eMap[json.d.doc_id] = json.d
+        parentChilds(json.p).push(json.d.doc_id)
+        getDomComponent('emr02').count++
+        !adn(json.d.r2).doc_id && readAdnByIds([json.d.r2]).then(() => {
+            getDomComponent('emr02').count++
+        })
     })
 }
