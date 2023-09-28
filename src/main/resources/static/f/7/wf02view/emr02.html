@@ -58,18 +58,16 @@
                         <span class="w3-tiny w3-opacity">{{adnId}}&nbsp;</span>
                         <span class="am-b" title="Encounter: Взаємодія">{{emrSymbolR(adnId)}}</span>
                         <span class="w3-small w3-opacity">
-                            {{emrSymbolR(adnId).includes('ꭍ')?(':'+emrSymbolR(adn(adnId).r2)+'.'+adn(adnId).r2):''}}
-                        </span>
+                            {{emrSymbolR(adnId).includes('ꭍ')?(':'+emrSymbolR(adn(adnId).r2)+'.'
+                            +adn(adnId).r2):''}} </span>
                         {{adn(adn(adnId).r2).vl_str}}
                         <span v-if="2015==adn(adn(adnId).r2).r">
-                            {{adnId}}
-                            <span class="w3-tiny w3-opacity" v-for="cpElId in parentChilds(adn(adn(adnId).r2).doc_id)">
-                                {{cpElId}}:
-                                <button @click="clickEmr_basedOnCpPd(adnId,cpElId)" class="w3-btn w3-padding-small w3-leftbar w3-border">
-                                    {{emrSymbolR(cpElId)}}.{{adn(cpElId).r2}};
-                                </button>
-                            </span>
-                        </span>
+                            <template v-for="cpElId in parentChilds(adn(adn(adnId).r2).doc_id)">
+                                <span class="w3-tiny w3-opacity">{{cpElId}}:</span>
+                                <button @click="clickEmr_basedOnCpPd(adnId,cpElId)"
+                                    class="w3-btn w3-padding-small w3-leftbar w3-border">
+                                    {{emrSymbolR(cpElId)}} <span class="w3-tiny w3-opacity">
+                                        .{{adn(cpElId).r2}};</span> </button> </template> </span>
                         <span class="w3-right w3-tiny w3-opacity">{{adn(adnId).vl_str}}</span>
                     </div>
 
@@ -80,13 +78,11 @@
                                     <span class="w3-tiny w3-opacity">{{adnId2}}&nbsp;{{emrSymbolR(adnId2)}}</span>
                                     {{adn(adn(adnId2).r2).vl_str}}
                                     <span class="w3-right w3-tiny w3-opacity">
-                                        {{adn(adnId2).vl_str}}
-                                    </span>
+                                        {{adn(adnId2).vl_str}} </span>
                                 </div>
                                 <div v-if="parentChilds(adnId2)" class="w3-container w3-border-left">
                                     <div v-for="adnId3 in parentChilds(adnId2)">
-                                        {{adnId3}}---{{adn(adnId3).vl_str}}
-                                    </div>
+                                        {{adnId3}}---{{adn(adnId3).vl_str}} </div>
                                 </div>
                             </template>
                         </div>

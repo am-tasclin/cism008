@@ -258,7 +258,7 @@ export const CpBody = {
             findBtnAdId: pdActionId => findAdInPDAction(pdActionId)
             , activityDefinitionId() { return adn(this.taskIcId).p }
             , clickAdBtn(adId) {
-                console.log(adId, adn(adId), this.pdActionIds)
+                // console.log(adId, adn(adId), this.pdActionIds)
                 taskWfExe(['wf'], 'clickAdBtn', { adId: adId, taskIcId: this.taskIcId })
             }, actionData() {
                 return getDomConf('wf').actionData && getDomConf('wf')

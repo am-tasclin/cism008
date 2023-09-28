@@ -53,19 +53,27 @@ getDomConf('wf').reView.initAfterPD = () =>
     getDomComponent('wf02use').rootId = getDomConf('wf').l[0]
 
 getDomConf('wf').taskWfExe.clickAdBtn = props => {
-    console.log(getDomConf('emr').encounterId, props, adn(props.adId),)
+    // console.log(getDomConf('emr').encounterId, props, adn(props.adId),)
     const actionDataId = adn(props.taskIcId).p
         , actionData = getDomConf('wf').actionData[actionDataId]
         , selectedIdForAd = actionData.selectedId
         , taskId = adn(parentChilds(props.adId).find(i => 2001 == adn(i).r)).r2
-    console.log(taskId, parentChilds(taskId), selectedIdForAd)
+    console.log(JSON.stringify(props), taskId
+        , parentChilds(taskId), selectedIdForAd, getDomConf('emr').encounterId)
     const mcJson = {}
-    parentChilds(taskId).forEach(i => {
-        console.log(i, adn(i), adn(i).vl_str)
-        const mcPattern = JSON.parse(adn(i).vl_str)
-        // console.log(mcPattern, mcPattern.pName)
-        mcPattern.pName && (mcJson.p = getDomConf('emr')[mcPattern.pName])
-        mcPattern.cmd && (mcJson.cmd = mcPattern.cmd)
-        console.log(mcJson)
-    })
+        , taskInputId = parentChilds(taskId)[0]
+        , taskOutputId = parentChilds(taskId)[1]
+        , taskInputPattern = JSON.parse(adn(taskInputId).vl_str)
+        , taskOutputPattern = JSON.parse(adn(taskOutputId).vl_str)
+    taskInputPattern.pValue && (mcJson.p = getDomConf('emr')[taskInputPattern.pValue])
+    taskOutputPattern.cmd && (mcJson.cmd = taskOutputPattern.cmd)
+    const tirr2Id = parentChilds(taskInputId)[0]
+    console.log(tirr2Id, adn(tirr2Id))
+    adn(tirr2Id) && adn(tirr2Id).r && (mcJson.r = adn(tirr2Id).r)
+    adn(tirr2Id) && adn(tirr2Id).r2 && (mcJson.r2 = adn(tirr2Id).r2)
+    taskInputPattern.r2Value && (mcJson.r2 = getDomConf('emr')[taskInputPattern.r2Value]
+        || actionData[taskInputPattern.r2Value]
+    )
+
+    console.log(mcJson)
 }
