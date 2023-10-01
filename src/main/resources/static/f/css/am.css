@@ -7,6 +7,7 @@
 .am-b {font-weight: bold;}
 .am-i {font-style: italic; }
 .am-u {text-decoration: underline; }
+.am-r-33{transform: rotate(-33deg);display: inline-block;}
 a.am-0u {text-decoration: none; }
 a.am-el {
 	background-image: url(/f/css/external_link.svg);

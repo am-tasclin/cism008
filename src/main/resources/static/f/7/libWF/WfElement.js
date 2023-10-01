@@ -58,7 +58,7 @@ export const WfElement = {
                     {{adn(adnId2).vl_str}} </div>
             </div>
             <div class="w3-half">
-                <div class="w3-tiny w3-light-grey"> 𝑡→ Task</div> 
+                <div class="w3-tiny w3-light-grey">&nbsp;𝑡⏶ Task</div> 
                 <div v-for="adnId3 in parentChilds(adnId2)">
                     <div class="w3-hover-shadow">
                         <span class="w3-tiny w3-opacity">

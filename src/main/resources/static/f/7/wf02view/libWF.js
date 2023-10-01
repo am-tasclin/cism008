@@ -193,8 +193,9 @@ export const wfSymbolR2 = { wfSymbolR2: adnId => wfType[adn(adnId).r2] }
  * 𝑡   -- Task
  */
 export const wfType = {
-    2001: '𝑡→', 2002: '𝑓→', 2003: '[]', 2004: '[]'
-    , p: { 2003: '⛋', 2004: '⛋' }
+    2001: '𝑡⏶', 2002: '𝑓⏶', 2003: '[]', 2004: '[]'
+    , p: { 2003: '➭', 2004: '➭' }
+    // , p: { 2003: '⛋', 2004: '⛋' }
 }
 /**
  * 
@@ -319,7 +320,7 @@ export const CpBody = {
         // <span class="w3-tiny w3-opacity w3-right"> {{count}} </span>
         components: { WfPart }, template: `
 <h6 :review="count" class="w3-border-bottom">
-    <span class="w3-tiny w3-opacity">{{rootId}} 🮿&nbsp;</span>
+    <span class="w3-tiny w3-opacity">{{rootId}} <sub class="am-r-33">→</sub>🞋&nbsp;</span>
     <span class="am-i">{{adn(rootId).vl_str}}</span></h6>
 <template v-for="adnId in parentChilds(parentChilds(rootId)[0])">
     <div class="w3-hover-shadow" @click="onOffAction(adnId)">

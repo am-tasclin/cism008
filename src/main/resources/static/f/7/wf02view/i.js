@@ -46,7 +46,7 @@ const Wf02View = {
 <div v-if="isUsageView()" class="w3-border-right"><Wf02Use /></div>
 <div @click="onOffUsageView" class="w3-light-grey w3-hover-shadow" style="text-align: center;"
     >usageView {{isUsageView()?'🡅':'🡇'}} </div>
-<h2 :review="count" class="w3-border-bottom"> <span class="w3-tiny w3-opacity">{{rootId}} 🮿</span> {{adn(rootId).vl_str}} </h2>
+<h2 :review="count" class="w3-border-bottom"> <span class="w3-tiny w3-opacity">{{rootId}} <sub class="am-r-33">→</sub>🞋</span> {{adn(rootId).vl_str}} </h2>
 <t-wf :adnid="rootId"></t-wf>
 <p><div class="w3-row w3-border-top">
     <div class="w3-half">

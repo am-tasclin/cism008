@@ -43,7 +43,7 @@ getDomConf('emr').reView.afterReadEMR = () => getDomComponent('emr02').count++
 import { Wf02Use } from '/f/7/wf02view/libWF.js'
 createApp({
     mounted() { setDomComponent('wf03', this) }, components: { Wf02Use }, template: `
-<div class="w3-light-grey am-b" style="text-align: center;">⛋&nbsp;WF03</div>
+<div class="w3-light-grey am-b" style="text-align: center;">WF03</div>
 <Wf02Use />`,
 }).mount('#wf03')
 /**

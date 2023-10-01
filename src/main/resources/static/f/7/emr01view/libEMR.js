@@ -21,7 +21,7 @@ const emrType = {
     2009: '⌓℅', // EpisodeOfCare.patient
     2008: '⌔℅∮', // Encounter.basedOn
     2015: '⛒℅', // CarePlan.title
-    2013: '💼.⛋', // CarePlan.instantiatesCanonical PlanDefinition
+    2013: '💼.🞋', // CarePlan.instantiatesCanonical PlanDefinition
     2016: '🔗', // Attachment.url
     2010: '🕘', // EpisodeOfCare.period Period.start
     2011: '🕘', // Encounter.actualPeriod Period.start
