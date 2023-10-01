@@ -54,16 +54,16 @@ export const WfElement = {
         <div class="w3-row" v-if="childTaskId(adnId2)">
             <div class="w3-half">
                 <div class="w3-hover-shadow">
-                    <span class="w3-tiny w3-opacity">{{adnId2}}&nbsp;𝑓→</span>
+                    <span class="w3-tiny w3-opacity">{{adnId2}}&nbsp;𝑓⏶</span>
                     {{adn(adnId2).vl_str}} </div>
             </div>
             <div class="w3-half">
                 <div class="w3-tiny w3-light-grey">&nbsp;𝑡⏶ Task</div> 
                 <div v-for="adnId3 in parentChilds(adnId2)">
                     <div class="w3-hover-shadow">
-                        <span class="w3-tiny w3-opacity">
+                        <span class="w3-tiny w3-text-green">
                         {{adnId3}}.{{adn(adnId3).r2}}
-                        &nbsp;𝑡→</span>&nbsp;
+                        &nbsp;𝑡⏶</span>&nbsp;
                         <Task :adnId="adn(adnId3).r2"/> </div> </div> </div> </div>
         <template v-else>
             <div class="w3-hover-shadow">
