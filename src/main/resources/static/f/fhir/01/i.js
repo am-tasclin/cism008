@@ -68,25 +68,25 @@ class PageLogicFactory extends PageLogic0Factory {
 // const sql_app2 = {}
 
 sql_app.doseQuantity = {
-    sql: 'SELECT s1.value qy_value, s2.value qy_code, d2.* FROM doc d1 \n\
-    LEFT JOIN string s1 ON s1.string_id=d1.doc_id \n\
-    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=368641 \n\
-    LEFT JOIN string s2 ON s2.string_id=d2.reference2 \n\
-    WHERE d1.reference=368637 ',
+    sql: `SELECT s1.value qy_value, s2.value qy_code, d2.* FROM doc d1 
+    LEFT JOIN string s1 ON s1.string_id=d1.doc_id 
+    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=368641 
+    LEFT JOIN string s2 ON s2.string_id=d2.reference2 
+    WHERE d1.reference=368637 `,
 }
 
 sql_app.carePlan_activity001 = {
-    sql: 'SELECT d1.parent d1id, d2.* FROM doc d1 \n\
-    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=368794 \n\
-    WHERE d1.reference=368789 ', 
+    sql: `SELECT d1.parent d1id, d2.* FROM doc d1 
+    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=368794 
+    WHERE d1.reference=368789 `, 
     // 368789=CarePlan.activity, 
     // 368794=CarePlan.activity.plannedActivityReference
 }
 
 sql_app.madicationRequest_medication_dosageInstruction001 = {
-    sql:'SELECT d2.doc_id d2id, d1.* FROM (:sql_app.madicationRequest_medication001 ) d1 \n\
-    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=369984 \n\
-    WHERE TRUE ',
+    sql:`SELECT d2.doc_id d2id, d1.* FROM (:sql_app.madicationRequest_medication001 ) d1 
+    LEFT JOIN doc d2 ON d2.parent=d1.doc_id AND d2.reference=369984 
+    WHERE TRUE `,
     // 369984=MedicationRequest.dose.dosageInstruction
 }
 
@@ -96,10 +96,10 @@ sql_app.madicationRequest_medication001 = {
 }
 
 sql_app.madicationRequest001 = {
-    sql: 'SELECT s1.value mr_medication, d1.* \n\
-    FROM (:sql_app.madicationRequest_medication001 ) d1 \n\
-    LEFT JOIN string s1 ON s1.string_id=reference2 \n\
-    WHERE TRUE ',
+    sql: `SELECT s1.value mr_medication, d1.* 
+    FROM (:sql_app.madicationRequest_medication001 ) d1 
+    LEFT JOIN string s1 ON s1.string_id=reference2 
+    WHERE TRUE `,
 }
 
 sql_app.carePlan_activity_mr_dosageInstruction_doseQuantity001 = {
@@ -161,12 +161,12 @@ sql_app.BackboneElement02 = {
 
 sql_app.BackboneElement01 = {
     name: 'BackboneElement в атрибутах унікальні',
-    sql: 'SELECT ps.value ps, s.value v, d.* FROM doc d \n\
-    LEFT JOIN string s ON s.string_id=d.doc_id \n\
-    LEFT JOIN string ps ON ps.string_id=d.parent \n\
-    WHERE d.reference= 369784 \n\
-    AND d.parent != 375830 \n\
-    ORDER BY ps.value, s.value',
+    sql: `SELECT ps.value ps, s.value v, d.* FROM doc d 
+    LEFT JOIN string s ON s.string_id=d.doc_id 
+    LEFT JOIN string ps ON ps.string_id=d.parent 
+    WHERE d.reference= 369784 
+    AND d.parent != 375830 
+    ORDER BY ps.value, s.value `,
 }
 
 sql_app.Element01 = {
@@ -180,10 +180,10 @@ sql_app.Element01 = {
 
 sql_app.Logical01 = {
     name: 'Logical',
-    sql: 'SELECT value v, d.* FROM doc d \n\
-    LEFT JOIN string ON string_id=d.doc_id \n\
-    WHERE d.reference = 369796 \n\
-    ORDER BY value',
+    sql: `SELECT value v, d.* FROM doc d
+    LEFT JOIN string ON string_id=d.doc_id
+    WHERE d.reference = 369796
+    ORDER BY value`,
 }
 sql_app.MetadataResource01 = {
     name: 'MetadataResource',
