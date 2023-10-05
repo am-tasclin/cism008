@@ -4,11 +4,31 @@
  * PL — Personal HealthCare Institution 
  * 
  */
-const pageData = { kved: { section: {}, conf: {} } }
-    , appContainer = {}
+const pageData = { kved: { section: {}, conf: {} } }, appContainer = {}
 console.log('dia_kved', pageData)
 
-fetch('/f/8/tmp/kved2.json').then(response => response.text()).then(data => {
+const { createApp } = Vue
+const appKved = {
+    data() { return { count: 0 } },
+    mounted() { appContainer.kved = this },
+    methods: {
+        isClosedSk: sk => pageData.kved.conf.closeSk && pageData.kved.conf.closeSk.includes(sk),
+        closeSk: sk => {
+            const closeSk = pageData.kved.conf.closeSk
+                || (pageData.kved.conf.closeSk = [])
+            closeSk.includes(sk) && closeSk.splice(closeSk.indexOf(sk), 1) || closeSk.push(sk)
+            appContainer.kved.count++
+        },
+        sectionList: () => Object.keys(pageData.kved.section),
+        section: sk => pageData.kved.section[sk],
+        partList: sk => Object.keys(pageData.kved.section[sk].part),
+        groupList: (sk, pk) => Object.keys(pageData.kved.section[sk].part[pk].group),
+        classList: (sk, pk, gk) => Object.keys(pageData.kved.section[sk].part[pk].group[gk].class),
+    },
+}
+createApp(appKved).mount('#kved')
+
+fetch('kved2.json').then(response => response.text()).then(data => {
     const dia_kved = JSON.parse(data)
     const clean_dia_kved = dia_kved.filter((d, i) => i > 1)
     clean_dia_kved.forEach(o => {
@@ -30,7 +50,6 @@ fetch('/f/8/tmp/kved2.json').then(response => response.text()).then(data => {
         !pageData.kved.section[sk].part[pk].group[gk].class[ck] &&
             (pageData.kved.section[sk].part[pk].group[gk].class[ck]
                 = { name: name })
-
     })
     appKved.methods.sectionList().filter(sk => !sk && delete pageData.kved.section[sk])
     appKved.methods.sectionList().forEach(sk => appKved.methods.partList(sk).filter(pk => !pk &&
@@ -45,28 +64,3 @@ fetch('/f/8/tmp/kved2.json').then(response => response.text()).then(data => {
 
     console.log(pageData.kved)
 })
-
-const { createApp } = Vue
-const appKved = {
-    data() { return { count: 0 } },
-    mounted() { appContainer.kved = this },
-    methods: {
-        isClosedSk: sk => pageData.kved.conf.closeSk && pageData.kved.conf.closeSk.includes(sk),
-        closeSk: sk => {
-            const closeSk = pageData.kved.conf.closeSk
-                || (pageData.kved.conf.closeSk = [])
-            closeSk.includes(sk) && closeSk.splice(closeSk.indexOf(sk), 1) || closeSk.push(sk)
-            appContainer.kved.count++
-
-        },
-        sectionList: () => Object.keys(pageData.kved.section),
-        section: sk => pageData.kved.section[sk],
-        partList: sk => Object.keys(pageData.kved.section[sk].part),
-        groupList: (sk, pk) =>
-            Object.keys(pageData.kved.section[sk].part[pk].group),
-        classList: (sk, pk, gk) =>
-            Object.keys(pageData.kved.section[sk].part[pk].group[gk].class),
-    },
-}
-createApp(appKved).mount('#kved')
-

@@ -37,7 +37,7 @@
     <div id="kved">
         <span class="w3-right w3-tiny w3-opacity">{{count}}</span>
         <div v-for="sk in sectionList()">
-            <p @click="closeSk(sk)" class="w3-border-bottom">
+            <p @click="closeSk(sk)" class="w3-border-bottom w3-hover-shadow">
                 <span class="am-b"> {{sk}} </span>
                 {{section(sk).name}}
             </p>
