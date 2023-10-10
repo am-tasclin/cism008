@@ -26,16 +26,23 @@
                 <a href="http://algoritmed.com/" class="am-0u w3-right w3-hover-shadow" target="_blank">&nbsp;<img
                         src="/f/img/algoritmed-logo.webp" style="width:75px;" />&nbsp;</a>
     </div>
-    <a href="https://zakon.rada.gov.ua/rada/show/vb457609-10#Text">
-        НАЦІОНАЛЬНИЙ КЛАСИФІКАТОР УКРАЇНИ 
-            КЛАСИФІКАЦІЯ ВИДІВ ЕКОНОМІЧНОЇ ДІЯЛЬНОСТІ 
-                           ДК 009:2010 
-    </a>,
-    <a href="https://uk.wikipedia.org/wiki/Міжнародна_стандартна_галузева_класифікація">
-        Міжнародна стандартна галузева класифікація всіх видів економічної діяльності
-    </a>
-    <div id="kved">
-        <span class="w3-right w3-tiny w3-opacity">{{count}}</span>
+    <div class="am-max-width-1">
+        <a href="https://zakon.rada.gov.ua/rada/show/vb457609-10#Text">
+            НАЦІОНАЛЬНИЙ КЛАСИФІКАТОР УКРАЇНИ
+            КЛАСИФІКАЦІЯ ВИДІВ ЕКОНОМІЧНОЇ ДІЯЛЬНОСТІ
+            ДК 009:2010</a>,
+        <a href="https://uk.wikipedia.org/wiki/Міжнародна_стандартна_галузева_класифікація">
+            Міжнародна стандартна галузева класифікація всіх видів економічної діяльності</a>,
+        <a href="https://en.wikipedia.org/wiki/North_American_Industry_Classification_System">
+            North American Industry Classification System</a>,
+        <a href="https://terminology.hl7.org/CodeSystem-naics.html">
+            CodeSystem: North American Industry Classification System</a>,
+        <a
+            href="https://uk.wikipedia.org/wiki/Єдиний_державний_реєстр_юридичних_осіб,_фізичних_осіб-підприємців_та_громадських_формувань">
+            Єдиний державний реєстр юридичних осіб, фізичних осіб-підприємців та громадських формувань (ЄДР)</a>
+    </div>
+    <div id="kved" class="am-max-width-1">
+        <span class="w3-right w3-tiny w3-opacity">{{count}}:count</span>
         <div v-for="sk in sectionList()">
             <p @click="closeSk(sk)" class="w3-border-bottom w3-hover-shadow">
                 <span class="am-b"> {{sk}} </span>
